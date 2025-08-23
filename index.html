@@ -1,327 +1,769 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposal KUBE Harapan Sejahtera</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Undangan Walimatul Khitan - Junior Habib R. Harun</title>
+
+    <!-- Meta Tags untuk WhatsApp & Social Media Preview -->
+    <meta property="og:title" content="Undangan Walimatul Khitan - Junior Habib R. Harun">
+    <meta property="og:description" content="Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir dalam acara Tasyakuran Khitan & Ulang Tahun putra kami.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/qisel/qiqi/main/f3.png">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600;700&family=Lobster&family=Roboto:700&family=Merriweather:700&family=Sacramento&family=Caveat&family=Cinzel+Decorative:700&family=Great+Vibes&family=Dancing+Script&family=Tangerine:700&family=Alex+Brush&family=Cormorant+Garamond:700&display=swap" rel="stylesheet">
+    
+    <!-- AOS (Animate On Scroll) for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
     <style>
+        /* Custom styles and fonts */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7fbf8;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: #F3F4F6;
         }
-        .container {
-            max-width: 900px;
+        .font-serif {
+            font-family: 'Playfair Display', serif;
         }
-        .section-title {
-            color: #2c6f37;
-            font-weight: 700;
+        #cover {
+            background-image: url('https://raw.githubusercontent.com/qisel/qiqi/main/f1.jpeg');
+            background-size: cover;
+            background-position: center;
         }
-        .text-justify {
-            text-align: justify;
+        @media (min-width: 768px) {
+            #cover {
+                background-image: url('https://raw.githubusercontent.com/qisel/qiqi/main/f3.png');
+            }
         }
-        .indent {
-            text-indent: 2rem;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse 2s infinite;
+        }
+        .font-button.active, .song-button.active, .effect-button.active {
+            background-color: #0D9488;
+            color: white;
+            border-color: #0D9488;
+        }
+        .color-button.active {
+            ring-offset-2 ring-2 ring-teal-500;
+        }
+        #cover-font-panel, #cover-link-panel, #cover-song-panel, #cover-effect-panel {
+            display: none;
+            z-index: 70;
+        }
+        #admin-buttons {
+            z-index: 60; 
+        }
+        .ornament {
+            width: 8rem;
+            height: 8rem;
+            fill: currentColor;
+        }
+        .animate-letters .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        #effect-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .quote-enter { animation: fadeIn 1s ease-out forwards; }
+        .quote-exit { animation: fadeOut 1s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        .thumbnail-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .thumbnail-container::-webkit-scrollbar {
+            display: none;
+        }
+        .thumbnail-item {
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .thumbnail-item.active {
+            border-color: #0D9488;
+            transform: scale(1.05);
+        }
+        .image-reveal-container {
+            position: relative;
+            overflow: hidden; 
+            display: inline-block; 
+        }
+
+        .image-reveal-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #d1fae5; 
+            transform: translateX(-101%); 
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .image-reveal-container.aos-animate::after {
+            transform: translateX(101%);
+        }
+
+        .image-reveal-container img {
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: scale(1.1); 
+        }
+        
+        .image-reveal-container.aos-animate img {
+            transform: scale(1);
         }
     </style>
 </head>
-<body class="p-8">
+<body class="bg-slate-100 text-slate-800">
+    <canvas id="effect-canvas"></canvas>
 
-    <!-- Cover Proposal -->
-    <div class="container mx-auto bg-white rounded-xl shadow-2xl p-8 md:p-16 lg:p-24 mb-16">
-        <div class="flex flex-col items-center justify-center text-center">
-            <div class="mb-8 w-full max-w-sm">
-                <img src="https://placehold.co/600x400/2c6f37/ffffff?text=Budidaya+Sapi+Potong" alt="Ilustrasi Budidaya Sapi Potong" class="w-full h-auto rounded-lg shadow-md">
+    <!-- Cover Section -->
+    <div id="cover" class="fixed top-0 left-0 w-full h-full z-50 flex flex-col items-center justify-center text-white text-center p-8 bg-slate-700">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative z-10" data-aos="fade-up">
+            <p class="text-lg mb-2">Syukuran Khitan & Ulang Tahun</p>
+            <h1 class="font-serif text-5xl md:text-6xl mb-4 target-nama-anak">Junior Habib R. Harun</h1>
+            <div id="guest-info" class="border-t border-b border-white py-4 my-8 hidden">
+                <p class="text-md">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+                <h2 id="guest-name" class="text-2xl font-bold mt-2"></h2>
+                <p class="text-xs mt-2 text-white/80">Mohon maaf jika terdapat kesalahan dalam penulisan nama atau gelar.</p>
             </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c6f37] mb-2">PROPOSAL BANTUAN USAHA EKONOMI PRODUKTIF (UEP)</h1>
-            <h2 class="text-xl md:text-2xl font-semibold text-[#548b61] mb-4">KELOMPOK USAHA BERSAMA (KUBE) “HARAPAN SEJAHTERA”</h2>
-            <p class="text-lg md:text-xl font-medium text-[#7d9f82]">BUDIDAYA TERNAK SAPI POTONG</p>
-            <p class="mt-12 text-gray-600">Diajukan kepada:</p>
-            <p class="text-xl font-bold text-gray-800">Dinas Sosial Kabupaten Gorontalo</p>
+            <button id="open-invitation" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform duration-300 animate-pulse-slow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Buka Undangan
+            </button>
+            <div id="review-comment-container" class="mt-8 mx-auto w-full max-w-sm">
+                <p class="bg-black text-white text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Komentar Tamu</p>
+                <div class="bg-white/30 text-white backdrop-blur-sm px-4 py-3 rounded-lg shadow-md min-h-[50px] flex items-center justify-center">
+                    <p id="review-comment-text" class="text-sm italic">Memuat komentar...</p>
+                </div>
+            </div>
         </div>
+        <div id="admin-buttons" class="absolute bottom-5 left-5 right-5 z-60 flex justify-between items-center max-w-xs mx-auto">
+            <button id="font-toggle-button" title="Pilih Font & Warna" class="bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 12a4 4 0 0 0 0-8H6v8"/><path d="M15 20a4 4 0 0 0 0-8H6v8Z"/><path d="m18 13 1.5-1.5a2.828 2.0 0 0 0-4-4L14 9"/><path d="m18 13 4 4L12 21.5l-4-4 6-6Z"/></svg>
+            </button>
+             <button id="effect-toggle-button" title="Pilih Efek" class="bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.3 0 .5.2.8.4l1.5 1.5c.2.2.4.5.4.8v0c0 .3-.2.5-.4.8l-1.5 1.5c-.2.2-.5.4-.8.4s-.5-.2-.8-.4l-1.5-1.5C9.2 6.3 9 6 9 5.7v0c0-.3.2-.5.4-.8l1.5-1.5c.3-.2.5-.4.8-.4z"/><path d="M19 12c.3 0 .5.2.8.4l1.5 1.5c.2.2.4.5.4.8v0c0 .3-.2.5-.4.8l-1.5 1.5c-.2.2-.5.4-.8.4s-.5-.2-.8-.4l-1.5-1.5c-.2-.2-.4-.5-.4-.8v0c0-.3.2-.5.4-.8l1.5-1.5c.3-.2.5-.4.8-.4z"/><path d="M5 12c.3 0 .5.2.8.4l1.5 1.5c.2.2.4.5.4.8v0c0 .3-.2.5-.4.8l-1.5 1.5c-.2.2-.5.4-.8.4s-.5-.2-.8-.4l-1.5-1.5C2.2 15.3 2 15 2 14.7v0c0-.3.2-.5.4-.8l1.5-1.5c.3-.2.5-.4.8-.4z"/></svg>
+            </button>
+            <button id="song-toggle-button" title="Pilih Lagu" class="bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </button>
+            <button id="link-toggle-button" title="Buat Link Tamu" class="bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </button>
+        </div>
+        <div id="cover-font-panel" class="absolute bottom-20 left-5 z-70 bg-white/95 backdrop-blur-md p-4 rounded-lg shadow-lg w-72"></div>
+        <div id="cover-effect-panel" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-70 bg-white/95 backdrop-blur-md p-4 rounded-lg shadow-lg w-72"></div>
+        <div id="cover-song-panel" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-70 bg-white/95 backdrop-blur-md p-4 rounded-lg shadow-lg w-72"></div>
+        <div id="cover-link-panel" class="absolute bottom-20 right-5 z-20 bg-white/95 backdrop-blur-md p-4 rounded-lg shadow-lg w-72 max-h-[70vh] overflow-y-auto"></div>
     </div>
 
-    <!-- Konten Proposal -->
-    <div class="container mx-auto bg-white rounded-xl shadow-lg p-8 md:p-12 lg:p-16">
+    <!-- Main Content -->
+    <main id="main-content" class="hidden max-w-3xl mx-auto bg-white shadow-xl relative z-20">
+        <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
+            <button id="fullscreen-toggle" title="Layar Penuh" class="bg-teal-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg"></button>
+            <button id="music-toggle" title="Musik" class="bg-teal-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg"></button>
+        </div>
+        <header class="text-center p-12 bg-slate-800 text-white parallax-bg" style="background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png');">
+            <p class="text-lg" data-aos="fade-down">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+            <p class="mt-4 max-w-xl mx-auto" data-aos="fade-up">
+                Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara Tasyakuran Khitan & Ulang Tahun putra kami:
+            </p>
+            <h1 class="font-serif text-5xl md:text-6xl mt-6 target-nama-anak" data-aos="zoom-in">Junior Habib R. Harun</h1>
+        </header>
 
-        <!-- BAB I: PENDAHULUAN -->
-        <section class="mb-12">
-            <h3 class="section-title text-2xl mb-6">BAB I: PENDAHULUAN</h3>
-            <div class="space-y-6">
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">1.1. Latar Belakang</h4>
-                    <p class="text-justify indent">
-                        Kemiskinan dan keterbatasan lapangan kerja masih menjadi masalah sosial yang dihadapi oleh masyarakat di Kabupaten Gorontalo, termasuk di Desa Barakati, Kecamatan Batudaa. Salah satu faktor utama yang menghambat peningkatan kesejahteraan masyarakat prasejahtera adalah keterbatasan akses modal usaha.
-                    </p>
-                    <p class="text-justify indent">
-                        Untuk mengatasi hal tersebut, kami, 10 orang warga Desa Barakati yang tergolong keluarga prasejahtera, membentuk Kelompok Usaha Bersama (KUBE) “Harapan Sejahtera” dengan tujuan mengembangkan usaha ekonomi produktif yang berkelanjutan.
-                    </p>
-                    <p class="text-justify indent mb-4">
-                        Kami memilih budidaya ternak sapi potong sebagai usaha bersama karena:
-                    </p>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                        <li>Desa Barakati memiliki potensi sumber daya alam berupa ketersediaan hijauan pakan.</li>
-                        <li>Budidaya sapi potong tidak hanya menghasilkan daging, tetapi juga anakan (pedet) yang bernilai ekonomis.</li>
-                        <li>Permintaan pasar terhadap daging sapi di Kabupaten Gorontalo cukup tinggi, terutama saat hari besar keagamaan.</li>
-                        <li>Limbah ternak (kotoran sapi) dapat dimanfaatkan sebagai pupuk organik untuk mendukung sektor pertanian.</li>
-                    </ul>
-                    <p class="text-justify indent mt-4">
-                        Dengan adanya usaha ini, kami berharap dapat menciptakan sumber pendapatan yang berkelanjutan, membuka lapangan kerja baru, serta mengurangi tingkat kemiskinan di desa kami.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">1.2. Maksud dan Tujuan</h4>
-                    <p class="text-justify indent">
-                        Maksud dari proposal ini adalah untuk memperoleh bantuan modal usaha dari Dinas Sosial Kabupaten Gorontalo dalam rangka mengembangkan budidaya sapi potong.
-                    </p>
-                    <h5 class="font-semibold text-base mt-4 mb-2">Tujuan:</h5>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                        <li>Meningkatkan taraf hidup anggota KUBE melalui usaha peternakan berkelanjutan.</li>
-                        <li>Menciptakan lapangan kerja baru bagi masyarakat desa.</li>
-                        <li>Mengembangkan potensi lokal melalui budidaya sapi potong.</li>
-                        <li>Menumbuhkan solidaritas, gotong royong, dan kemandirian ekonomi anggota.</li>
-                    </ul>
-                </div>
+        <section id="doa-harapan" class="p-8 md:p-12 text-center bg-white">
+            <div class="max-w-2xl mx-auto border-y-2 border-teal-500 py-6" data-aos="fade-up">
+                <p class="text-slate-600 italic">"Ya Allah, di hari yang penuh berkah ini, jadikanlah ananda kami insan yang sholeh, berbakti, dan senantiasa berada dalam lindungan-Mu. Semoga dengan bertambahnya usia dan disempurnakannya fitrahnya, ia tumbuh menjadi pribadi yang sehat, cerdas, dan membawa manfaat bagi sesama. Aamiin Ya Rabbal Alamin."</p>
             </div>
         </section>
 
-        <!-- BAB II: PROFIL KELOMPOK -->
-        <section class="mb-12">
-            <h3 class="section-title text-2xl mb-6">BAB II: PROFIL KELOMPOK</h3>
-            <div class="space-y-6">
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">2.1. Identitas Kelompok</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
-                        <p><strong>Nama Kelompok</strong> : KUBE “Harapan Sejahtera”</p>
-                        <p><strong>Alamat</strong> : Desa Barakati, Kecamatan Batudaa, Kabupaten Gorontalo</p>
-                        <p><strong>Jenis Usaha</strong> : Budidaya Sapi Potong</p>
-                        <p><strong>Tahun Berdiri</strong> : 2024</p>
-                        <p><strong>Jumlah Anggota</strong> : 10 orang</p>
-                    </div>
+        <section id="family" class="p-8 md:p-12 text-center bg-slate-50">
+             <p class="text-lg mb-8" data-aos="fade-up">Sekilas Tentang Keluarga</p>
+             <p class="text-md italic text-slate-600 mb-6" data-aos="fade-up" data-aos-delay="100">
+                Anak pertama kami dari dua bersaudara, Junior Habib R. Harun, kini menginjak usia 8 tahun. Dengan segala doa dan cinta, kami bersyukur atas kehadirannya yang melengkapi kebahagiaan kami.
+             </p>
+             <div class="flex justify-center">
+                <div class="image-reveal-container rounded-lg shadow-lg border-4 border-white" data-aos="image-reveal">
+                    <img src="https://raw.githubusercontent.com/qisel/qiqi/main/file2.png" alt="Foto Keluarga Besar" class="max-w-sm w-full h-auto object-cover">
                 </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">2.2. Visi dan Misi</h4>
-                    <p class="font-semibold text-base">Visi:</p>
-                    <p class="text-justify mb-2">Terwujudnya kesejahteraan dan kemandirian ekonomi anggota melalui usaha budidaya sapi potong.</p>
-                    <p class="font-semibold text-base">Misi:</p>
-                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                        <li>Menjalankan usaha budidaya sapi potong secara kolektif dan berkelanjutan.</li>
-                        <li>Meningkatkan keterampilan anggota dalam bidang peternakan.</li>
-                        <li>Mengembangkan sistem reproduksi ternak untuk menghasilkan pedet berkualitas.</li>
-                        <li>Membangun kemitraan dengan pemerintah, swasta, dan masyarakat dalam pemasaran hasil ternak.</li>
-                    </ol>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">2.3. Susunan Pengurus dan Anggota</h4>
-                    <p><strong>Pengurus:</strong></p>
-                    <ul class="list-disc list-inside text-gray-700 ml-4 mb-2">
-                        <li><strong>Ketua</strong> : Rum Yusran T. Luawo</li>
-                        <li><strong>Sekretaris</strong> : Usman Moonggalo</li>
-                    </ul>
-                    <p><strong>Anggota:</strong></p>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 ml-4">
-                        <li>Aslan Tooli</li>
-                        <li>Yanto Tooli</li>
-                        <li>Abdulkarim Fikran Luawo</li>
-                        <li>Hendra Hasan</li>
-                        <li>Rey Makrun</li>
-                        <li>Patir Polapa</li>
-                        <li>Meykel Harun</li>
-                        <li>Jeklin Harun</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- BAB III: RENCANA USAHA -->
-        <section class="mb-12">
-            <h3 class="section-title text-2xl mb-6">BAB III: RENCANA USAHA</h3>
-            <div class="space-y-6">
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">3.1. Potensi Usaha</h4>
-                    <p class="text-justify indent">
-                        Budidaya sapi potong memiliki prospek jangka panjang. Selain menghasilkan daging, usaha ini juga menghasilkan pedet (anak sapi) yang dapat dijual kembali atau dibesarkan menjadi sapi potong. Dengan jumlah indukan yang cukup, populasi sapi dapat bertambah setiap tahun.
-                    </p>
-                    <p class="text-justify indent">
-                        Selain itu, kotoran sapi bisa diolah menjadi pupuk organik, sehingga menambah nilai ekonomi sekaligus mendukung pertanian lokal.
-                    </p>
-                    <div class="mt-6 text-center">
-                        <img src="https://placehold.co/600x400/d6e9d6/2c6f37?text=Sapi+di+Padang+Rumput" alt="Ilustrasi sapi di padang rumput" class="w-full md:w-3/4 mx-auto rounded-lg shadow-md">
-                    </div>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-2">3.2. Rencana Kegiatan</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                        <li><strong>Persiapan:</strong> Menyiapkan lahan dan kandang kolektif.</li>
-                        <li><strong>Pengadaan Bibit:</strong> Membeli 8 ekor sapi betina produktif dan 2 ekor pejantan unggul.</li>
-                        <li><strong>Pemeliharaan:</strong> Memberikan pakan hijauan dan tambahan konsentrat, menjaga kesehatan ternak dengan obat & vitamin.</li>
-                        <li><strong>Reproduksi:</strong> Mengatur perkawinan alami atau inseminasi buatan untuk menghasilkan pedet.</li>
-                        <li><strong>Pemasaran:</strong> Menjual pedet berumur 6–12 bulan serta sapi potong sesuai permintaan pasar.</li>
-                        <li><strong>Pengembangan Usaha:</strong> Sebagian keuntungan digunakan untuk membeli indukan tambahan agar populasi sapi terus bertambah.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- BAB IV: RENCANA ANGGARAN BIAYA (RAB) -->
-        <section class="mb-12">
-            <h3 class="section-title text-2xl mb-6">BAB IV: RENCANA ANGGARAN BIAYA (RAB)</h3>
-            <div class="bg-gray-50 rounded-lg p-6 mb-8 shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-                            <tr>
-                                <th scope="col" class="py-3 px-6 rounded-tl-lg">No</th>
-                                <th scope="col" class="py-3 px-6">Uraian Kegiatan</th>
-                                <th scope="col" class="py-3 px-6">Volume</th>
-                                <th scope="col" class="py-3 px-6">Satuan</th>
-                                <th scope="col" class="py-3 px-6">Harga Satuan (Rp)</th>
-                                <th scope="col" class="py-3 px-6 rounded-tr-lg">Jumlah Biaya (Rp)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white border-b">
-                                <td colspan="6" class="py-3 px-6 font-bold text-gray-900">A. MODAL KERJA</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">1</td>
-                                <td class="py-3 px-6">Pembelian Indukan Betina Sapi</td>
-                                <td class="py-3 px-6">2 ekor</td>
-                                <td class="py-3 px-6">ekor</td>
-                                <td class="py-3 px-6">12.000.000</td>
-                                <td class="py-3 px-6">24.000.000</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">2</td>
-                                <td class="py-3 px-6">Pembelian Pejantan Sapi</td>
-                                <td class="py-3 px-6">1 ekor</td>
-                                <td class="py-3 px-6">ekor</td>
-                                <td class="py-3 px-6">15.000.000</td>
-                                <td class="py-3 px-6">15.000.000</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">3</td>
-                                <td class="py-3 px-6">Pakan Alternatif (Ampas tahu, jerami, silase)</td>
-                                <td class="py-3 px-6">1 paket</td>
-                                <td class="py-3 px-6">paket</td>
-                                <td class="py-3 px-6">8.000.000</td>
-                                <td class="py-3 px-6">8.000.000</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">4</td>
-                                <td class="py-3 px-6">Obat-obatan & Vitamin</td>
-                                <td class="py-3 px-6">1 paket</td>
-                                <td class="py-3 px-6">paket</td>
-                                <td class="py-3 px-6">3.000.000</td>
-                                <td class="py-3 px-6">3.000.000</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td colspan="6" class="py-3 px-6 font-bold text-gray-900">B. MODAL INVESTASI</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">1</td>
-                                <td class="py-3 px-6">Peralatan Kandang (terpal, ember)</td>
-                                <td class="py-3 px-6">1 paket</td>
-                                <td class="py-3 px-6">paket</td>
-                                <td class="py-3 px-6">3.500.000</td>
-                                <td class="py-3 px-6">3.500.000</td>
-                            </tr>
-                            <tr class="bg-white border-b">
-                                <td class="py-3 px-6">2</td>
-                                <td class="py-3 px-6">Transportasi & Tak Terduga</td>
-                                <td class="py-3 px-6">1 paket</td>
-                                <td class="py-3 px-6">paket</td>
-                                <td class="py-3 px-6">3.000.000</td>
-                                <td class="py-3 px-6">3.000.000</td>
-                            </tr>
-                            <tr class="bg-gray-200">
-                                <td colspan="5" class="py-3 px-6 font-bold text-gray-900">TOTAL</td>
-                                <td class="py-3 px-6 font-bold text-gray-900 rounded-br-lg">50.000.000</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p class="text-center font-semibold italic text-gray-600 mt-4">Terbilang: Lima Puluh Juta Rupiah</p>
-            </div>
-
-            <!-- Analisis Kelayakan & Proyeksi Keuangan -->
-            <div class="space-y-6">
-                <h4 class="font-semibold text-lg mb-2">Analisis Kelayakan & Proyeksi Keuangan</h4>
-                <p class="text-justify indent">
-                    Analisis ini menunjukkan bahwa dana sebesar Rp50.000.000 sudah sangat mencukupi untuk menjalankan proyek ini dari awal hingga menghasilkan anakan yang siap dijual, tanpa memerlukan dana tambahan.
-                </p>
-                <div>
-                    <h5 class="font-semibold text-base mb-2">1. Perkiraan Biaya Operasional Harian</h5>
-                    <p class="text-justify indent mb-2">
-                        Biaya operasional dihitung berdasarkan kebutuhan harian untuk 3 ekor sapi (2 indukan betina + 1 pejantan). Dengan memanfaatkan pakan alternatif yang umumnya tersedia di lingkungan peternak lokal, biaya dapat ditekan.
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 ml-4">
-                        <li><strong>Asumsi Biaya Pakan Harian:</strong> Kebutuhan pakan per ekor: sekitar Rp5.000/hari (termasuk pakan hijauan, ampas tahu, dan silase).</li>
-                        <li><strong>Jumlah sapi:</strong> 3 ekor</li>
-                        <li><strong>Total Biaya Harian:</strong> 3 ekor x Rp5.000 = Rp15.000</li>
-                        <li><strong>Total Biaya Bulanan:</strong> Rp15.000 x 30 hari = Rp450.000</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="font-semibold text-base mb-2">2. Proyeksi Kecukupan Dana</h5>
-                    <p class="text-justify indent mb-2">
-                        Dengan anggaran pakan sebesar Rp8.000.000, dana ini akan cukup untuk membiayai pakan selama:
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 ml-4">
-                        <li><strong>Perhitungan:</strong> Rp8.000.000 / Rp450.000 = sekitar 17.7 bulan</li>
-                    </ul>
-                    <p class="text-justify indent mt-2">
-                        Waktu yang diperlukan sapi betina untuk melahirkan anakan (masa kebuntingan) adalah sekitar 9-10 bulan. Setelah anakan lahir, dibutuhkan waktu sekitar 6 bulan untuk mencapai bobot yang ideal untuk dijual.
-                    </p>
-                    <p class="text-justify indent mt-2">
-                        <strong>Kesimpulan:</strong> Dana pakan yang dianggarkan (Rp8.000.000) sudah lebih dari cukup untuk menutupi biaya pakan dari awal proyek hingga anakan sapi siap dijual. Ini menunjukkan bahwa proyek ini <strong>layak</strong> dan dapat mandiri secara finansial dalam jangka panjang.
-                    </p>
-                </div>
-                <div>
-                    <h5 class="font-semibold text-base mb-2">3. Anggaran untuk Kesehatan Sapi</h5>
-                    <p class="text-justify indent">
-                        Dana sebesar Rp3.000.000 untuk obat-obatan dan vitamin mencakup semua kebutuhan kesehatan dasar, seperti vitamin rutin, obat cacing, dan vaksinasi. Sebagian dana ini juga akan digunakan sebagai dana cadangan untuk pengobatan darurat jika diperlukan.
-                    </p>
-                </div>
-            </div>
+             </div>
+             <h3 class="font-serif text-2xl mt-4" data-aos="fade-up" data-aos-delay="200">Kel. Harun & Kel. Mopangga</h3>
         </section>
         
-        <!-- BAB V: PENUTUP -->
-        <section class="mb-12">
-            <h3 class="section-title text-2xl mb-6">BAB V: PENUTUP</h3>
-            <p class="text-justify indent mb-4">
-                Demikian proposal permohonan bantuan usaha budidaya sapi potong ini kami buat dengan sebenar-benarnya. Proposal ini disusun berdasarkan kondisi riil masyarakat dan potensi yang tersedia di Desa Barakati.
-            </p>
-            <p class="text-justify indent">
-                Kami berharap Bapak Kepala Dinas Sosial Kabupaten Gorontalo dapat mempertimbangkan dan menyetujui permohonan ini, demi peningkatan kesejahteraan masyarakat prasejahtera menuju kemandirian ekonomi.
-            </p>
-            <p class="text-justify indent mb-8">
-                Atas perhatian dan bantuan yang diberikan, kami ucapkan terima kasih.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-between items-center sm:items-start text-center sm:text-left">
-                <div>
-                    <p>Barakati, 10 Agustus 2024</p>
-                    <p class="font-bold">Kelompok Usaha Bersama “Harapan Sejahtera”</p>
-                </div>
-                <div class="mt-8 sm:mt-0 flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-12">
-                    <div class="flex flex-col items-center">
-                        <p class="font-bold">Ketua,</p>
-                        <p class="mt-12 mb-2 font-bold underline">Rum Yusran T. Luawo</p>
+        <section id="details" class="p-8 md:p-12 text-center relative overflow-hidden">
+            <h2 class="font-serif text-4xl mb-8 animate-letters">Detail Acara</h2>
+            <div class="border-t-2 border-b-2 border-teal-500 py-8" data-aos="fade-up">
+                <p class="text-lg mb-4">Insya Allah akan diselenggarakan pada:</p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                    <div class="w-full md:w-1/2" data-aos="fade-right">
+                        <div class="bg-slate-100 p-6 rounded-lg shadow-md">
+                            <h3 class="font-serif text-2xl text-teal-700">Tasyakuran</h3>
+                            <p class="text-xl font-bold mt-2">Sabtu, 23 Agustus 2025</p>
+                            <p class="mt-1">Pukul 08:00 WITA - Selesai</p>
+                            <p class="mt-4 text-sm">
+                                Kediaman Bapak/Ibu Rizky R. Harun bersama istri <br>
+                                Kompleks RO. Taluhu Barakati Kecamatan Batudaa
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex flex-col items-center">
-                        <p class="font-bold">Sekretaris,</p>
-                        <p class="mt-12 mb-2 font-bold underline">Usman Moonggalo</p>
+                </div>
+            </div>
+            
+            <div id="countdown" class="mt-10 flex justify-center space-x-4 text-center"></div>
+            <div id="live-status" class="mt-10 hidden text-center">
+                <p class="text-2xl md:text-4xl font-bold text-teal-700 animate-pulse">Acara Sedang Berlangsung</p>
+                <a id="live-stream-button" href="#" target="_blank" class="mt-6 inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-2 -mt-1"><path d="M15.6 11.6L22 7v10l-6.4-4.6Z"/><path d="M2 7h11a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/></svg>
+                    Tonton Live Streaming
+                </a>
+            </div>
+            <div id="admin-livestream-panel" class="mt-6 max-w-md mx-auto bg-slate-200 p-4 rounded-lg shadow-inner hidden">
+                <p class="text-sm font-bold text-slate-700 mb-2 text-left">Panel Admin: Atur Link Live</p>
+                <div class="flex items-center gap-2">
+                    <input type="url" id="livestream-url-input" class="w-full p-2 text-sm border border-slate-400 rounded-lg focus:ring-2 focus:ring-teal-500" placeholder="https://youtube.com/live/...">
+                    <button id="save-livestream-link-btn" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-lg text-sm whitespace-nowrap">Simpan Link</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="p-8 md:p-12 text-center bg-white">
+            <h2 class="font-serif text-4xl mb-2 animate-letters">Galeri Kenangan</h2>
+            <p class="text-slate-600 max-w-xl mx-auto mb-8" data-aos="fade-up">Bagikan dan lihat momen-momen kebahagiaan dari acara kami.</p>
+            <div class="max-w-xl mx-auto" data-aos="fade-up">
+                <div class="w-full aspect-video bg-slate-200 rounded-lg shadow-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img id="main-photo" src="https://placehold.co/600x400/e2e8f0/94a3b8?text=Galeri+Foto" alt="Foto Utama Galeri" class="w-full h-full object-cover transition-opacity duration-500">
+                </div>
+                <div class="relative">
+                    <div id="thumbnail-container" class="flex items-center gap-3 overflow-x-auto pb-2 thumbnail-container">
+                        <div id="gallery-placeholder" class="text-center w-full py-4 text-slate-500">Belum ada foto di galeri.</div>
+                    </div>
+                </div>
+                
+                <a id="submit-photo-btn" href="#" target="_blank" class="mt-6 inline-block bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-2 -mt-1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    Kirim Foto Kenangan
+                </a>
+            </div>
+            
+            <div id="admin-gallery-panel" class="mt-8 max-w-xl mx-auto bg-slate-200 p-4 rounded-lg shadow-inner hidden text-left">
+                <p class="text-sm font-bold text-slate-700 mb-3">Panel Admin: Atur Galeri</p>
+                <div>
+                    <label for="google-photos-link-input" class="block text-xs font-medium text-slate-600 mb-1">Link Album Google Photos (untuk tamu)</label>
+                    <div class="flex items-center gap-2">
+                        <input type="url" id="google-photos-link-input" class="w-full p-2 text-sm border border-slate-400 rounded-lg" placeholder="https://photos.app.goo.gl/...">
+                        <button id="save-google-photos-link-btn" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-lg text-sm whitespace-nowrap">Simpan</button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="new-photo-url-input" class="block text-xs font-medium text-slate-600 mb-1">URL Foto Baru (untuk ditampilkan)</label>
+                    <div class="flex items-center gap-2">
+                        <input type="url" id="new-photo-url-input" class="w-full p-2 text-sm border border-slate-400 rounded-lg" placeholder="Klik kanan 'Salin alamat gambar'...">
+                        <button id="add-photo-btn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg text-sm whitespace-nowrap">Tambah</button>
                     </div>
                 </div>
             </div>
         </section>
 
-    </div>
+        <footer class="text-center p-12 bg-slate-800 text-white parallax-bg" style="background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic-style.png');">
+            <p class="mb-4" data-aos="fade-down">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan do'a restu.</p>
+            <p class="mb-8" data-aos="fade-up">Atas kehadiran dan do'a restunya, kami ucapkan terima kasih.</p>
+            <p class="font-serif text-3xl" data-aos="zoom-in">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+            <p class="mt-8 font-bold" data-aos="fade-up">Kami yang berbahagia,</p>
+            <p class="mt-2" data-aos="fade-up">Turut Mengundang: Kel. Harun & Kel. Mopangga</p>
+        </footer>
 
+        <section id="location" class="p-8 md:p-12 bg-white text-center">
+            <h2 class="font-serif text-4xl mb-8 animate-letters">Lokasi Acara</h2>
+            <div class="w-full h-80 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.655868478335!2d122.9918231747844!3d0.5489858635880668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32792b1959555555%3A0x8e9237ff2218c63!2sMasjid%20Jami%20Al-Ikhlas%20Batudaa!5e0!3m2!1sid!2sid!4v1724050215712!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <a href="https://maps.app.goo.gl/1224teB3kar7EA7Q6" target="_blank" class="mt-6 inline-block bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform duration-300" data-aos="fade-up">Buka di Google Maps</a>
+        </section>
+
+        <section id="guestbook" class="p-8 md:p-12 text-center bg-white">
+            <h2 class="font-serif text-4xl mb-2 animate-letters">Buku Tamu & Ucapan Doa</h2>
+            <p class="text-slate-600 max-w-xl mx-auto mb-8" data-aos="fade-up">Kirimkan ucapan dan doa terbaik Anda untuk putra kami.</p>
+            <div class="max-w-md mx-auto bg-slate-50 p-6 rounded-lg" data-aos="fade-up">
+                <form id="comment-form">
+                    <input type="text" id="comment-name" class="w-full p-3 border border-slate-300 rounded-lg mb-3 bg-slate-200 text-slate-800 font-medium" readonly required>
+                    <div class="text-left mb-3">
+                        <p class="text-sm text-slate-600 mb-2">Pilih ucapan atau tulis sendiri:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" class="comment-template-btn text-xs bg-white border border-slate-300 text-slate-600 px-3 py-1 rounded-full hover:bg-slate-200">Insya Allah akan hadir.</button>
+                            <button type="button" class="comment-template-btn text-xs bg-white border border-slate-300 text-slate-600 px-3 py-1 rounded-full hover:bg-slate-200">Mohon maaf berhalangan hadir.</button>
+                            <button type="button" class="comment-template-btn text-xs bg-white border border-slate-300 text-slate-600 px-3 py-1 rounded-full hover:bg-slate-200">Selamat, semoga menjadi anak sholeh.</button>
+                            <button type="button" class="comment-template-btn text-xs bg-white border border-slate-300 text-slate-600 px-3 py-1 rounded-full hover:bg-slate-200">Barakallah, semoga sehat selalu.</button>
+                            <button type="button" class="comment-template-btn text-xs bg-white border border-slate-300 text-slate-600 px-3 py-1 rounded-full hover:bg-slate-200">Selamat ulang tahun & khitanan!</button>
+                        </div>
+                    </div>
+                    <textarea id="comment-message" rows="4" placeholder="Tulis ucapan Anda di sini..." class="w-full p-3 border border-slate-300 rounded-lg mb-3 focus:ring-2 focus:ring-teal-500" required></textarea>
+                    <button type="submit" id="comment-submit-btn" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:bg-slate-400">Kirim Ucapan</button>
+                </form>
+            </div>
+            <div id="comments-list" class="max-w-md mx-auto mt-8 text-left space-y-4"></div>
+        </section>
+
+        <section id="gift" class="p-8 md:p-12 text-center bg-slate-50">
+            <h2 class="font-serif text-4xl mb-2 animate-letters">Kirim Hadiah</h2>
+            <p class="text-slate-600 max-w-xl mx-auto mb-8" data-aos="fade-up">Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.</p>
+            <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md" data-aos="zoom-in">
+                <p class="font-semibold text-lg">Scan QRIS</p>
+                <p class="text-sm text-slate-500">Mendukung semua E-Wallet & M-Banking</p>
+                <img src="https://placehold.co/300x300/ffffff/000000?text=Scan+QRIS+Anda+di+Sini" alt="QRIS Code" class="w-48 h-48 mx-auto my-4 rounded-lg">
+                <div class="flex justify-center items-center">
+                    <img src="https://1.bp.blogspot.com/-Vtb-RArDbaY/YIZA_Kry9qI/AAAAAAAACiw/z3xhKLb2IEccSpL1sTa68YFR8peqB3_dwCLcBGAsYHQ/s0/IMG_20210426_122311.jpg" alt="E-Wallet Logos" class="h-8">
+                </div>
+                <div class="my-6 border-t border-slate-200"></div>
+                <p class="font-semibold text-lg">Atau ke Nomor E-Wallet</p>
+                <p class="text-md mt-2">DANA / OVO / GoPay</p>
+                <p class="text-xl font-bold mt-1">0823-1194-5664</p>
+                <p class="text-md mt-1">a.n. Rizky R. Harun</p>
+                <button onclick="copyToClipboard('0823-1194-5664', this)" class="mt-4 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold py-2 px-4 rounded-full transition-colors">
+                    Salin Nomor
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-4 bg-slate-100">
+        <p class="text-xs text-slate-500">
+            Digital Invitation by 
+            <a href="https://wa.me/6285299069883" target="_blank" class="font-bold text-teal-600 hover:underline">arkan.digital</a>
+            - Desa Barakati
+        </p>
+    </footer>
+    <audio id="bg-music" src="https://dn721908.ca.archive.org/0/items/man-ana_202211/MAN%20ANA.mp3"></audio>
+    <audio id="preview-audio"></audio>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        const userFirebaseConfig = {
+          apiKey: "AIzaSyBcHvkLmeQRx1b_z8YPxqXA4MwBCPFtZvE",
+          authDomain: "undangan-digital-saya-b970e.firebaseapp.com",
+          projectId: "undangan-digital-saya-b970e",
+          storageBucket: "undangan-digital-saya-b970e.appspot.com",
+          messagingSenderId: "776870269876",
+          appId: "1:776870269876:web:760c755c643ab95bbe58e1"
+        };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userFirebaseConfig;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId;
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            // --- Live Stream Logic ---
+            const liveStreamDocRef = doc(db, `artifacts/${appId}/public/data/livestreamConfig`, "liveUrl");
+            
+            async function saveLiveStreamLink(url) {
+                const saveButton = document.getElementById('save-livestream-link-btn');
+                if (!url) { alert('Masukkan URL yang valid.'); return; }
+                saveButton.disabled = true;
+                saveButton.textContent = 'Menyimpan...';
+                try {
+                    await setDoc(liveStreamDocRef, { url: url });
+                    saveButton.textContent = 'Tersimpan!';
+                    setTimeout(() => { saveButton.textContent = 'Simpan Link'; }, 2000);
+                } catch (error) {
+                    console.error("Error saving link: ", error);
+                    saveButton.textContent = 'Gagal';
+                } finally {
+                    saveButton.disabled = false;
+                }
+            }
+
+            async function fetchAndApplyLiveStreamLink() {
+                const liveStreamButton = document.getElementById('live-stream-button');
+                try {
+                    const docSnap = await getDoc(liveStreamDocRef);
+                    if (docSnap.exists() && docSnap.data().url) {
+                        const liveUrl = docSnap.data().url;
+                        liveStreamButton.href = liveUrl;
+                        liveStreamButton.classList.remove('hidden');
+                        const urlInput = document.getElementById('livestream-url-input');
+                        if (urlInput) urlInput.value = liveUrl;
+                    } else {
+                        liveStreamButton.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error(`Error fetching document from ${liveStreamDocRef.path}:`, error);
+                    liveStreamButton.classList.add('hidden');
+                }
+            }
+            
+            document.getElementById('save-livestream-link-btn')?.addEventListener('click', () => {
+                const urlInput = document.getElementById('livestream-url-input').value;
+                saveLiveStreamLink(urlInput);
+            });
+
+            // --- Gallery Logic (Google Photos Method) ---
+            const galleryConfigDocRef = doc(db, `artifacts/${appId}/public/data/galleryConfig`, "googlePhotosLink");
+            const galleryPhotosCollectionRef = collection(db, `artifacts/${appId}/public/data/galleryPhotos`);
+
+            async function saveGooglePhotosLink(url) {
+                const saveButton = document.getElementById('save-google-photos-link-btn');
+                saveButton.disabled = true;
+                saveButton.textContent = '...';
+                try {
+                    await setDoc(galleryConfigDocRef, { url: url });
+                    saveButton.textContent = 'OK!';
+                    setTimeout(() => { saveButton.textContent = 'Simpan'; }, 2000);
+                } catch (error) {
+                    console.error("Error saving GPhotos link: ", error);
+                    saveButton.textContent = 'Gagal';
+                } finally {
+                    saveButton.disabled = false;
+                }
+            }
+
+            async function addPhotoToGallery(url) {
+                const addButton = document.getElementById('add-photo-btn');
+                if (!url || !url.startsWith('http')) { alert('Masukkan URL foto yang valid.'); return; }
+                addButton.disabled = true;
+                addButton.textContent = '...';
+                try {
+                    await addDoc(galleryPhotosCollectionRef, { url: url, timestamp: serverTimestamp() });
+                    document.getElementById('new-photo-url-input').value = '';
+                    addButton.textContent = 'OK!';
+                     setTimeout(() => { addButton.textContent = 'Tambah'; }, 2000);
+                } catch (error) {
+                    console.error("Error adding photo: ", error);
+                    addButton.textContent = 'Gagal';
+                } finally {
+                    addButton.disabled = false;
+                }
+            }
+
+            async function fetchAndApplyGooglePhotosLink() {
+                const submitBtn = document.getElementById('submit-photo-btn');
+                try {
+                    const docSnap = await getDoc(galleryConfigDocRef);
+                    if (docSnap.exists() && docSnap.data().url) {
+                        const albumUrl = docSnap.data().url;
+                        submitBtn.href = albumUrl;
+                        submitBtn.classList.remove('hidden');
+                        document.getElementById('google-photos-link-input').value = albumUrl;
+                    } else {
+                        submitBtn.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error(`Error fetching document from ${galleryConfigDocRef.path}:`, error);
+                    submitBtn.classList.add('hidden');
+                }
+            }
+
+            function listenForGalleryPhotos() {
+                onSnapshot(query(galleryPhotosCollectionRef), (snapshot) => {
+                    const photos = [];
+                    snapshot.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
+                    photos.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                    window.updateGalleryUI(photos);
+                });
+            }
+
+            document.getElementById('save-google-photos-link-btn')?.addEventListener('click', () => saveGooglePhotosLink(document.getElementById('google-photos-link-input').value));
+            document.getElementById('add-photo-btn')?.addEventListener('click', () => addPhotoToGallery(document.getElementById('new-photo-url-input').value));
+
+            // --- Guestbook Logic ---
+            function setupGuestbook() {
+                const commentForm = document.getElementById('comment-form');
+                const commentsCollection = collection(db, `artifacts/${appId}/public/data/comments`);
+                const reviewCommentText = document.getElementById('review-comment-text');
+                let allComments = [];
+                let commentLoopInterval = null;
+                let currentReviewIndex = 0;
+
+                function showNextReviewComment() {
+                    if (allComments.length === 0) { reviewCommentText.textContent = 'Belum ada ucapan dan doa.'; return; }
+                    const comment = allComments[currentReviewIndex];
+                    const shortMessage = comment.message.length > 50 ? comment.message.substring(0, 50) + '...' : comment.message;
+                    reviewCommentText.classList.remove('quote-enter');
+                    reviewCommentText.classList.add('quote-exit');
+                    setTimeout(() => {
+                        reviewCommentText.innerHTML = `<b>${escapeHTML(comment.name)}</b>: ${escapeHTML(shortMessage)}`;
+                        reviewCommentText.classList.remove('quote-exit');
+                        reviewCommentText.classList.add('quote-enter');
+                    }, 1000);
+                    currentReviewIndex = (currentReviewIndex + 1) % allComments.length;
+                }
+                
+                function startReviewCommentLoop() {
+                    if (commentLoopInterval) clearInterval(commentLoopInterval);
+                    if (allComments.length > 0) showNextReviewComment();
+                    else reviewCommentText.textContent = 'Belum ada ucapan dan doa.';
+                    commentLoopInterval = setInterval(() => {
+                        if (allComments.length > 0 && window.getComputedStyle(document.getElementById('cover')).display !== 'none') {
+                            showNextReviewComment();
+                        }
+                    }, 5000);
+                }
+                
+                document.getElementById('open-invitation').addEventListener('click', () => {
+                    if (commentLoopInterval) clearInterval(commentLoopInterval);
+                });
+
+                onSnapshot(query(commentsCollection), (snapshot) => {
+                    allComments = [];
+                    snapshot.forEach(doc => allComments.push({ id: doc.id, ...doc.data() }));
+                    if (window.getComputedStyle(document.getElementById('cover')).display !== 'none') {
+                       startReviewCommentLoop();
+                    }
+                    allComments.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                    
+                    const commentsList = document.getElementById('comments-list');
+                    if (commentsList) {
+                        commentsList.innerHTML = '';
+                        const groupedComments = {};
+                        allComments.forEach(comment => {
+                            if (!comment.timestamp || !comment.name) return;
+                            const date = new Date(comment.timestamp.seconds * 1000);
+                            const dateString = date.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                            const key = `${comment.name}_${dateString}`;
+                            if (!groupedComments[key]) {
+                                groupedComments[key] = { name: comment.name, date: dateString, messages: [], latestTimestamp: comment.timestamp.seconds };
+                            }
+                            groupedComments[key].messages.unshift(escapeHTML(comment.message));
+                        });
+
+                        const sortedGroups = Object.values(groupedComments).sort((a, b) => b.latestTimestamp - a.latestTimestamp);
+                        sortedGroups.forEach(group => {
+                            const groupElement = document.createElement('div');
+                            groupElement.className = 'bg-slate-100 p-4 rounded-lg';
+                            const messagesHTML = group.messages.map(message => `<p class="text-slate-600 border-t border-slate-200 pt-2 mt-2 first:mt-0 first:pt-0 first:border-0">${message}</p>`).join('');
+                            groupElement.innerHTML = `<div class="flex justify-between items-center mb-2"><p class="font-bold text-slate-800">${escapeHTML(group.name)}</p><p class="text-xs text-slate-500">${group.date}</p></div><div>${messagesHTML}</div>`;
+                            commentsList.appendChild(groupElement);
+                        });
+                    }
+                });
+
+                commentForm?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('comment-name').value.trim();
+                    const messageInput = document.getElementById('comment-message');
+                    const message = messageInput.value.trim();
+                    const submitBtn = document.getElementById('comment-submit-btn');
+                    if (name && message) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Mengirim...';
+                        try {
+                            await addDoc(commentsCollection, { name: name, message: message, timestamp: serverTimestamp() });
+                            messageInput.value = '';
+                        } catch (error) {
+                            console.error("Error adding document: ", error);
+                        } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Kirim Ucapan';
+                        }
+                    }
+                });
+            }
+            
+            // PERUBAHAN: Alur Autentikasi dan Inisialisasi
+            async function initializeAppAndAuth() {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    console.log("Firebase authenticated successfully with UID:", auth.currentUser?.uid);
+
+                    // Setelah autentikasi berhasil, jalankan semua fungsi setup
+                    setupGuestbook();
+                    fetchAndApplyLiveStreamLink();
+                    fetchAndApplyGooglePhotosLink();
+                    listenForGalleryPhotos();
+
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                }
+            }
+
+            initializeAppAndAuth();
+
+        } catch (e) {
+            console.error("Error initializing Firebase:", e);
+        }
+        
+        function escapeHTML(str) {
+            if (!str) return "";
+            return str.replace(/[&<>"']/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]));
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({ duration: 1000, once: true, offset: 120 });
+
+            const openInvitationButton = document.getElementById('open-invitation');
+            const mainContent = document.getElementById('main-content');
+            const cover = document.getElementById('cover');
+            const audio = document.getElementById('bg-music');
+            
+            function showInvitation() {
+                cover.style.transition = 'opacity 1s, transform 1s';
+                cover.style.opacity = '0';
+                cover.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    cover.style.display = 'none';
+                    mainContent.classList.remove('hidden');
+                    document.body.style.overflow = 'auto';
+                    audio.play().catch(error => console.log("Autoplay was prevented.", error));
+                    AOS.refresh();
+                }, 1000);
+            }
+
+            if(openInvitationButton) {
+                openInvitationButton.addEventListener('click', showInvitation);
+            }
+            
+            const mainPhoto = document.getElementById('main-photo');
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            const galleryPlaceholder = document.getElementById('gallery-placeholder');
+            let currentPhotos = [];
+
+            function selectThumbnail(index) {
+                if (!currentPhotos[index]) return;
+                mainPhoto.style.opacity = 0;
+                setTimeout(() => {
+                    mainPhoto.src = currentPhotos[index].url;
+                    mainPhoto.style.opacity = 1;
+                }, 300);
+                const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail-item');
+                thumbnails.forEach((thumb, i) => thumb.classList.toggle('active', i === index));
+                const activeThumb = thumbnails[index];
+                if (activeThumb) {
+                    const containerRect = thumbnailContainer.getBoundingClientRect();
+                    const thumbRect = activeThumb.getBoundingClientRect();
+                    const scrollLeft = thumbnailContainer.scrollLeft + thumbRect.left - containerRect.left - (containerRect.width / 2) + (thumbRect.width / 2);
+                    thumbnailContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+                }
+            }
+
+            window.updateGalleryUI = (photos) => {
+                currentPhotos = photos;
+                if (photos.length === 0) {
+                    galleryPlaceholder.classList.remove('hidden');
+                    thumbnailContainer.innerHTML = '';
+                    mainPhoto.src = 'https://placehold.co/600x400/e2e8f0/94a3b8?text=Galeri+Foto';
+                    return;
+                }
+                galleryPlaceholder.classList.add('hidden');
+                thumbnailContainer.innerHTML = '';
+                photos.forEach((photo, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = photo.url;
+                    thumb.alt = `Galeri Foto ${index + 1}`;
+                    thumb.className = 'thumbnail-item w-20 h-20 md:w-24 md:h-24 object-cover rounded-md cursor-pointer border-4 border-transparent flex-shrink-0';
+                    thumb.addEventListener('click', () => selectThumbnail(index));
+                    thumbnailContainer.appendChild(thumb);
+                });
+                selectThumbnail(0);
+            };
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestName = urlParams.get('to');
+            const adminLivestreamPanel = document.getElementById('admin-livestream-panel');
+            const adminGalleryPanel = document.getElementById('admin-gallery-panel');
+            if (guestName) {
+                document.getElementById('guest-info').classList.remove('hidden');
+                document.getElementById('guest-name').textContent = guestName.replace(/\+/g, ' ');
+                document.getElementById('admin-buttons').classList.add('hidden');
+                if(adminLivestreamPanel) adminLivestreamPanel.classList.add('hidden');
+                if(adminGalleryPanel) adminGalleryPanel.classList.add('hidden');
+            } else {
+                document.getElementById('admin-buttons').classList.remove('hidden');
+                if(adminLivestreamPanel) adminLivestreamPanel.classList.remove('hidden');
+                if(adminGalleryPanel) adminGalleryPanel.classList.remove('hidden');
+            }
+            document.getElementById('comment-name').value = guestName ? guestName.replace(/\+/g, ' ') : "Tamu Undangan";
+
+            const eventDate = "2025-08-23T08:00:00";
+            const eventEndDate = "2025-08-23T17:00:00";
+            let countdownInterval = setInterval(() => {
+                const targetDate = new Date(eventDate).getTime();
+                const endDate = new Date(eventEndDate).getTime();
+                const now = new Date().getTime();
+                const distanceToStart = targetDate - now;
+                const distanceToEnd = endDate - now;
+                const countdownEl = document.getElementById('countdown');
+                const liveStatusEl = document.getElementById('live-status');
+                if (distanceToStart > 0) {
+                    countdownEl.innerHTML = `
+                        <div class="bg-teal-600 text-white p-4 rounded-lg w-20"><div class="text-3xl font-bold">${String(Math.floor(distanceToStart / 86400000)).padStart(2, '0')}</div><div class="text-xs">Hari</div></div>
+                        <div class="bg-teal-600 text-white p-4 rounded-lg w-20"><div class="text-3xl font-bold">${String(Math.floor((distanceToStart % 86400000) / 3600000)).padStart(2, '0')}</div><div class="text-xs">Jam</div></div>
+                        <div class="bg-teal-600 text-white p-4 rounded-lg w-20"><div class="text-3xl font-bold">${String(Math.floor((distanceToStart % 3600000) / 60000)).padStart(2, '0')}</div><div class="text-xs">Menit</div></div>
+                        <div class="bg-teal-600 text-white p-4 rounded-lg w-20"><div class="text-3xl font-bold">${String(Math.floor((distanceToStart % 60000) / 1000)).padStart(2, '0')}</div><div class="text-xs">Detik</div></div>
+                    `;
+                } else if (distanceToEnd > 0) {
+                    countdownEl.classList.add('hidden');
+                    liveStatusEl.classList.remove('hidden');
+                } else {
+                    countdownEl.innerHTML = '<div class="text-center w-full text-xl font-bold">Acara Telah Selesai</div>';
+                    liveStatusEl.classList.add('hidden');
+                    clearInterval(countdownInterval); 
+                }
+            }, 1000);
+        });
+
+        function copyToClipboard(text, button) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text.replace(/\\n/g, '\n');
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const originalText = button.textContent;
+                button.textContent = 'Disalin!';
+                button.classList.add('bg-green-600');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 1500);
+            } catch (err) {
+                console.error('Gagal menyalin:', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
 </body>
 </html>
