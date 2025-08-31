@@ -324,6 +324,7 @@
                 const settings = fullData.settings || { current: {}, history: {} };
                 const currentValue = settings.current[key] || '';
                 const historyItems = settings.history[key] || [];
+                
                 let inputHtml = isTextarea 
                     ? `<textarea id="modal${key}" rows="5" style="width:100%">${escapeHTML(currentValue)}</textarea>`
                     : `<div class="input-with-history"><input type="${inputType}" id="modal${key}" value="${escapeHTML(currentValue)}"><select onchange="document.getElementById('modal${key}').value = this.value;"><option value="">Riwayat</option>${historyItems.map(item => `<option value="${escapeHTML(item)}">${escapeHTML(shortenText(item))}</option>`).join('')}</select></div>`;
@@ -345,37 +346,26 @@
             return text.substring(0, maxLength) + '...';
         }
 
-        // --- PERBAIKAN DIMULAI DI SINI ---
         function displayContent(data) {
             const article = data.article || {}; 
             const settings = data.settings.current || {};
-            
-            // Helper function to ensure URL has a protocol
             const formatUrl = (url) => {
                 if (!url || typeof url !== 'string' || url.trim() === '') return '#';
-                if (url.startsWith('http://') || url.startsWith('https://')) {
-                    return url;
-                }
+                if (url.startsWith('http://') || url.startsWith('https://')) return url;
                 return `https://${url}`;
             };
-            
             document.getElementById('artikelJudul').innerText = article.title || "Belum Ada Berita";
             document.getElementById('artikelFoto').src = article.imageUrl || "https://placehold.co/250x250?text=Gambar";
             const teksContainer = document.getElementById('artikelTeks');
             teksContainer.innerHTML = '';
             if(article.content){ article.content.split('\n').forEach(p => { if(p.trim() !== ''){ const newP = document.createElement('p'); newP.innerText = p; teksContainer.appendChild(newP); }}); } else { teksContainer.innerHTML = "<p>Silakan masukkan berita pertama.</p>"; }
-            
             document.getElementById('namaMajalah').innerText = settings.Nama_Majalah || 'MAJALAH KITA';
-            
             document.getElementById('logoKuaLink').href = formatUrl(settings.Link_Logo_KUA);
             document.getElementById('logoKuaImg').src = settings.Link_Logo_KUA || 'https://via.placeholder.com/150x150.png?text=Logo+KUA';
-
             document.getElementById('logoMasjidLink').href = formatUrl(settings.Link_Logo_Masjid);
             document.getElementById('logoMasjidImg').src = settings.Link_Logo_Masjid || 'https://via.placeholder.com/150x150.png?text=Logo+Masjid';
-            
             const medsosDiv = document.getElementById('footerMedsos');
             medsosDiv.innerHTML = `<a id="medsosLink" href="${formatUrl(settings.Link_Facebook)}" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/></svg><span>${settings.Medsos || 'Facebook'}</span></a>`;
-            
             document.getElementById('footerKontak').innerHTML = `<strong>Nomor HP:</strong> ${settings.No_HP || 'N/A'}`;
             document.getElementById('footerAlamat').innerHTML = `<strong>Sekretariat:</strong> ${settings.Alamat || 'N/A'}`;
             setupClickTrackers();
@@ -447,7 +437,9 @@
             button.disabled = true;
             const defaultSystemPrompt = "Anda adalah seorang jurnalis profesional untuk majalah komunitas Islam. Buatlah sebuah artikel berita yang informatif, positif, dan ringkas berdasarkan topik yang diberikan. Artikel harus memiliki judul yang menarik dan isi berita yang jelas dalam beberapa paragraf. Gunakan gaya bahasa yang formal namun mudah dipahami oleh masyarakat umum. Pisahkan judul dan isi berita dengan penanda [JUDUL] di awal judul dan [ISI] di awal isi berita.";
             const systemPrompt = fullData.settings?.current?.AI_System_Prompt || defaultSystemPrompt;
-            const apiKey = "";
+            // **PERBAIKAN DIMULAI DI SINI**
+            const apiKey = "AIzaSyD0lUbFs0Nv0e62l-d5TK5uJsw7IbbrzLk"; // Ganti dengan kunci API Anda jika diperlukan
+            // **PERBAIKAN SELESAI**
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             const payload = {
                 systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -494,7 +486,6 @@
                 case 'Alamat': document.getElementById('footerAlamat').innerHTML = `<strong>Sekretariat:</strong> ${value}`; break;
             }
         }
-        // --- PERBAIKAN SELESAI ---
 
         window.updateSingleSetting = function(key, button) {
             const input = document.getElementById(`modal${key}`);
