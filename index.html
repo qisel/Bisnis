@@ -326,18 +326,16 @@
                 const currentValue = settings.current[key] || '';
                 const historyItems = settings.history[key] || [];
                 
-                // **PERBAIKAN DIMULAI DI SINI**
-                let inputElement = isTextarea
+                let inputElement = isTextarea 
                     ? `<textarea id="modal${key}" rows="5" style="width:100%">${escapeHTML(currentValue)}</textarea>`
                     : `<input type="${inputType}" id="modal${key}" value="${escapeHTML(currentValue)}">`;
 
                 let historyDropdown = `<select onchange="document.getElementById('modal${key}').value = this.value;">
                     <option value="">Riwayat</option>
-                    ${historyItems.map(item => `<option value="${escapeHTML(item)}">${escapeHTML(shortenText(item))}</option>`).join('')}
+                    ${historyItems.map(item => `<option value="${escapeHTML(item)}">${escapeHTML(shortenText(item, key === 'AI_System_Prompt' ? 40 : 25))}</option>`).join('')}
                 </select>`;
                 
                 let inputHtml = `<div class="input-with-history">${inputElement}${historyDropdown}</div>`;
-                // **PERBAIKAN SELESAI**
 
                 return `<div class="setting-row"><div class="setting-input-group"><label for="modal${key}">${label}:</label>${inputHtml}</div><button class="btn-apply" onclick="updateSingleSetting('${key}', this)"><span class="btn-text">Terapkan</span><div class="spinner" style="width:14px; height:14px; border-width:2px;"></div></button></div>`;
             };
@@ -355,7 +353,6 @@
         
         function shortenText(text, maxLength = 25) {
             if (typeof text !== 'string' || text.length <= maxLength) return text;
-            // Ganti baris baru dengan spasi sebelum memotong
             return text.replace(/\n/g, ' ').substring(0, maxLength) + '...';
         }
 
@@ -454,7 +451,8 @@
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             const payload = {
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                contents: [{ parts: [{ text: userPrompt }] }]
+                contents: [{ parts: [{ text: userPrompt }] }],
+                tools: [{ "google_search": {} }]
             };
             try {
                 const response = await fetch(apiUrl, {
