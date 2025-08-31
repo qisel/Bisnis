@@ -74,7 +74,7 @@
         }
         .setting-input-group { flex-grow: 1; min-width: 0; }
         .setting-input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #2e7d32; font-size: 0.9em; }
-        .input-with-history { display: flex; gap: 8px; align-items: flex-start; } /* align-items: flex-start untuk textarea */
+        .input-with-history { display: flex; gap: 8px; align-items: flex-start; }
         .input-with-history input, .input-with-history textarea { flex-grow: 1; }
         .input-with-history select { flex-basis: 100px; flex-shrink: 0; }
         .btn-apply {
@@ -82,7 +82,7 @@
             background-color: #1976d2; color: white; cursor: pointer; transition: background-color 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 5px;
             flex-shrink: 0;
-            margin-bottom: 2px; /* Menyesuaikan dengan tinggi input */
+            margin-bottom: 2px;
         }
         .btn-apply:hover { background-color: #1565c0; }
 
@@ -436,6 +436,7 @@
             }
         }
         
+        // --- PERBAIKAN LOGIKA PROMPT AI ---
         window.generateWithGemini = async function(button) {
             const promptInput = document.getElementById('aiPrompt');
             const userPrompt = promptInput.value.trim();
@@ -445,15 +446,22 @@
             }
             button.classList.add('loading');
             button.disabled = true;
-            const defaultSystemPrompt = "Anda adalah seorang jurnalis profesional untuk majalah komunitas Islam. Buatlah sebuah artikel berita yang informatif, positif, dan ringkas berdasarkan topik yang diberikan. Artikel harus memiliki judul yang menarik dan isi berita yang jelas dalam beberapa paragraf. Gunakan gaya bahasa yang formal namun mudah dipahami oleh masyarakat umum. Pisahkan judul dan isi berita dengan penanda [JUDUL] di awal judul dan [ISI] di awal isi berita.";
-            const systemPrompt = fullData.settings?.current?.AI_System_Prompt || defaultSystemPrompt;
+            
+            // Mengambil prompt dari data yang sudah dimuat
+            const systemPrompt = fullData.settings?.current?.AI_System_Prompt;
             const apiKey = "AIzaSyD0lUbFs0Nv0e62l-d5TK5uJsw7IbbrzLk";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            
             const payload = {
-                systemInstruction: { parts: [{ text: systemPrompt }] },
                 contents: [{ parts: [{ text: userPrompt }] }],
                 tools: [{ "google_search": {} }]
             };
+            
+            // HANYA tambahkan instruksi sistem jika prompt-nya ada (tidak kosong)
+            if (systemPrompt && systemPrompt.trim() !== '') {
+                payload.systemInstruction = { parts: [{ text: systemPrompt }] };
+            }
+            
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
