@@ -113,6 +113,21 @@
             font-size: 0.9em;
             padding: 10px 15px;
         }
+        #image-preview-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+        }
+        #image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 4px;
+            display: none;
+        }
         
         .notification { padding: 12px; margin-bottom: 15px; border-radius: 5px; text-align: center; font-weight: bold; display: none; border: 1px solid transparent; opacity: 0; transition: opacity 0.5s; }
         .notification.show { display: block; opacity: 1; }
@@ -318,11 +333,11 @@
             modalBody.innerHTML = `
                 <div id="articleNotification" class="notification"></div>
                 <div class="ai-generator-section">
-                    <p>✨ Buat Otomatis dengan AI</p>
+                    <p>✨ Buat Teks Otomatis dengan AI</p>
                     <div class="ai-prompt-group">
                         <div class="form-group">
-                            <label for="aiPrompt">Topik Berita:</label>
-                            <input type="text" id="aiPrompt" placeholder="Contoh: Aksi bersih-bersih masjid...">
+                            <label for="aiTextPrompt">Topik Berita:</label>
+                            <input type="text" id="aiTextPrompt" placeholder="Contoh: Aksi bersih-bersih masjid...">
                         </div>
                         <button class="btn-update" onclick="generateWithGemini(this)">
                             <span class="btn-text">Buat</span>
@@ -331,8 +346,17 @@
                     </div>
                 </div>
                 <div class="form-group"><label>Judul Berita:</label><input type="text" id="modalJudul" value="${escapeHTML(article.title || '')}"></div>
-                <div class="form-group"><label>Link/URL Foto:</label><input type="url" id="modalFotoLink" value="${escapeHTML(article.imageUrl || '')}"></div>
                 <div class="form-group"><label>Isi Berita:</label><textarea id="modalIsi">${escapeHTML(article.content || '')}</textarea></div>
+                <hr style="border: 1px dashed #aaa; margin: 20px 0;">
+                <div class="ai-generator-section" style="border-top: none; padding-top: 0;">
+                     <p>🎨 Buat Gambar dari Berita di Atas</p>
+                     <button class="btn-update" onclick="generateImageFromArticle(this)">
+                        <span class="btn-text">Buat Gambar dengan AI</span>
+                        <div class="spinner"></div>
+                    </button>
+                    <div id="image-preview-container"><img id="image-preview" src="" alt="Image Preview"></div>
+                </div>
+                <div class="form-group"><label>Link/URL Foto:</label><input type="url" id="modalFotoLink" value="${escapeHTML(article.imageUrl || '')}"></div>
                 <button class="btn-update" onclick="updateArticle(event)"><span class="btn-text">${buttonText}</span><div class="spinner"></div></button>
             `;
         }
@@ -346,14 +370,8 @@
                 let inputElement = isTextarea 
                     ? `<textarea id="modal${key}" rows="5" style="width:100%">${escapeHTML(currentValue)}</textarea>`
                     : `<input type="${inputType}" id="modal${key}" value="${escapeHTML(currentValue)}">`;
-
-                let historyDropdown = `<select onchange="document.getElementById('modal${key}').value = this.value;">
-                    <option value="">Riwayat</option>
-                    ${historyItems.map(item => `<option value="${escapeHTML(item)}">${escapeHTML(shortenText(item, key === 'AI_System_Prompt' ? 40 : 25))}</option>`).join('')}
-                </select>`;
-                
+                let historyDropdown = `<select onchange="document.getElementById('modal${key}').value = this.value;"><option value="">Riwayat</option>${historyItems.map(item => `<option value="${escapeHTML(item)}">${escapeHTML(shortenText(item, key === 'AI_System_Prompt' || key === 'AI_Image_Prompt' ? 40 : 25))}</option>`).join('')}</select>`;
                 let inputHtml = `<div class="input-with-history">${inputElement}${historyDropdown}</div>`;
-
                 return `<div class="setting-row"><div class="setting-input-group"><label for="modal${key}">${label}:</label>${inputHtml}</div><button class="btn-apply" onclick="updateSingleSetting('${key}', this)"><span class="btn-text">Terapkan</span><div class="spinner" style="width:14px; height:14px; border-width:2px;"></div></button></div>`;
             };
             modalBody.innerHTML = `<div id="settingsNotification" class="notification"></div>
@@ -364,7 +382,8 @@
                 ${createSettingRow('Link_Facebook', 'Link Halaman Facebook', 'url')}
                 ${createSettingRow('No_HP', 'Nomor HP')}
                 ${createSettingRow('Alamat', 'Alamat Sekretariat')}
-                ${createSettingRow('AI_System_Prompt', 'Prompt Sistem AI (Instruksi untuk AI)', 'text', true)}
+                ${createSettingRow('AI_System_Prompt', 'Prompt Teks AI', 'text', true)}
+                ${createSettingRow('AI_Image_Prompt', 'Prompt Gambar AI', 'text', true)}
             `;
         }
         
@@ -454,7 +473,7 @@
         }
         
         window.generateWithGemini = async function(button) {
-            const promptInput = document.getElementById('aiPrompt');
+            const promptInput = document.getElementById('aiTextPrompt');
             const userPrompt = promptInput.value.trim();
             if (!userPrompt) {
                 showNotification("Harap masukkan topik berita untuk AI.", 'error', 'article');
@@ -486,11 +505,9 @@
                 let generatedText = candidate?.content?.parts?.[0]?.text;
                 if (!generatedText) throw new Error("Respon dari AI kosong atau tidak valid.");
                 
-                let title = '';
-                let content = '';
+                let title = '', content = '';
                 const titleMatch = generatedText.match(/\[JUDUL\]\s*([\s\S]*?)\s*\[ISI\]/);
                 const contentMatch = generatedText.match(/\[ISI\]\s*([\s\S]*)/);
-
                 if (titleMatch && contentMatch) {
                     title = titleMatch[1].trim();
                     content = contentMatch[1].trim();
@@ -499,17 +516,59 @@
                     if (lines.length > 1) {
                         title = lines[0].trim();
                         content = lines.slice(1).join('\n').trim();
-                    } else {
-                        content = generatedText.trim();
-                    }
+                    } else { content = generatedText.trim(); }
                 }
-
                 document.getElementById('modalJudul').value = title;
                 document.getElementById('modalIsi').value = content;
                 showNotification("Konten berhasil dibuat oleh AI! Silakan tinjau.", 'success', 'article');
             } catch (error) {
                 console.error("Error generating content with AI:", error);
                 showNotification("Gagal membuat konten dengan AI. Coba lagi.", 'error', 'article');
+            } finally {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        };
+
+        window.generateImageFromArticle = async function(button) {
+            const title = document.getElementById('modalJudul').value.trim();
+            const content = document.getElementById('modalIsi').value.trim();
+            if (!title || !content) {
+                showNotification("Harap isi Judul dan Isi Berita terlebih dahulu.", 'error', 'article');
+                return;
+            }
+            button.classList.add('loading');
+            button.disabled = true;
+
+            const defaultImagePrompt = "Berdasarkan judul dan isi berita berikut, buat deskripsi singkat dalam satu kalimat untuk sebuah gambar yang fotorealistik dan dramatis. Judul: [JUDUL], Isi: [ISI]";
+            let imageSystemPrompt = fullData.settings?.current?.AI_Image_Prompt || defaultImagePrompt;
+            
+            const finalImagePrompt = imageSystemPrompt.replace('[JUDUL]', title).replace('[ISI]', content);
+            
+            const apiKey = "AIzaSyD0lUbFs0Nv0e62l-d5TK5uJsw7IbbrzLk";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+            const payload = { instances: [{ prompt: finalImagePrompt }], parameters: { "sampleCount": 1 } };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const result = await response.json();
+                const base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+                if (!base64Data) throw new Error("Respon gambar dari AI kosong atau tidak valid.");
+
+                const imageUrl = `data:image/png;base64,${base64Data}`;
+                document.getElementById('modalFotoLink').value = imageUrl;
+                
+                const previewImg = document.getElementById('image-preview');
+                previewImg.src = imageUrl;
+                previewImg.style.display = 'block';
+
+                showNotification("Gambar berhasil dibuat oleh AI!", 'success', 'article');
+            } catch (error) {
+                console.error("Error generating image with AI:", error);
+                showNotification("Gagal membuat gambar dengan AI. Coba lagi.", 'error', 'article');
             } finally {
                 button.classList.remove('loading');
                 button.disabled = false;
