@@ -485,13 +485,28 @@
                 const candidate = result.candidates?.[0];
                 let generatedText = candidate?.content?.parts?.[0]?.text;
                 if (!generatedText) throw new Error("Respon dari AI kosong atau tidak valid.");
+                
+                let title = '';
+                let content = '';
                 const titleMatch = generatedText.match(/\[JUDUL\]\s*([\s\S]*?)\s*\[ISI\]/);
                 const contentMatch = generatedText.match(/\[ISI\]\s*([\s\S]*)/);
-                const title = titleMatch ? titleMatch[1].trim() : "Judul Tidak Ditemukan";
-                const content = contentMatch ? contentMatch[1].trim() : "Isi berita tidak dapat dibuat.";
+
+                if (titleMatch && contentMatch) {
+                    title = titleMatch[1].trim();
+                    content = contentMatch[1].trim();
+                } else {
+                    const lines = generatedText.split('\n').filter(line => line.trim() !== '');
+                    if (lines.length > 1) {
+                        title = lines[0].trim();
+                        content = lines.slice(1).join('\n').trim();
+                    } else {
+                        content = generatedText.trim();
+                    }
+                }
+
                 document.getElementById('modalJudul').value = title;
                 document.getElementById('modalIsi').value = content;
-                showNotification("Judul dan isi berita berhasil dibuat oleh AI!", 'success', 'article');
+                showNotification("Konten berhasil dibuat oleh AI! Silakan tinjau.", 'success', 'article');
             } catch (error) {
                 console.error("Error generating content with AI:", error);
                 showNotification("Gagal membuat konten dengan AI. Coba lagi.", 'error', 'article');
