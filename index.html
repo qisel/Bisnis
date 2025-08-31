@@ -350,10 +350,16 @@
                 <hr style="border: 1px dashed #aaa; margin: 20px 0;">
                 <div class="ai-generator-section" style="border-top: none; padding-top: 0;">
                      <p>🎨 Buat Gambar dari Berita di Atas</p>
-                     <button class="btn-update" onclick="generateImageFromArticle(this)">
-                        <span class="btn-text">Buat Gambar dengan AI</span>
-                        <div class="spinner"></div>
-                    </button>
+                     <div class="ai-prompt-group">
+                         <div class="form-group">
+                            <label for="aiImagePrompt">Saran Prompt Gambar:</label>
+                            <input type="text" id="aiImagePrompt">
+                        </div>
+                        <button class="btn-update" onclick="generateImageFromArticle(this)">
+                            <span class="btn-text">Buat</span>
+                            <div class="spinner"></div>
+                        </button>
+                    </div>
                     <div id="image-preview-container"><img id="image-preview" src="" alt="Image Preview"></div>
                 </div>
                 <div class="form-group"><label>Link/URL Foto:</label><input type="url" id="modalFotoLink" value="${escapeHTML(article.imageUrl || '')}"></div>
@@ -383,7 +389,7 @@
                 ${createSettingRow('No_HP', 'Nomor HP')}
                 ${createSettingRow('Alamat', 'Alamat Sekretariat')}
                 ${createSettingRow('AI_System_Prompt', 'Prompt Teks AI', 'text', true)}
-                ${createSettingRow('AI_Image_Prompt', 'Prompt Gambar AI', 'text', true)}
+                ${createSettingRow('AI_Image_Prompt', 'Template Prompt Gambar AI', 'text', true)}
             `;
         }
         
@@ -505,12 +511,15 @@
                 let generatedText = candidate?.content?.parts?.[0]?.text;
                 if (!generatedText) throw new Error("Respon dari AI kosong atau tidak valid.");
                 
-                let title = '', content = '';
+                let title = '', content = '', imagePrompt = '';
                 const titleMatch = generatedText.match(/\[JUDUL\]\s*([\s\S]*?)\s*\[ISI\]/);
-                const contentMatch = generatedText.match(/\[ISI\]\s*([\s\S]*)/);
-                if (titleMatch && contentMatch) {
+                const contentMatch = generatedText.match(/\[ISI\]\s*([\s\S]*?)\s*\[PROMPT_GAMBAR\]/);
+                const imagePromptMatch = generatedText.match(/\[PROMPT_GAMBAR\]\s*([\s\S]*)/);
+
+                if (titleMatch && contentMatch && imagePromptMatch) {
                     title = titleMatch[1].trim();
                     content = contentMatch[1].trim();
+                    imagePrompt = imagePromptMatch[1].trim();
                 } else {
                     const lines = generatedText.split('\n').filter(line => line.trim() !== '');
                     if (lines.length > 1) {
@@ -520,7 +529,8 @@
                 }
                 document.getElementById('modalJudul').value = title;
                 document.getElementById('modalIsi').value = content;
-                showNotification("Konten berhasil dibuat oleh AI! Silakan tinjau.", 'success', 'article');
+                document.getElementById('aiImagePrompt').value = imagePrompt;
+                showNotification("Konten berhasil dibuat oleh AI!", 'success', 'article');
             } catch (error) {
                 console.error("Error generating content with AI:", error);
                 showNotification("Gagal membuat konten dengan AI. Coba lagi.", 'error', 'article');
@@ -531,19 +541,18 @@
         };
 
         window.generateImageFromArticle = async function(button) {
-            const title = document.getElementById('modalJudul').value.trim();
-            const content = document.getElementById('modalIsi').value.trim();
-            if (!title || !content) {
-                showNotification("Harap isi Judul dan Isi Berita terlebih dahulu.", 'error', 'article');
+            const imagePrompt = document.getElementById('aiImagePrompt').value.trim();
+            if (!imagePrompt) {
+                showNotification("Harap buat teks berita terlebih dahulu untuk mendapatkan saran prompt gambar.", 'error', 'article');
                 return;
             }
             button.classList.add('loading');
             button.disabled = true;
 
-            const defaultImagePrompt = "Berdasarkan judul dan isi berita berikut, buat deskripsi singkat dalam satu kalimat untuk sebuah gambar yang fotorealistik dan dramatis. Judul: [JUDUL], Isi: [ISI]";
-            let imageSystemPrompt = fullData.settings?.current?.AI_Image_Prompt || defaultImagePrompt;
+            const defaultImagePromptTemplate = "fotorealistik, [DESKRIPSI_GAMBAR]";
+            let imageSystemPrompt = fullData.settings?.current?.AI_Image_Prompt || defaultImagePromptTemplate;
             
-            const finalImagePrompt = imageSystemPrompt.replace('[JUDUL]', title).replace('[ISI]', content);
+            const finalImagePrompt = imageSystemPrompt.replace('[DESKRIPSI_GAMBAR]', imagePrompt);
             
             const apiKey = "AIzaSyD0lUbFs0Nv0e62l-d5TK5uJsw7IbbrzLk";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
