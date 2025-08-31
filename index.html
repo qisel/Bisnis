@@ -98,6 +98,21 @@
             margin-top: 0;
             text-align: center;
         }
+        .ai-prompt-group {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        .ai-prompt-group .form-group {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+        .ai-prompt-group .btn-update {
+            flex-shrink: 0;
+            width: auto;
+            font-size: 0.9em;
+            padding: 10px 15px;
+        }
         
         .notification { padding: 12px; margin-bottom: 15px; border-radius: 5px; text-align: center; font-weight: bold; display: none; border: 1px solid transparent; opacity: 0; transition: opacity 0.5s; }
         .notification.show { display: block; opacity: 1; }
@@ -304,14 +319,16 @@
                 <div id="articleNotification" class="notification"></div>
                 <div class="ai-generator-section">
                     <p>✨ Buat Otomatis dengan AI</p>
-                    <div class="form-group">
-                        <label for="aiPrompt">Topik Berita:</label>
-                        <input type="text" id="aiPrompt" placeholder="Contoh: Aksi bersih-bersih masjid An-Nur...">
+                    <div class="ai-prompt-group">
+                        <div class="form-group">
+                            <label for="aiPrompt">Topik Berita:</label>
+                            <input type="text" id="aiPrompt" placeholder="Contoh: Aksi bersih-bersih masjid...">
+                        </div>
+                        <button class="btn-update" onclick="generateWithGemini(this)">
+                            <span class="btn-text">Buat</span>
+                            <div class="spinner"></div>
+                        </button>
                     </div>
-                    <button class="btn-update" onclick="generateWithGemini(this)">
-                        <span class="btn-text">Buat Judul & Isi Berita</span>
-                        <div class="spinner"></div>
-                    </button>
                 </div>
                 <div class="form-group"><label>Judul Berita:</label><input type="text" id="modalJudul" value="${escapeHTML(article.title || '')}"></div>
                 <div class="form-group"><label>Link/URL Foto:</label><input type="url" id="modalFotoLink" value="${escapeHTML(article.imageUrl || '')}"></div>
@@ -436,7 +453,6 @@
             }
         }
         
-        // --- PERBAIKAN LOGIKA PROMPT AI ---
         window.generateWithGemini = async function(button) {
             const promptInput = document.getElementById('aiPrompt');
             const userPrompt = promptInput.value.trim();
@@ -447,7 +463,6 @@
             button.classList.add('loading');
             button.disabled = true;
             
-            // Mengambil prompt dari data yang sudah dimuat
             const systemPrompt = fullData.settings?.current?.AI_System_Prompt;
             const apiKey = "AIzaSyD0lUbFs0Nv0e62l-d5TK5uJsw7IbbrzLk";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
@@ -457,7 +472,6 @@
                 tools: [{ "google_search": {} }]
             };
             
-            // HANYA tambahkan instruksi sistem jika prompt-nya ada (tidak kosong)
             if (systemPrompt && systemPrompt.trim() !== '') {
                 payload.systemInstruction = { parts: [{ text: systemPrompt }] };
             }
