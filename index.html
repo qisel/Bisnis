@@ -35,127 +35,110 @@
 </head>
 <body class="text-gray-200">
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="container mx-auto p-4 sm:p-6">
         <div class="max-w-7xl mx-auto bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div class="p-6 sm:p-8">
-                <div class="text-center mb-6">
-                    <h1 class="text-3xl sm:text-4xl font-bold text-white">Kalkulator Margin & Simulasi Strategi</h1>
-                    <p class="text-gray-400 mt-2">Dengan Harga & Simulasi Real-time</p>
+            <div class="p-4 sm:p-6">
+                <div class="text-center mb-4">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Kalkulator Strategi Averaging by Loss</h1>
                 </div>
 
                 <!-- Real-time Price Display -->
-                <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-4 mb-8 text-center max-w-lg mx-auto">
-                    <h2 class="text-lg font-semibold text-gray-300 flex items-center justify-center">
-                        <span id="blinking-dot-indicator" class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-3 mb-6 text-center max-w-md mx-auto">
+                    <h2 class="text-base font-semibold text-gray-300 flex items-center justify-center">
+                        <span id="blinking-dot-indicator" class="w-2.5 h-2.5 bg-yellow-500 rounded-full mr-2"></span>
                         Harga BTCUSD Saat Ini
                     </h2>
-                    <div id="realtime-price" class="text-4xl font-bold text-white my-2 tracking-wider">Memuat...</div>
+                    <div id="realtime-price" class="text-3xl font-bold text-white my-1 tracking-wider">Memuat...</div>
                     <p id="last-updated" class="text-xs text-gray-500">Terakhir diperbarui: -</p>
                 </div>
 
-                <!-- Main Layout Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
-                    <!-- Kolom Kiri: Kalkulator -->
-                    <div class="lg:pr-4">
-                        <h2 class="text-2xl font-bold text-white mb-4">Parameter Kalkulator</h2>
-                        <!-- Input Form -->
-                        <form id="calculator-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <!-- Kolom Kiri Form -->
-                            <div>
-                                <label for="asset" class="block text-sm font-medium text-gray-300 mb-1">Aset</label>
-                                <input type="text" id="asset" value="BTCUSD" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: BTCUSD, XAUUSD">
-
-                                <label for="lotSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Lot per Posisi</label>
-                                <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                                
-                                <label for="contractSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Kontrak</label>
-                                <input type="number" id="contractSize" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                                <p class="text-xs text-gray-500 mt-1">Contoh: 1 untuk BTC, 100 untuk XAUUSD</p>
-                            </div>
-                            
-                            <!-- Kolom Kanan Form -->
-                            <div>
-                                <label for="leverage" class="block text-sm font-medium text-gray-300 mb-1">Leverage</label>
-                                <select id="leverage" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                                    <option value="100">1:100</option>
-                                    <option value="200">1:200</option>
-                                    <option value="400">1:400</option>
-                                    <option value="500">1:500</option>
-                                </select>
-
-                                <div>
-                                    <label for="initialPrice" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Harga Awal (Otomatis)</label>
-                                    <input type="number" id="initialPrice" class="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-gray-400 cursor-not-allowed" disabled>
+                <!-- Compact Form Layout -->
+                <div class="bg-gray-900/30 p-4 rounded-lg">
+                    <form id="calculator-form" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                        <div>
+                            <label for="capital" class="block text-xs font-medium text-gray-300 mb-1">Modal (USD)</label>
+                            <input type="number" id="capital" value="50" class="w-full bg-yellow-500/20 border border-yellow-500 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                        <div>
+                            <label for="lossTrigger" class="block text-xs font-medium text-gray-300 mb-1">Rugi Pemicu ($)</label>
+                            <input type="number" id="lossTrigger" value="1" class="w-full bg-cyan-500/20 border border-cyan-500 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                        <div>
+                            <label for="lotSize" class="block text-xs font-medium text-gray-300 mb-1">Lot</label>
+                            <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                        <div>
+                            <label for="contractSize" class="block text-xs font-medium text-gray-300 mb-1">Kontrak</label>
+                            <input type="number" id="contractSize" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                        <div>
+                            <label for="leverage" class="block text-xs font-medium text-gray-300 mb-1">Leverage</label>
+                            <select id="leverage" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow">
+                                <option value="100">1:100</option>
+                                <option value="200">1:200</option>
+                                <option value="400">1:400</option>
+                                <option value="500">1:500</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="maxLevels" class="block text-xs font-medium text-gray-300 mb-1">Max Posisi</label>
+                            <input type="number" id="maxLevels" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                        <div>
+                            <label for="usdIdrRate" class="block text-xs font-medium text-gray-300 mb-1">Kurs USD/IDR</label>
+                            <input type="number" id="usdIdrRate" value="16000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow">
+                        </div>
+                         <div class="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div class="sm:col-span-1">
+                                <label class="block text-xs font-medium text-gray-300 mb-1">Strategi</label>
+                                <div class="flex items-center space-x-4 bg-gray-700 rounded-md p-1.5">
+                                    <label class="flex items-center w-full justify-center">
+                                        <input type="radio" name="strategy" value="sell" checked class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm text-white">SELL</span>
+                                    </label>
+                                    <label class="flex items-center w-full justify-center">
+                                        <input type="radio" name="strategy" value="buy" class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm text-white">BUY</span>
+                                    </label>
                                 </div>
-                                
-                                <label for="step" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Jarak Antar Posisi ($)</label>
-                                <input type="number" id="step" value="1000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
                             </div>
-
-                            <!-- Baris Bawah Form -->
-                            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="maxLevels" class="block text-sm font-medium text-gray-300 mb-1">Jumlah Maksimal Posisi</label>
-                                    <input type="number" id="maxLevels" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                                </div>
-                                <div>
-                                     <label for="usdIdrRate" class="block text-sm font-medium text-gray-300 mb-1">Kurs USD ke IDR</label>
-                                    <input type="number" id="usdIdrRate" value="15500" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                                </div>
-                            </div>
-                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Level Support / Resisten</label>
+                            <div class="col-span-2 sm:col-span-3">
+                                 <label class="block text-xs font-medium text-gray-300 mb-1">Level Support / Resisten</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div>
-                                        <label id="sr1-label" for="sr1" class="block text-xs text-gray-400 mb-1">Resisten 1</label>
-                                        <input type="number" id="sr1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 75000">
+                                        <input type="number" id="sr1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow" placeholder="Level 1">
                                     </div>
                                     <div>
-                                        <label id="sr2-label" for="sr2" class="block text-xs text-gray-400 mb-1">Resisten 2</label>
-                                        <input type="number" id="sr2" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 80000">
+                                        <input type="number" id="sr2" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow" placeholder="Level 2">
                                     </div>
                                     <div>
-                                        <label id="sr3-label" for="sr3" class="block text-xs text-gray-400 mb-1">Resisten 3</label>
-                                        <input type="number" id="sr3" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 85000">
+                                        <input type="number" id="sr3" class="w-full bg-gray-700 border border-gray-600 rounded-md p-1.5 text-sm text-white input-glow" placeholder="Level 3">
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Strategi</label>
-                                <div class="flex items-center space-x-4">
-                                    <label class="flex items-center">
-                                        <input type="radio" name="strategy" value="sell" checked class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
-                                        <span class="ml-2 text-white">SELL</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="radio" name="strategy" value="buy" class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
-                                        <span class="ml-2 text-white">BUY</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </form>
-
-                        <!-- Tombol Aksi -->
-                        <div class="space-y-4">
-                             <button id="simulationControlBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg">
-                                Mulai Simulasi
-                            </button>
-                             <button id="resetBtn" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                                Reset
-                            </button>
                         </div>
-                    </div>
-
-                    <!-- Kolom Kanan: Hasil Simulasi (Ringkasan) -->
-                    <div id="summary-panel" class="hidden lg:block mt-8 lg:mt-0 lg:pl-4 lg:border-l lg:border-gray-700">
-                        <!-- Konten ringkasan hasil akan disisipkan di sini oleh JS -->
+                    </form>
+                     <!-- Tombol Aksi -->
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                         <button id="simulationControlBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 text-sm rounded-lg transition-all duration-300 shadow-lg">
+                            Mulai Simulasi
+                        </button>
+                         <button id="resetBtn" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 text-sm rounded-lg transition duration-300">
+                            Reset
+                        </button>
                     </div>
                 </div>
 
-                <!-- Bawah Kolom: Tabel Detail -->
-                <div id="table-panel" class="hidden mt-8 pt-8 border-t border-gray-700">
-                     <!-- Konten tabel hasil akan disisipkan di sini oleh JS -->
+                <!-- Hasil -->
+                <div id="results-wrapper" class="hidden mt-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
+                        <div id="summary-panel">
+                            <!-- Summary content here -->
+                        </div>
+                        <div id="table-panel" class="mt-8 lg:mt-0">
+                             <!-- Table content here -->
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -166,19 +149,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             const realtimePriceEl = document.getElementById('realtime-price');
             const lastUpdatedEl = document.getElementById('last-updated');
-            const initialPriceInput = document.getElementById('initialPrice');
             const simulationControlBtn = document.getElementById('simulationControlBtn');
             const resetBtn = document.getElementById('resetBtn');
             const blinkingDot = document.getElementById('blinking-dot-indicator');
+            const resultsWrapper = document.getElementById('results-wrapper');
             const summaryPanel = document.getElementById('summary-panel');
             const tablePanel = document.getElementById('table-panel');
             const strategyRadios = document.querySelectorAll('input[name="strategy"]');
+            const calculatorForm = document.getElementById('calculator-form');
             
             let currentBtcPrice = 0;
             let currentSimulationData = null; 
             let priceInterval = null; 
             let isSimulationRunning = false;
-            let usdIdrRate = 15500;
+            let previousTotalLivePL = null;
 
             const formatCurrency = (value) => {
                 return new Intl.NumberFormat('en-US', { 
@@ -210,7 +194,7 @@
             function updateLiveSimulation() {
                 if (!currentSimulationData || currentBtcPrice === 0) return; 
 
-                const { openPositions, lotSize, contractSize, strategy, maxLevels, rate } = currentSimulationData;
+                const { openPositions, lotSize, contractSize, strategy, maxLevels, rate, capital, avgPrices } = currentSimulationData;
                 
                 let totalLivePL = 0;
                 openPositions.forEach(openPrice => {
@@ -218,16 +202,30 @@
                 });
 
                 const liveProfitLossEl = document.getElementById('liveProfitLoss');
-                if(liveProfitLossEl) {
-                    liveProfitLossEl.innerHTML = formatFullCurrency(totalLivePL, rate);
+                if (liveProfitLossEl) {
                     const parentCard = liveProfitLossEl.parentElement;
-                    parentCard.className = 'col-span-2 p-4 rounded-lg text-center transition-colors'; 
-                    if (totalLivePL >= 0) {
-                        parentCard.classList.add('bg-green-900/50', 'border', 'border-green-700');
+                    if (Math.abs(totalLivePL) >= capital) {
+                         liveProfitLossEl.innerHTML = `<div class='text-3xl font-bold'>MARGIN CALL</div>`;
+                         parentCard.className = 'col-span-2 p-3 rounded-lg text-center transition-colors bg-red-900/50 border border-red-500';
                     } else {
-                        parentCard.classList.add('bg-red-900/50', 'border', 'border-red-700');
+                        let plChangeHtml = '';
+                        if (previousTotalLivePL !== null && Math.abs(totalLivePL - previousTotalLivePL) > 0.001) {
+                            const plChange = totalLivePL - previousTotalLivePL;
+                            const colorClass = plChange >= 0 ? 'text-green-400' : 'text-red-400';
+                            const sign = plChange >= 0 ? '+' : '';
+                            const plChangeUsdFormatted = formatCurrency(Math.abs(plChange));
+                            plChangeHtml = ` <span class="text-base font-medium ml-2 ${colorClass}">(${sign}${plChangeUsdFormatted})</span>`;
+                        }
+                        liveProfitLossEl.innerHTML = `<div class="flex items-center justify-center">${formatFullCurrency(totalLivePL, rate)} ${plChangeHtml}</div>`;
+                        parentCard.className = 'col-span-2 p-3 rounded-lg text-center transition-colors'; 
+                        if (totalLivePL >= 0) {
+                            parentCard.classList.add('bg-green-900/50', 'border', 'border-green-700');
+                        } else {
+                            parentCard.classList.add('bg-red-900/50', 'border', 'border-red-700');
+                        }
                     }
                 }
+                previousTotalLivePL = totalLivePL;
 
                 for (let i = 0; i < maxLevels; i++) {
                     let currentLayerCumulativePL = 0;
@@ -236,11 +234,24 @@
                         currentLayerCumulativePL += strategy === 'sell' ? (pos - currentBtcPrice) * lotSize * contractSize : (currentBtcPrice - pos) * lotSize * contractSize;
                     }
 
+                    const avgPrice = avgPrices[i];
+                    const pointDifference = strategy === 'sell' ? avgPrice - currentBtcPrice : currentBtcPrice - avgPrice;
+                    
+                    const livePointsCell = document.getElementById(`live-points-${i + 1}`);
+                    if (livePointsCell) {
+                        const colorClass = pointDifference >= 0 ? 'text-green-400' : 'text-red-400';
+                        livePointsCell.innerHTML = `<span class="${colorClass}">${pointDifference.toFixed(2)}</span>`;
+                    }
+
                     const livePlCell = document.getElementById(`live-pl-${i + 1}`);
                     if (livePlCell) {
-                        livePlCell.innerHTML = formatFullCurrency(currentLayerCumulativePL, rate);
-                        livePlCell.classList.remove('text-green-400', 'text-red-400');
-                        livePlCell.classList.add(currentLayerCumulativePL >= 0 ? 'text-green-400' : 'text-red-400');
+                         if (Math.abs(currentLayerCumulativePL) >= capital) {
+                            livePlCell.innerHTML = `<span class="text-red-400 font-bold">MARGIN CALL</span>`;
+                        } else {
+                            livePlCell.innerHTML = formatFullCurrency(currentLayerCumulativePL, rate);
+                            livePlCell.classList.remove('text-green-400', 'text-red-400');
+                            livePlCell.classList.add(currentLayerCumulativePL >= 0 ? 'text-green-400' : 'text-red-400');
+                        }
                     }
                 }
             }
@@ -262,12 +273,9 @@
                     }
                     currentBtcPrice = newPrice;
                     
-                    const currentRate = parseFloat(document.getElementById('usdIdrRate').value) || 15500;
+                    const currentRate = parseFloat(document.getElementById('usdIdrRate').value) || 16000;
                     realtimePriceEl.innerHTML = formatFullCurrency(currentBtcPrice, currentRate);
-
-                    if (document.activeElement !== initialPriceInput) {
-                        initialPriceInput.value = currentBtcPrice.toFixed(2);
-                    }
+                    
                     lastUpdatedEl.textContent = `Terakhir diperbarui: ${new Date().toLocaleTimeString('id-ID')}`;
                     
                     updateLiveSimulation();
@@ -305,33 +313,48 @@
             
             fetchPrice(); 
 
-            function updateSrLabels() {
+            function updateSrPlaceholders() {
                 const strategy = document.querySelector('input[name="strategy"]:checked').value;
                 const baseLabel = strategy === 'sell' ? 'Resisten' : 'Support';
-                document.getElementById('sr1-label').textContent = `${baseLabel} 1`;
-                document.getElementById('sr2-label').textContent = `${baseLabel} 2`;
-                document.getElementById('sr3-label').textContent = `${baseLabel} 3`;
+                 document.getElementById('sr1').placeholder = `${baseLabel} 1`;
+                 document.getElementById('sr2').placeholder = `${baseLabel} 2`;
+                 document.getElementById('sr3').placeholder = `${baseLabel} 3`;
             }
-            strategyRadios.forEach(radio => radio.addEventListener('change', updateSrLabels));
-            updateSrLabels(); 
+            strategyRadios.forEach(radio => radio.addEventListener('change', updateSrPlaceholders));
+            updateSrPlaceholders(); 
+
+            // **NEW**: Listen for changes on any form input
+            const formInputs = document.querySelectorAll('#calculator-form input, #calculator-form select');
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (currentSimulationData) {
+                        if (isSimulationRunning) {
+                            stopLiveUpdates();
+                        }
+                        currentSimulationData = null; // Mark simulation as stale
+                        simulationControlBtn.textContent = 'Hitung Ulang Simulasi';
+                        simulationControlBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'bg-green-600', 'hover:bg-green-700');
+                        simulationControlBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    }
+                });
+            });
 
             simulationControlBtn.addEventListener('click', () => {
                 if (!currentSimulationData) {
+                    previousTotalLivePL = null;
                     if (currentBtcPrice === 0) {
-                        console.warn("Harga real-time belum dimuat.");
-                        realtimePriceEl.textContent = "Coba lagi sebentar...";
-                        realtimePriceEl.classList.add('text-yellow-400');
                         return;
                     }
                     
                     const lotSize = parseFloat(document.getElementById('lotSize').value);
                     const contractSize = parseFloat(document.getElementById('contractSize').value);
                     const leverage = parseInt(document.getElementById('leverage').value);
-                    const initialPrice = currentBtcPrice; 
-                    const step = parseFloat(document.getElementById('step').value);
+                    const initialPrice = currentBtcPrice;
+                    const lossTrigger = parseFloat(document.getElementById('lossTrigger').value);
                     const maxLevels = parseInt(document.getElementById('maxLevels').value);
                     const strategy = document.querySelector('input[name="strategy"]:checked').value;
                     const rate = parseFloat(document.getElementById('usdIdrRate').value);
+                    const capital = parseFloat(document.getElementById('capital').value);
 
                     const srInputs = [
                         parseFloat(document.getElementById('sr1').value),
@@ -341,107 +364,149 @@
                     const srLevels = srInputs.filter(v => !isNaN(v));
                     const srLabels = (strategy === 'sell' ? ['R1', 'R2', 'R3'] : ['S1', 'S2', 'S3']);
 
-                    if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(step) || isNaN(maxLevels) || isNaN(rate)) {
+                    if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(lossTrigger) || isNaN(maxLevels) || isNaN(rate) || isNaN(capital)) {
                         console.error("Input tidak valid"); return;
                     }
                     
-                    let openPositions = [];
+                    let openPositions = [initialPrice];
+                    let avgPrices = [initialPrice];
                     let tableRowsHtml = '';
                     let tableSrHeaderHtml = '';
+                    let marginCallFlags = {};
+
+                    // Calculate open prices based on loss trigger
+                    for (let i = 2; i <= maxLevels; i++) {
+                        const prevPositions = openPositions.slice(0, i - 1);
+                        const prevTotalLots = lotSize * (i - 1);
+                        
+                        let weightedSum = 0;
+                        prevPositions.forEach(p => weightedSum += p * lotSize);
+                        const prevAvgPrice = weightedSum / prevTotalLots;
+                        
+                        let nextOpenPrice;
+                        const targetLoss = lossTrigger * (i - 1);
+
+                        if (strategy === 'sell') {
+                           nextOpenPrice = prevAvgPrice + (targetLoss / prevTotalLots);
+                        } else { // buy
+                           nextOpenPrice = prevAvgPrice - (targetLoss / prevTotalLots);
+                        }
+                        openPositions.push(nextOpenPrice);
+
+                        const currentAvgPrice = openPositions.reduce((sum, p) => sum + p, 0) / i;
+                        avgPrices.push(currentAvgPrice);
+                    }
+                    
+                    // Generate table rows with calculated positions
                     srLevels.forEach((level, index) => {
-                        tableSrHeaderHtml += `<th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Loss @ ${srLabels[index]}</th>`;
+                        tableSrHeaderHtml += `<th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Loss @ ${srLabels[index]}</th>`;
                     });
 
-
                     for (let i = 1; i <= maxLevels; i++) {
-                        const openPrice = strategy === 'sell' ? initialPrice + ((i - 1) * step) : initialPrice - ((i - 1) * step);
-                        openPositions.push(openPrice);
-                        
+                        const openPrice = openPositions[i-1];
                         const currentOpenPositions = openPositions.slice(0, i);
                         const currentTotalLots = lotSize * i;
-                        const currentWeightedSum = currentOpenPositions.reduce((sum, price) => sum + (price * lotSize), 0);
-                        const avgPrice = currentWeightedSum / currentTotalLots;
-                        
+                        const avgPrice = avgPrices[i-1];
                         const requiredMargin = (currentTotalLots * contractSize * avgPrice) / leverage;
                         
                         let srLossCellsHtml = '';
-                        srLevels.forEach(targetPrice => {
-                            let targetFloatingLoss = 0;
-                            currentOpenPositions.forEach(price => targetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
-                            srLossCellsHtml += `<td class="p-3 whitespace-nowrap font-semibold text-red-400">${formatFullCurrency(targetFloatingLoss, rate)}</td>`;
+                        let rowMarginCalled = false;
+                        srLevels.forEach((targetPrice, index) => {
+                            let cellHtml;
+                            if (marginCallFlags[`sr_${index}`]) {
+                                cellHtml = `<span class="text-red-400 font-bold">MARGIN CALL</span>`;
+                            } else {
+                                let targetFloatingLoss = 0;
+                                currentOpenPositions.forEach(price => targetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
+                                
+                                if (Math.abs(targetFloatingLoss) >= capital) {
+                                    cellHtml = `<span class="text-red-400 font-bold">MARGIN CALL</span>`;
+                                    marginCallFlags[`sr_${index}`] = true;
+                                    rowMarginCalled = true;
+                                } else {
+                                    cellHtml = formatFullCurrency(targetFloatingLoss, rate);
+                                }
+                            }
+                            srLossCellsHtml += `<td class="p-2 whitespace-nowrap font-semibold text-red-400 text-sm">${cellHtml}</td>`;
                         });
 
                         const lossAmount = 1;
                         const priceForOneDollarLoss = strategy === 'sell' ? avgPrice + (lossAmount / (currentTotalLots * contractSize)) : avgPrice - (lossAmount / (currentTotalLots * contractSize));
+                        const rowClass = rowMarginCalled ? 'bg-red-900/30' : 'hover:bg-gray-700/50';
 
                         tableRowsHtml += `
-                            <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
-                                <td class="p-3 whitespace-nowrap">${i}</td>
-                                <td class="p-3 whitespace-nowrap">${formatFullCurrency(openPrice, rate)}</td>
-                                <td class="p-3 whitespace-nowrap">${formatFullCurrency(avgPrice, rate)}</td>
-                                <td class="p-3 whitespace-nowrap font-semibold text-orange-400">${formatFullCurrency(requiredMargin, rate)}</td>
+                            <tr class="border-b border-gray-700 ${rowClass} transition-colors">
+                                <td class="p-2 whitespace-nowrap text-sm">${i}</td>
+                                <td class="p-2 whitespace-nowrap text-sm">${formatCurrency(openPrice)}</td>
+                                <td class="p-2 whitespace-nowrap text-sm">${formatCurrency(avgPrice)}</td>
+                                <td class="p-2 whitespace-nowrap font-semibold text-orange-400 text-sm">${formatFullCurrency(requiredMargin, rate)}</td>
                                 ${srLossCellsHtml}
-                                <td id="live-pl-${i + 1}" class="p-3 whitespace-nowrap font-semibold">Memuat...</td>
-                                <td class="p-3 whitespace-nowrap font-semibold text-cyan-400">${formatFullCurrency(priceForOneDollarLoss, rate)}</td>
+                                <td id="live-points-${i}" class="p-2 whitespace-nowrap font-semibold text-sm">Memuat...</td>
+                                <td id="live-pl-${i}" class="p-2 whitespace-nowrap font-semibold text-sm">Memuat...</td>
+                                <td class="p-2 whitespace-nowrap font-semibold text-cyan-400 text-sm">${formatCurrency(priceForOneDollarLoss)}</td>
                             </tr>
                         `;
                     }
                     
-                    currentSimulationData = { openPositions, lotSize, contractSize, strategy, maxLevels, rate };
+                    currentSimulationData = { openPositions, lotSize, contractSize, strategy, maxLevels, rate, capital, avgPrices };
                     
                     const finalTotalLots = lotSize * maxLevels;
-                    const finalWeightedSum = openPositions.reduce((sum, price) => sum + (price * lotSize), 0);
-                    const finalAvgPrice = finalWeightedSum / finalTotalLots;
+                    const finalAvgPrice = avgPrices[maxLevels-1];
                     const finalRequiredMargin = (finalTotalLots * contractSize * finalAvgPrice) / leverage;
                     
                     let summarySrHtml = '';
                     srLevels.forEach((level, index) => {
                          let finalSrLoss = 0;
                          openPositions.forEach(price => finalSrLoss += strategy === 'sell' ? (price - level) * lotSize * contractSize : (level - price) * lotSize * contractSize);
-                         summarySrHtml += `<div class="bg-red-900/50 border border-red-700 p-4 rounded-lg text-center"><p class="text-sm text-red-300">Loss @ ${srLabels[index]} (${formatCurrency(level)})</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalSrLoss, rate)}</div></div>`;
+                         let lossDisplayHtml;
+                         if (Math.abs(finalSrLoss) >= capital) {
+                             lossDisplayHtml = `<div class='text-lg font-bold text-red-400'>MARGIN CALL</div><div class="text-white">${formatFullCurrency(-capital, rate)}</div>`;
+                         } else {
+                             lossDisplayHtml = `<div class="text-lg font-bold text-white">${formatFullCurrency(finalSrLoss, rate)}</div>`;
+                         }
+                         summarySrHtml += `<div class="bg-red-900/50 border border-red-700 p-3 rounded-lg text-center"><p class="text-xs text-red-300">Loss @ ${srLabels[index]} (${formatCurrency(level)})</p>${lossDisplayHtml}</div>`;
                     });
 
 
                     summaryPanel.innerHTML = `
                         <div class="fade-in">
-                            <h2 class="text-2xl font-bold text-white mb-4">Ringkasan Simulasi</h2>
-                             <p class="text-sm text-gray-400 mb-6">Mulai dari ${formatCurrency(initialPrice)}</p>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Posisi</p><p class="text-xl font-bold text-white">${maxLevels}</p></div>
-                                <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Lot</p><p class="text-xl font-bold text-white">${formatNumber(finalTotalLots, 2)}</p></div>
-                                <div class="bg-gray-700 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-gray-400">Harga Rata-rata</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalAvgPrice, rate)}</div></div>
-                                <div class="bg-orange-500/20 border border-orange-500 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-orange-300">Total Margin Dibutuhkan</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalRequiredMargin, rate)}</div></div>
-                                <div class="col-span-2 p-4 rounded-lg text-center transition-colors bg-gray-700"><p class="text-sm text-gray-300">Total P/L Saat Ini (Live)</p><div id="liveProfitLoss" class="text-3xl font-bold text-white">-</div></div>
-                                <div class="col-span-2 grid grid-cols-1 gap-4">${summarySrHtml}</div>
+                            <h2 class="text-xl font-bold text-white mb-2">Ringkasan Simulasi</h2>
+                             <p class="text-xs text-gray-400 mb-4">Modal: ${formatCurrency(capital)} | Pemicu: ${formatCurrency(lossTrigger)} | Mulai dari: ${formatCurrency(initialPrice)}</p>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-gray-700 p-3 rounded-lg text-center"><p class="text-xs text-gray-400">Total Posisi</p><p class="text-lg font-bold text-white">${maxLevels}</p></div>
+                                <div class="bg-gray-700 p-3 rounded-lg text-center"><p class="text-xs text-gray-400">Total Lot</p><p class="text-lg font-bold text-white">${formatNumber(finalTotalLots, 2)}</p></div>
+                                <div class="bg-gray-700 p-3 rounded-lg text-center col-span-2"><p class="text-xs text-gray-400">Harga Rata-rata Akhir</p><div class="text-lg font-bold text-white">${formatCurrency(finalAvgPrice)}</div></div>
+                                <div class="bg-orange-500/20 border border-orange-500 p-3 rounded-lg text-center col-span-2"><p class="text-xs text-orange-300">Total Margin</p><div class="text-lg font-bold text-white">${formatFullCurrency(finalRequiredMargin, rate)}</div></div>
+                                <div class="col-span-2 p-3 rounded-lg text-center transition-colors bg-gray-700"><p class="text-xs text-gray-300">Total P/L (Live)</p><div id="liveProfitLoss" class="text-2xl font-bold text-white">-</div></div>
+                                <div class="col-span-2 grid grid-cols-1 gap-3">${summarySrHtml}</div>
                             </div>
                         </div>
                     `;
 
                     tablePanel.innerHTML = `
-                        <div class="fade-in">
-                            <h2 class="text-2xl font-bold text-white mb-4">Tabel Detail Simulasi</h2>
+                         <div class="fade-in">
+                            <h2 class="text-xl font-bold text-white mb-4">Tabel Detail Simulasi</h2>
                             <div class="overflow-x-auto">
                                 <table class="min-w-full bg-gray-900/50 rounded-lg">
                                     <thead class="bg-gray-700">
                                         <tr>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Layer</th>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Buka</th>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rata-rata</th>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Margin</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Layer</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Buka</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rata-rata</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Margin</th>
                                             ${tableSrHeaderHtml}
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">P/L (Live)</th>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rugi $1</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Poin (Live)</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">P/L (Live)</th>
+                                            <th class="p-2 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rugi $1</th>
                                         </tr>
                                     </thead>
                                     <tbody>${tableRowsHtml}</tbody>
                                 </table>
                             </div>
-                            <p class="text-xs text-gray-500 mt-4 text-center">*P/L Saat Ini (Live) diperbarui secara otomatis. Gunakan tombol Play/Stop untuk mengontrol.</p>
                         </div>
                     `;
                     
-                    summaryPanel.classList.remove('hidden');
-                    tablePanel.classList.remove('hidden');
+                    resultsWrapper.classList.remove('hidden');
                     startLiveUpdates();
                 } else {
                     if(isSimulationRunning) {
@@ -454,13 +519,13 @@
 
             resetBtn.addEventListener('click', () => {
                 stopLiveUpdates();
-                document.getElementById('calculator-form').reset();
-                summaryPanel.classList.add('hidden');
-                tablePanel.classList.add('hidden');
+                calculatorForm.reset();
+                resultsWrapper.classList.add('hidden');
                 summaryPanel.innerHTML = '';
                 tablePanel.innerHTML = '';
                 currentSimulationData = null;
                 isSimulationRunning = false;
+                previousTotalLivePL = null;
                 
                 simulationControlBtn.textContent = 'Mulai Simulasi';
                 simulationControlBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'bg-green-600', 'hover:bg-green-700');
@@ -468,7 +533,7 @@
                 
                 blinkingDot.classList.remove('blinking-dot', 'bg-green-500', 'bg-red-500');
                 blinkingDot.classList.add('bg-yellow-500');
-                updateSrLabels();
+                updateSrPlaceholders();
             });
         });
     </script>
