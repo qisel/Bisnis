@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Margin Trading MT5</title>
+    <title>Kalkulator Margin Trading MT5 (Real-time)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,163 +24,144 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .blinking-dot {
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
     </style>
 </head>
 <body class="text-gray-200">
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="max-w-5xl mx-auto bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="max-w-7xl mx-auto bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
             <div class="p-6 sm:p-8">
-                <div class="text-center mb-8">
+                <div class="text-center mb-6">
                     <h1 class="text-3xl sm:text-4xl font-bold text-white">Kalkulator Margin & Simulasi Strategi</h1>
-                    <p class="text-gray-400 mt-2">Untuk Kripto & Emas di MT5</p>
+                    <p class="text-gray-400 mt-2">Dengan Harga & Simulasi Real-time</p>
                 </div>
 
-                <!-- Input Form -->
-                <form id="calculator-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Kolom Kiri -->
-                    <div>
-                        <label for="asset" class="block text-sm font-medium text-gray-300 mb-1">Aset</label>
-                        <input type="text" id="asset" value="BTCUSD" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: BTCUSD, XAUUSD">
+                <!-- Real-time Price Display -->
+                <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-4 mb-8 text-center max-w-lg mx-auto">
+                    <h2 class="text-lg font-semibold text-gray-300 flex items-center justify-center">
+                        <span id="blinking-dot-indicator" class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                        Harga BTCUSD Saat Ini
+                    </h2>
+                    <p id="realtime-price" class="text-4xl font-bold text-white my-2 tracking-wider">Memuat...</p>
+                    <p id="last-updated" class="text-xs text-gray-500">Terakhir diperbarui: -</p>
+                </div>
 
-                        <label for="lotSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Lot per Posisi</label>
-                        <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                        
-                        <label for="contractSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Kontrak</label>
-                        <input type="number" id="contractSize" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                        <p class="text-xs text-gray-500 mt-1">Contoh: 1 untuk BTC, 100 untuk XAUUSD</p>
-                    </div>
-                    
-                    <!-- Kolom Kanan -->
-                    <div>
-                        <label for="leverage" class="block text-sm font-medium text-gray-300 mb-1">Leverage</label>
-                        <select id="leverage" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                            <option value="100">1:100</option>
-                            <option value="200">1:200</option>
-                            <option value="400">1:400</option>
-                            <option value="500">1:500</option>
-                        </select>
+                <!-- Main Layout Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
+                    <!-- Kolom Kiri: Kalkulator -->
+                    <div class="lg:pr-4">
+                        <h2 class="text-2xl font-bold text-white mb-4">Parameter Kalkulator</h2>
+                        <!-- Input Form -->
+                        <form id="calculator-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <!-- Kolom Kiri Form -->
+                            <div>
+                                <label for="asset" class="block text-sm font-medium text-gray-300 mb-1">Aset</label>
+                                <input type="text" id="asset" value="BTCUSD" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: BTCUSD, XAUUSD">
 
-                        <label for="initialPrice" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Harga Awal (Open Posisi Pertama)</label>
-                        <input type="number" id="initialPrice" value="110000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                        
-                        <label for="step" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Jarak Antar Posisi ($)</label>
-                        <input type="number" id="step" value="1000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                        <p class="text-xs text-gray-500 mt-1">Harga bergerak berapa $ untuk buka posisi baru</p>
-                    </div>
+                                <label for="lotSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Lot per Posisi</label>
+                                <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                
+                                <label for="contractSize" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Ukuran Kontrak</label>
+                                <input type="number" id="contractSize" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                <p class="text-xs text-gray-500 mt-1">Contoh: 1 untuk BTC, 100 untuk XAUUSD</p>
+                            </div>
+                            
+                            <!-- Kolom Kanan Form -->
+                            <div>
+                                <label for="leverage" class="block text-sm font-medium text-gray-300 mb-1">Leverage</label>
+                                <select id="leverage" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                    <option value="100">1:100</option>
+                                    <option value="200">1:200</option>
+                                    <option value="400">1:400</option>
+                                    <option value="500">1:500</option>
+                                </select>
 
-                    <!-- Baris Bawah -->
-                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="maxLevels" class="block text-sm font-medium text-gray-300 mb-1">Jumlah Maksimal Posisi (Layer)</label>
-                            <input type="number" id="maxLevels" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                <div>
+                                    <label for="initialPrice" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Harga Awal (Otomatis)</label>
+                                    <input type="number" id="initialPrice" class="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-gray-400 cursor-not-allowed" disabled>
+                                </div>
+                                
+                                <label for="step" class="block text-sm font-medium text-gray-300 mb-1 mt-4">Jarak Antar Posisi ($)</label>
+                                <input type="number" id="step" value="1000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                            </div>
+
+                            <!-- Baris Bawah Form -->
+                            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="maxLevels" class="block text-sm font-medium text-gray-300 mb-1">Jumlah Maksimal Posisi</label>
+                                    <input type="number" id="maxLevels" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                </div>
+                                <div>
+                                     <label for="targetPrice" class="block text-sm font-medium text-gray-300 mb-1">Target Harga Kerugian</label>
+                                    <input type="number" id="targetPrice" value="120000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                </div>
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Strategi</label>
+                                <div class="flex items-center space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="strategy" value="sell" checked class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-white">SELL</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="strategy" value="buy" class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-white">BUY</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Tombol Aksi -->
+                        <div class="space-y-4">
+                             <button id="simulationControlBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg">
+                                Mulai Simulasi
+                            </button>
+                             <button id="resetBtn" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                                Reset
+                            </button>
                         </div>
-                        <div>
-                             <label for="targetPrice" class="block text-sm font-medium text-gray-300 mb-1">Target Harga Kerugian</label>
-                            <input type="number" id="targetPrice" value="120000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
-                            <p class="text-xs text-gray-500 mt-1">Harga jika skenario terburuk terjadi</p>
-                        </div>
                     </div>
-                    
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Strategi</label>
-                        <div class="flex items-center space-x-4">
-                            <label class="flex items-center">
-                                <input type="radio" name="strategy" value="sell" checked class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
-                                <span class="ml-2 text-white">SELL (Harga Naik, Buka Posisi Sell Baru)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="radio" name="strategy" value="buy" class="h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
-                                <span class="ml-2 text-white">BUY (Harga Turun, Buka Posisi Buy Baru)</span>
-                            </label>
-                        </div>
-                    </div>
-                </form>
 
-                <!-- Tombol Aksi -->
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button id="calculateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg">
-                        Hitung & Simulasikan
-                    </button>
-                    <button id="resetBtn" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                        Reset
-                    </button>
-                </div>
-            </div>
-
-            <!-- Hasil -->
-            <div id="results-container" class="hidden bg-gray-800 p-6 sm:p-8 border-t border-gray-700">
-                <h2 class="text-2xl font-bold text-white mb-6 text-center">Hasil Simulasi</h2>
-
-                <!-- Ringkasan -->
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-gray-700 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-400">Total Posisi</p>
-                        <p id="totalPositions" class="text-2xl font-bold text-white">-</p>
-                    </div>
-                    <div class="bg-gray-700 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-400">Total Lot</p>
-                        <p id="totalLots" class="text-2xl font-bold text-white">-</p>
-                    </div>
-                    <div class="bg-gray-700 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-400">Harga Rata-rata</p>
-                        <p id="avgPrice" class="text-2xl font-bold text-white">-</p>
-                    </div>
-                    <div class="bg-orange-500/20 border border-orange-500 p-4 rounded-lg text-center">
-                        <p class="text-sm text-orange-300">Total Margin Dibutuhkan</p>
-                        <p id="requiredMargin" class="text-2xl font-bold text-white">-</p>
-                    </div>
-                    <div class="col-span-2 bg-red-900/50 border border-red-700 p-4 rounded-lg text-center">
-                        <p class="text-sm text-red-300">Estimasi Total Kerugian (di Target Harga)</p>
-                        <p id="floatingLoss" class="text-2xl font-bold text-white">-</p>
+                    <!-- Kolom Kanan: Hasil Simulasi (Ringkasan) -->
+                    <div id="summary-panel" class="hidden lg:block mt-8 lg:mt-0 lg:pl-4 lg:border-l lg:border-gray-700">
+                        <!-- Konten ringkasan hasil akan disisipkan di sini oleh JS -->
                     </div>
                 </div>
-                
-                <!-- Detail Tabel -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-gray-900/50 rounded-lg">
-                        <thead class="bg-gray-700">
-                            <tr>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Layer</th>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Buka</th>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rata-rata</th>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Margin Dibutuhkan</th>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Floating Loss</th>
-                                <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rugi $1</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trade-log">
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
+
+                <!-- Bawah Kolom: Tabel Detail -->
+                <div id="table-panel" class="hidden mt-8 pt-8 border-t border-gray-700">
+                     <!-- Konten tabel hasil akan disisipkan di sini oleh JS -->
                 </div>
-                <p class="text-xs text-gray-500 mt-4 text-center">
-                    *Floating Loss dihitung berdasarkan Target Harga Kerugian. Harga Rugi $1 adalah harga pasar agar total kerugian menjadi $1.
-                </p>
+
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const calculateBtn = document.getElementById('calculateBtn');
+            const realtimePriceEl = document.getElementById('realtime-price');
+            const lastUpdatedEl = document.getElementById('last-updated');
+            const initialPriceInput = document.getElementById('initialPrice');
+            const simulationControlBtn = document.getElementById('simulationControlBtn');
             const resetBtn = document.getElementById('resetBtn');
-            const resultsContainer = document.getElementById('results-container');
-            const tradeLog = document.getElementById('trade-log');
-
+            const blinkingDot = document.getElementById('blinking-dot-indicator');
+            const summaryPanel = document.getElementById('summary-panel');
+            const tablePanel = document.getElementById('table-panel');
             const strategyRadios = document.querySelectorAll('input[name="strategy"]');
             const targetPriceInput = document.getElementById('targetPrice');
 
-            function updateTargetPriceSuggestion() {
-                const strategy = document.querySelector('input[name="strategy"]:checked').value;
-                if (strategy === 'sell') {
-                    targetPriceInput.value = "120000";
-                } else {
-                    targetPriceInput.value = "102000";
-                }
-            }
-
-            strategyRadios.forEach(radio => radio.addEventListener('change', updateTargetPriceSuggestion));
+            let currentBtcPrice = 0;
+            let currentSimulationData = null; 
+            let priceInterval = null; 
+            let isSimulationRunning = false;
 
             const formatCurrency = (value) => {
                 return new Intl.NumberFormat('en-US', { 
@@ -190,118 +171,251 @@
                     maximumFractionDigits: 2
                 }).format(value);
             };
-            
-            const formatNumber = (value, decimals = 2) => {
+
+             const formatNumber = (value, decimals = 2) => {
                  return parseFloat(value).toFixed(decimals);
             }
 
-            calculateBtn.addEventListener('click', () => {
-                // Ambil semua nilai input
-                const lotSize = parseFloat(document.getElementById('lotSize').value);
-                const contractSize = parseFloat(document.getElementById('contractSize').value);
-                const leverage = parseInt(document.getElementById('leverage').value);
-                const initialPrice = parseFloat(document.getElementById('initialPrice').value);
-                const step = parseFloat(document.getElementById('step').value);
-                const maxLevels = parseInt(document.getElementById('maxLevels').value);
-                const targetPrice = parseFloat(document.getElementById('targetPrice').value);
-                const strategy = document.querySelector('input[name="strategy"]:checked').value;
+            function updateLiveSimulation() {
+                if (!currentSimulationData || currentBtcPrice === 0) return; 
 
-                // Validasi input
-                if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(initialPrice) || isNaN(step) || isNaN(maxLevels) || isNaN(targetPrice)) {
-                    console.error("Input tidak valid");
-                    return;
-                }
+                const { openPositions, lotSize, contractSize, strategy, maxLevels } = currentSimulationData;
                 
-                tradeLog.innerHTML = ''; // Kosongkan tabel hasil sebelumnya
-                let totalLots = 0;
-                let weightedPriceSum = 0;
-                let lastAvgPrice = 0;
-                let lastRequiredMargin = 0;
-                let openPositions = [];
-                let lastFloatingLoss = 0;
+                let totalLivePL = 0;
+                openPositions.forEach(openPrice => {
+                    totalLivePL += strategy === 'sell' ? (openPrice - currentBtcPrice) * lotSize * contractSize : (currentBtcPrice - openPrice) * lotSize * contractSize;
+                });
 
-                for (let i = 1; i <= maxLevels; i++) {
-                    let openPrice;
-                    if (strategy === 'sell') {
-                        openPrice = initialPrice + ((i - 1) * step);
+                const liveProfitLossEl = document.getElementById('liveProfitLoss');
+                if(liveProfitLossEl) {
+                    liveProfitLossEl.textContent = formatCurrency(totalLivePL);
+                    const parentCard = liveProfitLossEl.parentElement;
+                    parentCard.className = 'col-span-2 p-4 rounded-lg text-center transition-colors'; 
+                    if (totalLivePL >= 0) {
+                        parentCard.classList.add('bg-green-900/50', 'border', 'border-green-700');
                     } else {
-                        openPrice = initialPrice - ((i - 1) * step);
-                    }
-                    openPositions.push(openPrice);
-
-                    totalLots += lotSize;
-                    weightedPriceSum += openPrice * lotSize;
-
-                    const avgPrice = weightedPriceSum / totalLots;
-                    const requiredMargin = (totalLots * contractSize * avgPrice) / leverage;
-                    
-                    // Hitung floating loss berdasarkan target price
-                    let currentFloatingLoss = 0;
-                    if (strategy === 'sell') {
-                        openPositions.forEach(price => {
-                           currentFloatingLoss += (price - targetPrice) * lotSize * contractSize;
-                        });
-                    } else { // strategy === 'buy'
-                        openPositions.forEach(price => {
-                           currentFloatingLoss += (targetPrice - price) * lotSize * contractSize;
-                        });
-                    }
-
-                    // **BARU: Hitung harga untuk kerugian $1**
-                    let priceForOneDollarLoss = 0;
-                    const lossAmount = 1; // $1
-                    if (strategy === 'sell') {
-                        // marketPrice = avgPrice + (loss / (totalLots * contractSize))
-                        priceForOneDollarLoss = avgPrice + (lossAmount / (totalLots * contractSize));
-                    } else { // strategy === 'buy'
-                        // marketPrice = avgPrice - (loss / (totalLots * contractSize))
-                        priceForOneDollarLoss = avgPrice - (lossAmount / (totalLots * contractSize));
-                    }
-
-
-                    // Buat baris tabel baru
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-gray-700 hover:bg-gray-700/50 transition-colors';
-                    row.innerHTML = `
-                        <td class="p-3 whitespace-nowrap">${i}</td>
-                        <td class="p-3 whitespace-nowrap">${formatCurrency(openPrice)}</td>
-                        <td class="p-3 whitespace-nowrap">${formatCurrency(avgPrice)}</td>
-                        <td class="p-3 whitespace-nowrap font-semibold text-orange-400">${formatCurrency(requiredMargin)}</td>
-                        <td class="p-3 whitespace-nowrap font-semibold text-red-400">${formatCurrency(currentFloatingLoss)}</td>
-                        <td class="p-3 whitespace-nowrap font-semibold text-cyan-400">${formatCurrency(priceForOneDollarLoss)}</td>
-                    `;
-                    tradeLog.appendChild(row);
-
-                    // Simpan data terakhir untuk ringkasan
-                    if (i === maxLevels) {
-                        lastAvgPrice = avgPrice;
-                        lastRequiredMargin = requiredMargin;
-                        lastFloatingLoss = currentFloatingLoss;
+                        parentCard.classList.add('bg-red-900/50', 'border', 'border-red-700');
                     }
                 }
-                
-                // Update kartu ringkasan
-                document.getElementById('totalPositions').textContent = maxLevels;
-                document.getElementById('totalLots').textContent = formatNumber(totalLots, 2);
-                document.getElementById('avgPrice').textContent = formatCurrency(lastAvgPrice);
-                document.getElementById('requiredMargin').textContent = formatCurrency(lastRequiredMargin);
-                document.getElementById('floatingLoss').textContent = formatCurrency(lastFloatingLoss);
 
-                // Tampilkan hasil
-                resultsContainer.classList.remove('hidden');
-                resultsContainer.classList.add('fade-in');
-                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                for (let i = 0; i < maxLevels; i++) {
+                    let currentLayerCumulativePL = 0;
+                    for (let j = 0; j <= i; j++){
+                        const pos = openPositions[j];
+                        currentLayerCumulativePL += strategy === 'sell' ? (pos - currentBtcPrice) * lotSize * contractSize : (currentBtcPrice - pos) * lotSize * contractSize;
+                    }
+
+                    const livePlCell = document.getElementById(`live-pl-${i + 1}`);
+                    if (livePlCell) {
+                        livePlCell.textContent = formatCurrency(currentLayerCumulativePL);
+                        livePlCell.classList.toggle('text-green-400', currentLayerCumulativePL >= 0);
+                        livePlCell.classList.toggle('text-red-400', currentLayerCumulativePL < 0);
+                    }
+                }
+            }
+
+            async function fetchPrice() {
+                try {
+                    const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    const newPrice = parseFloat(data.price);
+
+                    if (currentBtcPrice !== 0 && newPrice !== currentBtcPrice) {
+                        const priceChange = newPrice - currentBtcPrice;
+                        realtimePriceEl.classList.add(priceChange > 0 ? 'text-green-400' : 'text-red-400');
+                        setTimeout(() => {
+                           realtimePriceEl.classList.remove('text-green-400', 'text-red-400');
+                           realtimePriceEl.classList.add('text-white');
+                        }, 500);
+                    }
+                    currentBtcPrice = newPrice;
+
+                    realtimePriceEl.textContent = formatCurrency(currentBtcPrice);
+                    if (document.activeElement !== initialPriceInput) {
+                        initialPriceInput.value = currentBtcPrice.toFixed(2);
+                    }
+                    lastUpdatedEl.textContent = `Terakhir diperbarui: ${new Date().toLocaleTimeString('id-ID')}`;
+                    
+                    updateLiveSimulation();
+
+                } catch (error) {
+                    console.error("Gagal mengambil data harga:", error);
+                    realtimePriceEl.textContent = 'Gagal Memuat';
+                    realtimePriceEl.classList.add('text-red-500');
+                }
+            }
+
+            function startLiveUpdates() {
+                if (priceInterval) return; 
+                blinkingDot.classList.add('blinking-dot', 'bg-green-500');
+                blinkingDot.classList.remove('bg-yellow-500', 'bg-red-500');
+                fetchPrice(); 
+                priceInterval = setInterval(fetchPrice, 5000);
+                isSimulationRunning = true;
+                simulationControlBtn.textContent = 'Stop Simulasi';
+                simulationControlBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'bg-green-600', 'hover:bg-green-700');
+                simulationControlBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+            }
+
+            function stopLiveUpdates() {
+                if (!priceInterval) return;
+                clearInterval(priceInterval);
+                priceInterval = null;
+                blinkingDot.classList.remove('blinking-dot', 'bg-green-500');
+                blinkingDot.classList.add('bg-red-500');
+                isSimulationRunning = false;
+                simulationControlBtn.textContent = 'Play Simulasi';
+                simulationControlBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                simulationControlBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            }
+            
+            fetchPrice(); 
+
+            function updateTargetPriceSuggestion() {
+                if (currentBtcPrice === 0) return;
+                const strategy = document.querySelector('input[name="strategy"]:checked').value;
+                if (strategy === 'sell') {
+                    targetPriceInput.value = (Math.ceil(currentBtcPrice / 1000) * 1000) + 10000;
+                } else {
+                    targetPriceInput.value = (Math.floor(currentBtcPrice / 1000) * 1000) - 10000;
+                }
+            }
+            strategyRadios.forEach(radio => radio.addEventListener('change', updateTargetPriceSuggestion));
+
+            simulationControlBtn.addEventListener('click', () => {
+                if (!currentSimulationData) {
+                    if (currentBtcPrice === 0) {
+                        console.warn("Harga real-time belum dimuat.");
+                        realtimePriceEl.textContent = "Coba lagi sebentar...";
+                        realtimePriceEl.classList.add('text-yellow-400');
+                        return;
+                    }
+                    
+                    const lotSize = parseFloat(document.getElementById('lotSize').value);
+                    const contractSize = parseFloat(document.getElementById('contractSize').value);
+                    const leverage = parseInt(document.getElementById('leverage').value);
+                    const initialPrice = currentBtcPrice; 
+                    const step = parseFloat(document.getElementById('step').value);
+                    const maxLevels = parseInt(document.getElementById('maxLevels').value);
+                    const targetPrice = parseFloat(document.getElementById('targetPrice').value);
+                    const strategy = document.querySelector('input[name="strategy"]:checked').value;
+
+                    if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(step) || isNaN(maxLevels) || isNaN(targetPrice)) {
+                        console.error("Input tidak valid");
+                        return;
+                    }
+                    
+                    let openPositions = [];
+                    let tableRowsHtml = '';
+
+                    for (let i = 1; i <= maxLevels; i++) {
+                        const openPrice = strategy === 'sell' ? initialPrice + ((i - 1) * step) : initialPrice - ((i - 1) * step);
+                        openPositions.push(openPrice);
+                        
+                        const currentOpenPositions = openPositions.slice(0, i);
+                        const currentTotalLots = lotSize * i;
+                        const currentWeightedSum = currentOpenPositions.reduce((sum, price) => sum + (price * lotSize), 0);
+                        const avgPrice = currentWeightedSum / currentTotalLots;
+                        
+                        const requiredMargin = (currentTotalLots * contractSize * avgPrice) / leverage;
+                        
+                        let targetFloatingLoss = 0;
+                        currentOpenPositions.forEach(price => targetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
+                        
+                        const lossAmount = 1;
+                        const priceForOneDollarLoss = strategy === 'sell' ? avgPrice + (lossAmount / (currentTotalLots * contractSize)) : avgPrice - (lossAmount / (currentTotalLots * contractSize));
+
+                        tableRowsHtml += `
+                            <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                                <td class="p-3 whitespace-nowrap">${i}</td>
+                                <td class="p-3 whitespace-nowrap">${formatCurrency(openPrice)}</td>
+                                <td class="p-3 whitespace-nowrap">${formatCurrency(avgPrice)}</td>
+                                <td class="p-3 whitespace-nowrap font-semibold text-orange-400">${formatCurrency(requiredMargin)}</td>
+                                <td class="p-3 whitespace-nowrap font-semibold text-red-400">${formatCurrency(targetFloatingLoss)}</td>
+                                <td id="live-pl-${i + 1}" class="p-3 whitespace-nowrap font-semibold">Memuat...</td>
+                                <td class="p-3 whitespace-nowrap font-semibold text-cyan-400">${formatCurrency(priceForOneDollarLoss)}</td>
+                            </tr>
+                        `;
+                    }
+                    
+                    currentSimulationData = { openPositions, lotSize, contractSize, strategy, maxLevels };
+                    
+                    const finalTotalLots = lotSize * maxLevels;
+                    const finalWeightedSum = openPositions.reduce((sum, price) => sum + (price * lotSize), 0);
+                    const finalAvgPrice = finalWeightedSum / finalTotalLots;
+                    const finalRequiredMargin = (finalTotalLots * contractSize * finalAvgPrice) / leverage;
+                    let finalTargetFloatingLoss = 0;
+                    openPositions.forEach(price => finalTargetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
+
+                    // HTML for Summary Panel
+                    summaryPanel.innerHTML = `
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold text-white mb-4">Ringkasan Simulasi</h2>
+                             <p class="text-sm text-gray-400 mb-6">Mulai dari ${formatCurrency(initialPrice)}</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Posisi</p><p class="text-xl font-bold text-white">${maxLevels}</p></div>
+                                <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Lot</p><p class="text-xl font-bold text-white">${formatNumber(finalTotalLots, 2)}</p></div>
+                                <div class="bg-gray-700 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-gray-400">Harga Rata-rata</p><p class="text-xl font-bold text-white">${formatCurrency(finalAvgPrice)}</p></div>
+                                <div class="bg-orange-500/20 border border-orange-500 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-orange-300">Total Margin Dibutuhkan</p><p class="text-xl font-bold text-white">${formatCurrency(finalRequiredMargin)}</p></div>
+                                <div class="col-span-2 p-4 rounded-lg text-center transition-colors bg-gray-700"><p class="text-sm text-gray-300">Total P/L Saat Ini (Live)</p><p id="liveProfitLoss" class="text-3xl font-bold text-white">-</p></div>
+                                <div class="col-span-2 bg-red-900/50 border border-red-700 p-4 rounded-lg text-center"><p class="text-sm text-red-300">Estimasi Kerugian (di Target)</p><p class="text-xl font-bold text-white">${formatCurrency(finalTargetFloatingLoss)}</p></div>
+                            </div>
+                        </div>
+                    `;
+
+                    // HTML for Table Panel
+                    tablePanel.innerHTML = `
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold text-white mb-4">Tabel Detail Simulasi</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-gray-900/50 rounded-lg">
+                                    <thead class="bg-gray-700">
+                                        <tr>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Layer</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Buka</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rata-rata</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Margin</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Loss (Target)</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">P/L (Live)</th>
+                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rugi $1</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${tableRowsHtml}</tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-4 text-center">*P/L Saat Ini (Live) diperbarui secara otomatis. Gunakan tombol Play/Stop untuk mengontrol.</p>
+                        </div>
+                    `;
+                    
+                    summaryPanel.classList.remove('hidden');
+                    tablePanel.classList.remove('hidden');
+                    startLiveUpdates();
+                } else {
+                    if(isSimulationRunning) {
+                        stopLiveUpdates();
+                    } else {
+                        startLiveUpdates();
+                    }
+                }
             });
 
             resetBtn.addEventListener('click', () => {
+                stopLiveUpdates();
                 document.getElementById('calculator-form').reset();
-                resultsContainer.classList.add('hidden');
-                tradeLog.innerHTML = '';
-                document.getElementById('totalPositions').textContent = '-';
-                document.getElementById('totalLots').textContent = '-';
-                document.getElementById('avgPrice').textContent = '-';
-                document.getElementById('requiredMargin').textContent = '-';
-                document.getElementById('floatingLoss').textContent = '-';
+                summaryPanel.classList.add('hidden');
+                tablePanel.classList.add('hidden');
+                summaryPanel.innerHTML = '';
+                tablePanel.innerHTML = '';
+                currentSimulationData = null;
+                isSimulationRunning = false;
+                
+                simulationControlBtn.textContent = 'Mulai Simulasi';
+                simulationControlBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'bg-green-600', 'hover:bg-green-700');
+                simulationControlBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                
+                blinkingDot.classList.remove('blinking-dot', 'bg-green-500', 'bg-red-500');
+                blinkingDot.classList.add('bg-yellow-500');
                 updateTargetPriceSuggestion();
             });
         });
