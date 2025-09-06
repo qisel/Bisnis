@@ -6,7 +6,7 @@
     <title>Kalkulator Margin Trading MT5 (Real-time)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -49,7 +49,7 @@
                         <span id="blinking-dot-indicator" class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
                         Harga BTCUSD Saat Ini
                     </h2>
-                    <p id="realtime-price" class="text-4xl font-bold text-white my-2 tracking-wider">Memuat...</p>
+                    <div id="realtime-price" class="text-4xl font-bold text-white my-2 tracking-wider">Memuat...</div>
                     <p id="last-updated" class="text-xs text-gray-500">Terakhir diperbarui: -</p>
                 </div>
 
@@ -99,8 +99,25 @@
                                     <input type="number" id="maxLevels" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
                                 </div>
                                 <div>
-                                     <label for="targetPrice" class="block text-sm font-medium text-gray-300 mb-1">Target Harga Kerugian</label>
-                                    <input type="number" id="targetPrice" value="120000" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                     <label for="usdIdrRate" class="block text-sm font-medium text-gray-300 mb-1">Kurs USD ke IDR</label>
+                                    <input type="number" id="usdIdrRate" value="15500" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow">
+                                </div>
+                            </div>
+                             <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Level Support / Resisten</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label id="sr1-label" for="sr1" class="block text-xs text-gray-400 mb-1">Resisten 1</label>
+                                        <input type="number" id="sr1" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 75000">
+                                    </div>
+                                    <div>
+                                        <label id="sr2-label" for="sr2" class="block text-xs text-gray-400 mb-1">Resisten 2</label>
+                                        <input type="number" id="sr2" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 80000">
+                                    </div>
+                                    <div>
+                                        <label id="sr3-label" for="sr3" class="block text-xs text-gray-400 mb-1">Resisten 3</label>
+                                        <input type="number" id="sr3" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white input-glow" placeholder="Contoh: 85000">
+                                    </div>
                                 </div>
                             </div>
                             
@@ -156,12 +173,12 @@
             const summaryPanel = document.getElementById('summary-panel');
             const tablePanel = document.getElementById('table-panel');
             const strategyRadios = document.querySelectorAll('input[name="strategy"]');
-            const targetPriceInput = document.getElementById('targetPrice');
-
+            
             let currentBtcPrice = 0;
             let currentSimulationData = null; 
             let priceInterval = null; 
             let isSimulationRunning = false;
+            let usdIdrRate = 15500;
 
             const formatCurrency = (value) => {
                 return new Intl.NumberFormat('en-US', { 
@@ -171,6 +188,20 @@
                     maximumFractionDigits: 2
                 }).format(value);
             };
+            
+            const formatFullCurrency = (usdValue, rate) => {
+                if (isNaN(usdValue) || isNaN(rate)) return '-';
+                const usdFormatted = formatCurrency(usdValue);
+                const idrValue = usdValue * rate;
+                const idrFormatted = new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(idrValue);
+
+                return `${usdFormatted} <span class="block text-xs text-gray-400">(${idrFormatted})</span>`;
+            };
 
              const formatNumber = (value, decimals = 2) => {
                  return parseFloat(value).toFixed(decimals);
@@ -179,7 +210,7 @@
             function updateLiveSimulation() {
                 if (!currentSimulationData || currentBtcPrice === 0) return; 
 
-                const { openPositions, lotSize, contractSize, strategy, maxLevels } = currentSimulationData;
+                const { openPositions, lotSize, contractSize, strategy, maxLevels, rate } = currentSimulationData;
                 
                 let totalLivePL = 0;
                 openPositions.forEach(openPrice => {
@@ -188,7 +219,7 @@
 
                 const liveProfitLossEl = document.getElementById('liveProfitLoss');
                 if(liveProfitLossEl) {
-                    liveProfitLossEl.textContent = formatCurrency(totalLivePL);
+                    liveProfitLossEl.innerHTML = formatFullCurrency(totalLivePL, rate);
                     const parentCard = liveProfitLossEl.parentElement;
                     parentCard.className = 'col-span-2 p-4 rounded-lg text-center transition-colors'; 
                     if (totalLivePL >= 0) {
@@ -207,9 +238,9 @@
 
                     const livePlCell = document.getElementById(`live-pl-${i + 1}`);
                     if (livePlCell) {
-                        livePlCell.textContent = formatCurrency(currentLayerCumulativePL);
-                        livePlCell.classList.toggle('text-green-400', currentLayerCumulativePL >= 0);
-                        livePlCell.classList.toggle('text-red-400', currentLayerCumulativePL < 0);
+                        livePlCell.innerHTML = formatFullCurrency(currentLayerCumulativePL, rate);
+                        livePlCell.classList.remove('text-green-400', 'text-red-400');
+                        livePlCell.classList.add(currentLayerCumulativePL >= 0 ? 'text-green-400' : 'text-red-400');
                     }
                 }
             }
@@ -230,8 +261,10 @@
                         }, 500);
                     }
                     currentBtcPrice = newPrice;
+                    
+                    const currentRate = parseFloat(document.getElementById('usdIdrRate').value) || 15500;
+                    realtimePriceEl.innerHTML = formatFullCurrency(currentBtcPrice, currentRate);
 
-                    realtimePriceEl.textContent = formatCurrency(currentBtcPrice);
                     if (document.activeElement !== initialPriceInput) {
                         initialPriceInput.value = currentBtcPrice.toFixed(2);
                     }
@@ -272,16 +305,15 @@
             
             fetchPrice(); 
 
-            function updateTargetPriceSuggestion() {
-                if (currentBtcPrice === 0) return;
+            function updateSrLabels() {
                 const strategy = document.querySelector('input[name="strategy"]:checked').value;
-                if (strategy === 'sell') {
-                    targetPriceInput.value = (Math.ceil(currentBtcPrice / 1000) * 1000) + 10000;
-                } else {
-                    targetPriceInput.value = (Math.floor(currentBtcPrice / 1000) * 1000) - 10000;
-                }
+                const baseLabel = strategy === 'sell' ? 'Resisten' : 'Support';
+                document.getElementById('sr1-label').textContent = `${baseLabel} 1`;
+                document.getElementById('sr2-label').textContent = `${baseLabel} 2`;
+                document.getElementById('sr3-label').textContent = `${baseLabel} 3`;
             }
-            strategyRadios.forEach(radio => radio.addEventListener('change', updateTargetPriceSuggestion));
+            strategyRadios.forEach(radio => radio.addEventListener('change', updateSrLabels));
+            updateSrLabels(); 
 
             simulationControlBtn.addEventListener('click', () => {
                 if (!currentSimulationData) {
@@ -298,16 +330,28 @@
                     const initialPrice = currentBtcPrice; 
                     const step = parseFloat(document.getElementById('step').value);
                     const maxLevels = parseInt(document.getElementById('maxLevels').value);
-                    const targetPrice = parseFloat(document.getElementById('targetPrice').value);
                     const strategy = document.querySelector('input[name="strategy"]:checked').value;
+                    const rate = parseFloat(document.getElementById('usdIdrRate').value);
 
-                    if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(step) || isNaN(maxLevels) || isNaN(targetPrice)) {
-                        console.error("Input tidak valid");
-                        return;
+                    const srInputs = [
+                        parseFloat(document.getElementById('sr1').value),
+                        parseFloat(document.getElementById('sr2').value),
+                        parseFloat(document.getElementById('sr3').value)
+                    ];
+                    const srLevels = srInputs.filter(v => !isNaN(v));
+                    const srLabels = (strategy === 'sell' ? ['R1', 'R2', 'R3'] : ['S1', 'S2', 'S3']);
+
+                    if (isNaN(lotSize) || isNaN(contractSize) || isNaN(leverage) || isNaN(step) || isNaN(maxLevels) || isNaN(rate)) {
+                        console.error("Input tidak valid"); return;
                     }
                     
                     let openPositions = [];
                     let tableRowsHtml = '';
+                    let tableSrHeaderHtml = '';
+                    srLevels.forEach((level, index) => {
+                        tableSrHeaderHtml += `<th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Loss @ ${srLabels[index]}</th>`;
+                    });
+
 
                     for (let i = 1; i <= maxLevels; i++) {
                         const openPrice = strategy === 'sell' ? initialPrice + ((i - 1) * step) : initialPrice - ((i - 1) * step);
@@ -320,35 +364,44 @@
                         
                         const requiredMargin = (currentTotalLots * contractSize * avgPrice) / leverage;
                         
-                        let targetFloatingLoss = 0;
-                        currentOpenPositions.forEach(price => targetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
-                        
+                        let srLossCellsHtml = '';
+                        srLevels.forEach(targetPrice => {
+                            let targetFloatingLoss = 0;
+                            currentOpenPositions.forEach(price => targetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
+                            srLossCellsHtml += `<td class="p-3 whitespace-nowrap font-semibold text-red-400">${formatFullCurrency(targetFloatingLoss, rate)}</td>`;
+                        });
+
                         const lossAmount = 1;
                         const priceForOneDollarLoss = strategy === 'sell' ? avgPrice + (lossAmount / (currentTotalLots * contractSize)) : avgPrice - (lossAmount / (currentTotalLots * contractSize));
 
                         tableRowsHtml += `
                             <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
                                 <td class="p-3 whitespace-nowrap">${i}</td>
-                                <td class="p-3 whitespace-nowrap">${formatCurrency(openPrice)}</td>
-                                <td class="p-3 whitespace-nowrap">${formatCurrency(avgPrice)}</td>
-                                <td class="p-3 whitespace-nowrap font-semibold text-orange-400">${formatCurrency(requiredMargin)}</td>
-                                <td class="p-3 whitespace-nowrap font-semibold text-red-400">${formatCurrency(targetFloatingLoss)}</td>
+                                <td class="p-3 whitespace-nowrap">${formatFullCurrency(openPrice, rate)}</td>
+                                <td class="p-3 whitespace-nowrap">${formatFullCurrency(avgPrice, rate)}</td>
+                                <td class="p-3 whitespace-nowrap font-semibold text-orange-400">${formatFullCurrency(requiredMargin, rate)}</td>
+                                ${srLossCellsHtml}
                                 <td id="live-pl-${i + 1}" class="p-3 whitespace-nowrap font-semibold">Memuat...</td>
-                                <td class="p-3 whitespace-nowrap font-semibold text-cyan-400">${formatCurrency(priceForOneDollarLoss)}</td>
+                                <td class="p-3 whitespace-nowrap font-semibold text-cyan-400">${formatFullCurrency(priceForOneDollarLoss, rate)}</td>
                             </tr>
                         `;
                     }
                     
-                    currentSimulationData = { openPositions, lotSize, contractSize, strategy, maxLevels };
+                    currentSimulationData = { openPositions, lotSize, contractSize, strategy, maxLevels, rate };
                     
                     const finalTotalLots = lotSize * maxLevels;
                     const finalWeightedSum = openPositions.reduce((sum, price) => sum + (price * lotSize), 0);
                     const finalAvgPrice = finalWeightedSum / finalTotalLots;
                     const finalRequiredMargin = (finalTotalLots * contractSize * finalAvgPrice) / leverage;
-                    let finalTargetFloatingLoss = 0;
-                    openPositions.forEach(price => finalTargetFloatingLoss += strategy === 'sell' ? (price - targetPrice) * lotSize * contractSize : (targetPrice - price) * lotSize * contractSize);
+                    
+                    let summarySrHtml = '';
+                    srLevels.forEach((level, index) => {
+                         let finalSrLoss = 0;
+                         openPositions.forEach(price => finalSrLoss += strategy === 'sell' ? (price - level) * lotSize * contractSize : (level - price) * lotSize * contractSize);
+                         summarySrHtml += `<div class="bg-red-900/50 border border-red-700 p-4 rounded-lg text-center"><p class="text-sm text-red-300">Loss @ ${srLabels[index]} (${formatCurrency(level)})</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalSrLoss, rate)}</div></div>`;
+                    });
 
-                    // HTML for Summary Panel
+
                     summaryPanel.innerHTML = `
                         <div class="fade-in">
                             <h2 class="text-2xl font-bold text-white mb-4">Ringkasan Simulasi</h2>
@@ -356,15 +409,14 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Posisi</p><p class="text-xl font-bold text-white">${maxLevels}</p></div>
                                 <div class="bg-gray-700 p-4 rounded-lg text-center"><p class="text-sm text-gray-400">Total Lot</p><p class="text-xl font-bold text-white">${formatNumber(finalTotalLots, 2)}</p></div>
-                                <div class="bg-gray-700 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-gray-400">Harga Rata-rata</p><p class="text-xl font-bold text-white">${formatCurrency(finalAvgPrice)}</p></div>
-                                <div class="bg-orange-500/20 border border-orange-500 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-orange-300">Total Margin Dibutuhkan</p><p class="text-xl font-bold text-white">${formatCurrency(finalRequiredMargin)}</p></div>
-                                <div class="col-span-2 p-4 rounded-lg text-center transition-colors bg-gray-700"><p class="text-sm text-gray-300">Total P/L Saat Ini (Live)</p><p id="liveProfitLoss" class="text-3xl font-bold text-white">-</p></div>
-                                <div class="col-span-2 bg-red-900/50 border border-red-700 p-4 rounded-lg text-center"><p class="text-sm text-red-300">Estimasi Kerugian (di Target)</p><p class="text-xl font-bold text-white">${formatCurrency(finalTargetFloatingLoss)}</p></div>
+                                <div class="bg-gray-700 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-gray-400">Harga Rata-rata</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalAvgPrice, rate)}</div></div>
+                                <div class="bg-orange-500/20 border border-orange-500 p-4 rounded-lg text-center col-span-2"><p class="text-sm text-orange-300">Total Margin Dibutuhkan</p><div class="text-xl font-bold text-white">${formatFullCurrency(finalRequiredMargin, rate)}</div></div>
+                                <div class="col-span-2 p-4 rounded-lg text-center transition-colors bg-gray-700"><p class="text-sm text-gray-300">Total P/L Saat Ini (Live)</p><div id="liveProfitLoss" class="text-3xl font-bold text-white">-</div></div>
+                                <div class="col-span-2 grid grid-cols-1 gap-4">${summarySrHtml}</div>
                             </div>
                         </div>
                     `;
 
-                    // HTML for Table Panel
                     tablePanel.innerHTML = `
                         <div class="fade-in">
                             <h2 class="text-2xl font-bold text-white mb-4">Tabel Detail Simulasi</h2>
@@ -376,7 +428,7 @@
                                             <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Buka</th>
                                             <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rata-rata</th>
                                             <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Margin</th>
-                                            <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Loss (Target)</th>
+                                            ${tableSrHeaderHtml}
                                             <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">P/L (Live)</th>
                                             <th class="p-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">Harga Rugi $1</th>
                                         </tr>
@@ -416,7 +468,7 @@
                 
                 blinkingDot.classList.remove('blinking-dot', 'bg-green-500', 'bg-red-500');
                 blinkingDot.classList.add('bg-yellow-500');
-                updateTargetPriceSuggestion();
+                updateSrLabels();
             });
         });
     </script>
