@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solusi Kreatif - Jasa Cetak & Digital</title>
+    <title>Solusi Lengkap - Cetak, Digital, & Teknologi</title>
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,6 +64,36 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
+        /* New style for flare effect */
+        .flare-effect {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+        .flare-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right, 
+                transparent 0%, 
+                rgba(56, 189, 248, 0.7) 50%, 
+                transparent 100%
+            );
+           transform: skewX(-25deg);
+           animation: flare 4s linear infinite;
+        }
+        @keyframes flare {
+          from {
+            left: -75%;
+          }
+          to {
+            left: 125%;
+          }
+        }
     </style>
 </head>
 <!-- NAMA: BODY_UTAMA -->
@@ -74,8 +104,8 @@
         
         <!-- NAMA: HEADER -->
         <header class="relative z-20 text-center p-4 flex-shrink-0 bg-gradient-to-r from-sky-800 to-indigo-800 text-white">
-            <h1 class="text-lg font-bold tracking-tight">SOLUSI KREATIF ANDA</h1>
-            <p class="text-xs text-slate-300">Cetak, Digital, & Kreatif</p>
+            <h1 class="text-lg font-bold tracking-tight">SOLUSI KREATIF & TEKNOLOGI</h1>
+            <p class="text-xs text-slate-300">Cetak, Digital, Internet, AI & Lainnya</p>
         </header>
 
         <!-- NAMA: KONTEN_UTAMA -->
@@ -208,7 +238,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                 Hubungi Kami
             </a>
-            <p class="text-[10px] text-slate-600 mt-1.5">&copy; 2025 Usman Moonggalo.</p>
+            <p class="text-[10px] text-slate-800 font-semibold mt-1.5 flare-effect">&copy; 2025 Usman Moonggalo.</p>
         </footer>
     </div>
     
@@ -234,5 +264,9 @@
     </script>
 </body>
 </html>
+
+
+
+
 
 
