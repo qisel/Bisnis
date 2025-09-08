@@ -271,7 +271,7 @@
                         </div>
                         
                         <!-- NAMA: ACCORDION_AI -->
-                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20 active">
+                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
@@ -282,21 +282,23 @@
                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
                             <div class="accordion-content">
-                                <!-- PERUBAHAN: Kontainer untuk seluruh area AI -->
                                 <div class="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50 text-xs mt-2">
                                     
-                                    <!-- PERUBAHAN: Form verifikasi kode -->
                                     <div id="aiPasswordPrompt">
                                         <h4 class="text-sm font-semibold mb-2 text-sky-300">Verifikasi Kode Akses</h4>
-                                        <p class="text-xs text-slate-400 mb-3">Masukkan kode untuk membuka Kanvas AI.</p>
+                                        <div class="text-center mb-3">
+                                            <a href="https://wa.me/6285299069883?text=Halo,%20saya%20ingin%20meminta%20kode%20akses%20untuk%20Kanvas%20AI." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-3 py-1 rounded-full shadow-md text-[11px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                                Hubungi Untuk Kode Akses
+                                            </a>
+                                        </div>
                                         <div class="flex flex-col gap-2">
-                                            <input type="password" id="aiPasswordInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan kode...">
+                                            <input type="password" id="aiPasswordInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan kode di sini...">
                                             <button id="aiVerifyBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">Buka Kanvas</button>
                                             <p id="aiPasswordError" class="text-red-400 text-xs text-center hidden"></p>
                                         </div>
                                     </div>
                                     
-                                    <!-- PERUBAHAN: Kontainer untuk Kanvas AI (disembunyikan) -->
                                     <div id="aiCanvasTools" class="hidden">
                                         <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
                                         
@@ -308,9 +310,19 @@
                                         <div class="flex flex-col gap-2">
                                             <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
                                             
-                                            <button id="uploadImageBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
-                                                Unggah Gambar Referensi (Opsional)
-                                            </button>
+                                            <!-- PERUBAHAN DIMULAI DI SINI -->
+                                            <div id="imageButtonsContainer" class="flex gap-2 hidden">
+                                                <button id="uploadImageBtn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                                    <span>Unggah</span>
+                                                </button>
+                                                <button id="popularPromptBtn" class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 6 6 6"/><path d="M12 20.49 16 12"/></svg>
+                                                    <span>Populer</span>
+                                                </button>
+                                            </div>
+                                            <!-- PERUBAHAN SELESAI DI SINI -->
+                                            
                                             <input type="file" id="imageInput" accept="image/*" class="hidden">
                                             <div id="imagePreviewContainer" class="hidden flex justify-center mb-2 relative">
                                                 <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
@@ -379,22 +391,28 @@
             const removeImageBtn = document.getElementById('removeImageBtn');
             const mainImageContainer = document.getElementById('mainImageContainer');
 
-            // PERUBAHAN: Mendapatkan elemen verifikasi kode
             const aiPasswordPrompt = document.getElementById('aiPasswordPrompt');
             const aiPasswordInput = document.getElementById('aiPasswordInput');
             const aiVerifyBtn = document.getElementById('aiVerifyBtn');
             const aiPasswordError = document.getElementById('aiPasswordError');
             const aiCanvasTools = document.getElementById('aiCanvasTools');
 
+            // PERUBAHAN: Mendapatkan elemen baru
+            const imageButtonsContainer = document.getElementById('imageButtonsContainer');
+            const popularPromptBtn = document.getElementById('popularPromptBtn');
+            
+            // PERUBAHAN: Menyimpan teks prompt populer
+            const popularPromptText = "Using the model, create a 1/7 scale commercialized figurine of the characters in the picture, in a realistic style, in a real environment. The figurine is placed on a computer desk. The figurine has a round transparent acrylic base, with no text on the base. The content on the computer screen is the Zbrush modeling process of this figurine. Next to the computer screen is a BANDAI-style toy packaging box printed with the original artwork. The packaging features two-dimensional flat illustrations.";
+
             let currentMode = 'text';
             let imageData = null;
             let originalImageUrl = null;
+            let imageGenerationCount = 0;
 
             if (mainImageContainer) {
                 originalImageUrl = mainImageContainer.style.backgroundImage;
             }
             
-            // PERUBAHAN: Logika untuk verifikasi kode
             if (aiVerifyBtn) {
                 aiVerifyBtn.addEventListener('click', () => {
                     if (aiPasswordInput.value.trim().toLowerCase() === 'kaptengembel') {
@@ -408,7 +426,6 @@
                 });
             }
 
-
             const setMode = (mode) => {
                 currentMode = mode;
                 aiOutput.innerHTML = '';
@@ -419,7 +436,8 @@
                     modeImageBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
                     modeImageBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Tanyakan apa saja...';
-                    uploadImageBtn.classList.add('hidden');
+                    // PERUBAHAN: Menyembunyikan kontainer tombol gambar
+                    imageButtonsContainer.classList.add('hidden');
                     imagePreviewContainer.classList.add('hidden');
                     imageData = null;
                 } else { // mode === 'image'
@@ -428,13 +446,19 @@
                     modeTextBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
                     modeTextBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
-                    uploadImageBtn.classList.remove('hidden');
+                    // PERUBAHAN: Menampilkan kontainer tombol gambar
+                    imageButtonsContainer.classList.remove('hidden');
                 }
             };
             
             modeTextBtn.addEventListener('click', () => setMode('text'));
             modeImageBtn.addEventListener('click', () => setMode('image'));
             uploadImageBtn.addEventListener('click', () => imageInput.click());
+
+            // PERUBAHAN: Menambahkan event listener untuk tombol prompt populer
+            popularPromptBtn.addEventListener('click', () => {
+                aiPromptInput.value = popularPromptText;
+            });
 
             imageInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
@@ -469,6 +493,12 @@
                     return;
                 }
 
+                if (currentMode === 'image' && imageGenerationCount >= 1) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Batas pembuatan gambar (1x) telah habis.</p>`;
+                    aiOutput.classList.remove('hidden');
+                    return;
+                }
+
                 aiLoader.classList.remove('hidden');
                 aiOutput.classList.add('hidden');
                 aiOutput.innerHTML = '';
@@ -480,6 +510,7 @@
                         await generateText(userPrompt);
                     } else {
                         await generateImage(userPrompt);
+                        imageGenerationCount++;
                     }
                 } catch (error) {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
@@ -602,11 +633,6 @@
             }
 
             setMode('text');
-            // Buka accordion AI secara default
-            const aiAccordion = document.querySelectorAll('.accordion-item')[5]; // AI adalah item ke-6 (index 5)
-            if(aiAccordion && !aiAccordion.classList.contains('active')) {
-                 aiAccordion.querySelector('.accordion-header').click();
-            }
         });
     </script>
 </body>
