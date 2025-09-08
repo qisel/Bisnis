@@ -60,6 +60,30 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
+
+        /* Responsive Styles for Mobile */
+        @media (max-width: 767px) {
+            .mobile-spacer-hidden {
+                display: none; /* Sembunyikan spacer kiri di mobile */
+            }
+            .mobile-accordion-full {
+                width: 100%; /* Buat accordion full width di mobile */
+            }
+            #floating-image-container {
+                width: 90% !important; /* Ukuran gambar 300% lebih besar dari aslinya */
+                max-width: 320px;
+                left: 50%;
+                transform: translateX(-50%);
+                top: -40px; /* Posisikan di atas, sedikit tumpang tindih dengan header */
+                bottom: auto;
+            }
+            .accordion-container-mobile-padding {
+                padding-top: 180px; /* Beri ruang agar accordion tidak tertutup gambar */
+            }
+            .mobile-slider-hidden {
+                display: none; /* Sembunyikan slider di mobile */
+            }
+        }
     </style>
 </head>
 <!-- NAMA: BODY_UTAMA -->
@@ -76,12 +100,12 @@
 
         <!-- NAMA: KONTEN_UTAMA -->
         <main class="relative z-10 flex-grow overflow-hidden flex flex-row">
-            <!-- Spacer Kiri (untuk memberi ruang) -->
-            <div class="w-1/4 h-full flex-shrink-0"></div>
+            <!-- Spacer Kiri (untuk memberi ruang), HILANG DI MOBILE -->
+            <div class="w-1/4 h-full flex-shrink-0 mobile-spacer-hidden"></div>
             
-            <!-- Kolom Accordion Kanan -->
-            <div class="w-3/4 h-full overflow-y-auto custom-scrollbar bg-slate-800">
-                <div class="p-3 space-y-3">
+            <!-- Kolom Accordion Kanan, FULL DI MOBILE -->
+            <div class="w-3/4 h-full overflow-y-auto custom-scrollbar bg-slate-800 mobile-accordion-full">
+                <div class="p-3 space-y-3 accordion-container-mobile-padding">
                     <h2 class="text-sm font-bold text-center mb-2 text-white/90">Layanan Profesional Kami</h2>
                     <div class="space-y-2">
                         
@@ -167,8 +191,8 @@
                     Hubungi Kami
                 </a>
             </div>
-             <!-- Slider control -->
-            <div class="px-4">
+             <!-- Slider control, HILANG DI MOBILE -->
+            <div class="px-4 mobile-slider-hidden">
                  <label for="image-size-slider" class="block text-xs text-slate-400 mb-1">Atur Ukuran Gambar</label>
                 <input id="image-size-slider" type="range" min="25" max="50" value="40" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer">
             </div>
