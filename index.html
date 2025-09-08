@@ -260,20 +260,23 @@
                             </button>
                             <div class="accordion-content">
                                 <div class="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50 text-xs mt-2">
-                                    <h4 id="aiCanvasTitle" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
+                                    <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
                                     <div class="flex flex-col gap-2">
-                                        <!-- Opsi untuk memilih antara gambar dan teks -->
-                                        <div class="flex items-center gap-2">
-                                            <button id="imageModeBtn" class="flex-1 bg-sky-500 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">Buat Gambar</button>
-                                            <button id="textModeBtn" class="flex-1 bg-sky-700 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">Buat Teks</button>
+                                        <div class="flex flex-row gap-2 mb-2">
+                                            <button id="modeImage" class="py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Gambar</button>
+                                            <button id="modeText" class="py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-slate-600 text-white hover:bg-slate-500">Buat Teks</button>
                                         </div>
-
-                                        <div class="flex flex-col gap-2 mb-2">
-                                            <label for="aiToken" class="text-xs text-slate-400">Masukkan Token Akses:</label>
-                                            <input type="text" id="aiToken" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Token..."/>
+                                        <input type="text" id="tokenInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan token Anda...">
+                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan deskripsi gambar atau teks yang ingin Anda buat..."></textarea>
+                                        <button id="uploadImageBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
+                                            Unggah Foto
+                                        </button>
+                                        <input type="file" id="imageInput" accept="image/*" class="hidden">
+                                        <div id="imagePreviewContainer" class="hidden mb-2 relative">
+                                            <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="w-full h-auto rounded-lg object-contain border border-slate-600">
+                                            <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-[10px]"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                                         </div>
-                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan deskripsi gambar atau teks yang ingin Anda buat..." disabled></textarea>
-                                        <button id="aiGenerateBtn" class="bg-sky-700 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors cursor-not-allowed" disabled>
+                                        <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
                                             Buat Sekarang
                                         </button>
                                         <div id="aiLoader" class="hidden flex justify-center items-center py-4">
@@ -293,7 +296,7 @@
 
         <!-- NAMA: FOOTER -->
         <footer class="absolute bottom-0 left-0 right-0 z-20 p-2 text-center bg-slate-50/10 backdrop-blur-sm border-t border-black/10 text-slate-800">
-            <a id="whatsappLink" href="#" target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-4 py-1.5 rounded-full shadow-lg text-xs">
+            <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-4 py-1.5 rounded-full shadow-lg text-xs">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                 Hubungi Kami
             </a>
@@ -303,7 +306,7 @@
     
     <script>
         // NOTE: Untuk menggunakan file ini secara publik (misalnya di GitHub Pages),
-        // Anda harus memasukkan URL dari Google Apps Script Anda.
+        // Anda harus memasukkan URL skrip Google Apps Script Anda.
         const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzpnEmAlscbsAWSEGhSM75m2hqVSph4JU8O4t20IVr8fkMowPcIOEhvCu5FE9Go66qCCg/exec"; 
 
         // Initialize Lucide icons
@@ -325,96 +328,96 @@
             });
 
             // Logika untuk kanvas AI
-            const aiTokenInput = document.getElementById('aiToken');
             const aiPromptInput = document.getElementById('aiPrompt');
             const aiGenerateBtn = document.getElementById('aiGenerateBtn');
             const aiLoader = document.getElementById('aiLoader');
             const aiOutput = document.getElementById('aiOutput');
-            const whatsappLink = document.getElementById('whatsappLink');
-            const imageModeBtn = document.getElementById('imageModeBtn');
-            const textModeBtn = document.getElementById('textModeBtn');
-            const aiCanvasTitle = document.getElementById('aiCanvasTitle');
+            const modeImageBtn = document.getElementById('modeImage');
+            const modeTextBtn = document.getElementById('modeText');
+            const uploadImageBtn = document.getElementById('uploadImageBtn');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const imagePreview = document.getElementById('imagePreview');
+            const removeImageBtn = document.getElementById('removeImageBtn');
+            const aiCanvasTitle = document.getElementById('ai-canvas-title');
+            let currentMode = 'image'; // Default mode
+            let imageData = null;
 
-            let currentMode = 'image'; // Mode default
-
-            // Fungsi untuk mengupdate UI mode
-            const updateModeUI = () => {
-                if (currentMode === 'image') {
-                    imageModeBtn.classList.remove('bg-sky-700');
-                    imageModeBtn.classList.add('bg-sky-500');
-                    textModeBtn.classList.remove('bg-sky-500');
-                    textModeBtn.classList.add('bg-sky-700');
+            // Fungsi untuk mengaktifkan mode
+            const setMode = (mode) => {
+                currentMode = mode;
+                if (mode === 'image') {
+                    modeImageBtn.classList.add('bg-sky-500', 'text-white');
+                    modeImageBtn.classList.remove('bg-slate-600');
+                    modeTextBtn.classList.add('bg-slate-600', 'text-white');
+                    modeTextBtn.classList.remove('bg-sky-500');
                     aiPromptInput.placeholder = "Masukkan deskripsi gambar yang ingin Anda buat...";
+                    uploadImageBtn.classList.remove('hidden');
+                    if (imagePreviewContainer.classList.contains('hidden')) {
+                         aiOutput.innerHTML = '';
+                         aiOutput.classList.add('hidden');
+                    }
                 } else {
-                    imageModeBtn.classList.remove('bg-sky-500');
-                    imageModeBtn.classList.add('bg-sky-700');
-                    textModeBtn.classList.remove('bg-sky-700');
-                    textModeBtn.classList.add('bg-sky-500');
-                    aiPromptInput.placeholder = "Masukkan topik teks yang ingin Anda buat...";
+                    modeTextBtn.classList.add('bg-sky-500', 'text-white');
+                    modeTextBtn.classList.remove('bg-slate-600');
+                    modeImageBtn.classList.add('bg-slate-600', 'text-white');
+                    modeImageBtn.classList.remove('bg-sky-500');
+                    aiPromptInput.placeholder = "Masukkan teks yang ingin Anda buat...";
+                    uploadImageBtn.classList.add('hidden');
+                    imagePreviewContainer.classList.add('hidden');
+                     aiOutput.innerHTML = '';
+                    aiOutput.classList.add('hidden');
+                    imageData = null;
                 }
             };
-
-            // Event listener untuk tombol mode
-            imageModeBtn.addEventListener('click', () => {
-                currentMode = 'image';
-                updateModeUI();
+            
+            // Event listeners for mode selection
+            modeImageBtn.addEventListener('click', () => setMode('image'));
+            modeTextBtn.addEventListener('click', () => setMode('text'));
+            
+            // Event listener for image upload
+            uploadImageBtn.addEventListener('click', () => {
+                imageInput.click();
             });
 
-            textModeBtn.addEventListener('click', () => {
-                currentMode = 'text';
-                updateModeUI();
+            imageInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imageData = e.target.result.split(',')[1];
+                        imagePreview.src = e.target.result;
+                        imagePreviewContainer.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
             
-            // Mengaktifkan atau menonaktifkan tombol
-            aiTokenInput.addEventListener('input', () => {
-                const token = aiTokenInput.value.trim();
-                if (token.length > 0) {
-                    aiPromptInput.disabled = false;
-                    aiGenerateBtn.disabled = false;
-                    aiGenerateBtn.classList.remove('bg-sky-700', 'cursor-not-allowed');
-                    aiGenerateBtn.classList.add('bg-sky-500');
-                    aiOutput.innerHTML = '';
-                    aiOutput.classList.add('hidden');
-                    aiCanvasTitle.textContent = "Kanvas AI";
-                    whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda.";
-                    whatsappLink.textContent = "Hubungi Kami";
-                } else {
-                    aiPromptInput.disabled = true;
-                    aiGenerateBtn.disabled = true;
-                    aiGenerateBtn.classList.add('bg-sky-700', 'cursor-not-allowed');
-                    aiGenerateBtn.classList.remove('bg-sky-500');
-                    
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan token untuk menggunakan layanan.</p>`;
-                    aiOutput.classList.remove('hidden');
-                    whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20membutuhkan%20token%20gratis%20untuk%20layanan%20AI.";
-                    whatsappLink.textContent = "Dapatkan Token Gratis";
-                }
+            removeImageBtn.addEventListener('click', () => {
+                imageData = null;
+                imagePreview.src = "#";
+                imagePreviewContainer.classList.add('hidden');
             });
-
-            aiPromptInput.addEventListener('input', () => {
-                const token = aiTokenInput.value.trim();
-                const prompt = aiPromptInput.value.trim();
-                if (token.length > 0 && prompt.length > 0) {
-                    aiGenerateBtn.disabled = false;
-                    aiGenerateBtn.classList.remove('bg-sky-700', 'cursor-not-allowed');
-                    aiGenerateBtn.classList.add('bg-sky-500');
-                } else {
-                    aiGenerateBtn.disabled = true;
-                    aiGenerateBtn.classList.add('bg-sky-700', 'cursor-not-allowed');
-                    aiGenerateBtn.classList.remove('bg-sky-500');
-                }
-            });
-
+            
             // Logika untuk memanggil API dan menampilkan hasil
             aiGenerateBtn.addEventListener('click', async () => {
                 const userPrompt = aiPromptInput.value.trim();
-                const userToken = aiTokenInput.value.trim();
-                if (userPrompt === "" || userToken === "") {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi dan token!</p>`;
+                const userToken = document.getElementById('tokenInput').value;
+
+                if (userToken === "") {
+                    // Gunakan peringatan kustom untuk token
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan token untuk mengakses layanan.</p>`;
                     aiOutput.classList.remove('hidden');
                     return;
                 }
 
+                if (userPrompt === "" && !imageData) {
+                     aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi atau unggah foto!</p>`;
+                     aiOutput.classList.remove('hidden');
+                     return;
+                }
+
+                // Tampilkan loader dan sembunyikan output sebelumnya
                 aiLoader.classList.remove('hidden');
                 aiOutput.classList.add('hidden');
                 aiOutput.innerHTML = '';
@@ -423,81 +426,92 @@
                     const payload = {
                         token: userToken,
                         prompt: userPrompt,
-                        mode: currentMode // Mengirim mode ke Apps Script
+                        mode: currentMode,
+                        imageData: imageData // Mengirim data gambar jika ada
                     };
+                    
+                    let response = null;
+                    let retries = 0;
+                    const maxRetries = 5;
+                    const initialBackoff = 1000; // 1 second
 
-                    const response = await fetch(appsScriptUrl, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: {
-                            'Content-Type': 'application/json'
+                    while (retries < maxRetries) {
+                        try {
+                            response = await fetch(appsScriptUrl, {
+                                method: 'POST',
+                                body: JSON.stringify(payload)
+                            });
+                            if (response.ok) {
+                                break;
+                            } else if (response.status === 429) {
+                                const backoffTime = initialBackoff * Math.pow(2, retries);
+                                retries++;
+                                await new Promise(resolve => setTimeout(resolve, backoffTime));
+                            } else {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                        } catch (e) {
+                            if (retries === maxRetries - 1) throw e;
+                            const backoffTime = initialBackoff * Math.pow(2, retries);
+                            retries++;
+                            await new Promise(resolve => setTimeout(resolve, backoffTime));
                         }
-                    });
+                    }
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!response || !response.ok) {
+                        throw new Error("Failed to get a successful response after multiple retries.");
                     }
 
                     const result = await response.json();
                     
                     if (result.error) {
-                        aiOutput.innerHTML = `<p class="text-center text-red-400">${result.error}.</p>`;
-                        whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20membutuhkan%20token%20gratis%20untuk%20layanan%20AI.";
-                        whatsappLink.textContent = "Dapatkan Token Gratis";
-                        aiCanvasTitle.textContent = "Kanvas AI";
-                    } else if (result.imageUrl) {
-                         aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
-
-                        const label = document.createElement('h5');
-                        label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                        label.textContent = `Hasil Gambar:`;
-
-                        const img = document.createElement('img');
-                        img.src = result.imageUrl;
-                        img.alt = userPrompt;
-                        img.className = 'w-full rounded-lg mb-2';
-                        
-                        const text = document.createElement('p');
-                        text.className = 'text-center text-slate-300 text-xs';
-                        text.textContent = `Prompt: "${userPrompt}"`;
-                        
-                        aiOutput.appendChild(label);
-                        aiOutput.appendChild(img);
-                        aiOutput.appendChild(text);
-                        
-                        aiOutput.classList.remove('hidden');
-                        whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda.";
-                        whatsappLink.textContent = "Hubungi Kami";
-
-                    } else if (result.generatedText) {
-                        aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
-
-                        const label = document.createElement('h5');
-                        label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                        label.textContent = `Hasil Teks:`;
-
-                        const text = document.createElement('p');
-                        text.className = 'p-2 rounded-lg bg-slate-900/50 text-white text-xs whitespace-pre-wrap';
-                        text.textContent = result.generatedText;
-
-                        aiOutput.appendChild(label);
-                        aiOutput.appendChild(text);
-                        aiOutput.classList.remove('hidden');
-                        whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda.";
-                        whatsappLink.textContent = "Hubungi Kami";
+                        aiOutput.innerHTML = `<p class="text-center text-red-400">${result.error}</p>`;
+                         if (result.error.includes("hubungi")) {
+                             const whatsappBtn = document.querySelector('.whatsapp-button');
+                             whatsappBtn.textContent = "Dapatkan Token Gratis";
+                         }
                     } else {
-                        aiOutput.innerHTML = `<p class="text-center text-red-400">Maaf, gagal membuat konten. Silakan coba lagi.</p>`;
-                        aiCanvasTitle.textContent = "Kanvas AI";
+                        aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
+                        if (result.imageUrl) {
+                             const label = document.createElement('h5');
+                             label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
+                             label.textContent = 'Hasil Gambar:';
+
+                             const img = document.createElement('img');
+                             img.src = result.imageUrl;
+                             img.alt = userPrompt;
+                             img.className = 'w-full rounded-lg mb-2';
+                             
+                             const text = document.createElement('p');
+                             text.className = 'text-center text-slate-300 text-xs';
+                             text.textContent = `Prompt: "${userPrompt}"`;
+                             
+                             aiOutput.appendChild(label);
+                             aiOutput.appendChild(img);
+                             aiOutput.appendChild(text);
+
+                        } else if (result.generatedText) {
+                            const label = document.createElement('h5');
+                            label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
+                            label.textContent = 'Hasil Teks:';
+
+                            const text = document.createElement('p');
+                            text.className = 'text-left text-slate-300 text-xs';
+                            text.textContent = result.generatedText;
+
+                            aiOutput.appendChild(label);
+                            aiOutput.appendChild(text);
+                        }
                     }
+
                 } catch (error) {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
-                    whatsappLink.href = "https://wa.me/6285299069883?text=Halo,%20saya%20mengalami%20masalah%20teknis%20dengan%20layanan%20AI.";
-                    aiCanvasTitle.textContent = "Kanvas AI";
                 } finally {
                     aiLoader.classList.add('hidden');
+                    aiOutput.classList.remove('hidden');
                 }
             });
-            updateModeUI(); // Set UI awal
+            setMode('image');
         });
     </script>
 </body>
