@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons for modern icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    < src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></>
 
     <style>
         /* Custom styles */
@@ -305,214 +305,220 @@
     </div>
     
     <script>
-        // NOTE: Untuk menggunakan file ini secara publik (misalnya di GitHub Pages),
-        // Anda harus memasukkan URL skrip Google Apps Script Anda.
-        const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzpnEmAlscbsAWSEGhSM75m2hqVSph4JU8O4t20IVr8fkMowPcIOEhvCu5FE9Go66qCCg/exec"; 
+    // NOTE: Untuk menggunakan file ini secara publik (misalnya di GitHub Pages),
+    // Anda harus memasukkan URL skrip Google Apps Script Anda.
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzpnEmAlscbsAWSEGhSM75m2hqVSph4JU8O4t20IVr8fkMowPcIOEhvCu5FE9Go66qCCg/exec";
 
-        // Initialize Lucide icons
-        lucide.createIcons();
-        // Accordion logic
-        document.addEventListener("DOMContentLoaded", () => {
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const activeItem = document.querySelector('.accordion-item.active');
-                    const clickedItem = header.parentElement;
+    // Initialize Lucide icons
+    lucide.createIcons();
+    // Accordion logic
+    document.addEventListener("DOMContentLoaded", () => {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const activeItem = document.querySelector('.accordion-item.active');
+                const clickedItem = header.parentElement;
 
-                    if (activeItem && activeItem !== clickedItem) {
-                        activeItem.classList.remove('active');
-                    }
-                    
-                    clickedItem.classList.toggle('active');
-                });
-            });
-
-            // Logika untuk kanvas AI
-            const aiPromptInput = document.getElementById('aiPrompt');
-            const aiGenerateBtn = document.getElementById('aiGenerateBtn');
-            const aiLoader = document.getElementById('aiLoader');
-            const aiOutput = document.getElementById('aiOutput');
-            const modeImageBtn = document.getElementById('modeImage');
-            const modeTextBtn = document.getElementById('modeText');
-            const uploadImageBtn = document.getElementById('uploadImageBtn');
-            const imageInput = document.getElementById('imageInput');
-            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-            const imagePreview = document.getElementById('imagePreview');
-            const removeImageBtn = document.getElementById('removeImageBtn');
-            const aiCanvasTitle = document.getElementById('ai-canvas-title');
-            let currentMode = 'image'; // Default mode
-            let imageData = null;
-
-            // Fungsi untuk mengaktifkan mode
-            const setMode = (mode) => {
-                currentMode = mode;
-                if (mode === 'image') {
-                    modeImageBtn.classList.add('bg-sky-500', 'text-white');
-                    modeImageBtn.classList.remove('bg-slate-600');
-                    modeTextBtn.classList.add('bg-slate-600', 'text-white');
-                    modeTextBtn.classList.remove('bg-sky-500');
-                    aiPromptInput.placeholder = "Masukkan deskripsi gambar yang ingin Anda buat...";
-                    uploadImageBtn.classList.remove('hidden');
-                    if (imagePreviewContainer.classList.contains('hidden')) {
-                         aiOutput.innerHTML = '';
-                         aiOutput.classList.add('hidden');
-                    }
-                } else {
-                    modeTextBtn.classList.add('bg-sky-500', 'text-white');
-                    modeTextBtn.classList.remove('bg-slate-600');
-                    modeImageBtn.classList.add('bg-slate-600', 'text-white');
-                    modeImageBtn.classList.remove('bg-sky-500');
-                    aiPromptInput.placeholder = "Masukkan teks yang ingin Anda buat...";
-                    uploadImageBtn.classList.add('hidden');
-                    imagePreviewContainer.classList.add('hidden');
-                     aiOutput.innerHTML = '';
-                    aiOutput.classList.add('hidden');
-                    imageData = null;
+                if (activeItem && activeItem !== clickedItem) {
+                    activeItem.classList.remove('active');
                 }
-            };
-            
-            // Event listeners for mode selection
-            modeImageBtn.addEventListener('click', () => setMode('image'));
-            modeTextBtn.addEventListener('click', () => setMode('text'));
-            
-            // Event listener for image upload
-            uploadImageBtn.addEventListener('click', () => {
-                imageInput.click();
-            });
 
-            imageInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        imageData = e.target.result.split(',')[1];
-                        imagePreview.src = e.target.result;
-                        imagePreviewContainer.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
+                clickedItem.classList.toggle('active');
             });
-            
-            removeImageBtn.addEventListener('click', () => {
-                imageData = null;
-                imagePreview.src = "#";
+        });
+
+        // Logika untuk kanvas AI
+        const aiPromptInput = document.getElementById('aiPrompt');
+        const aiGenerateBtn = document.getElementById('aiGenerateBtn');
+        const aiLoader = document.getElementById('aiLoader');
+        const aiOutput = document.getElementById('aiOutput');
+        const modeImageBtn = document.getElementById('modeImage');
+        const modeTextBtn = document.getElementById('modeText');
+        const uploadImageBtn = document.getElementById('uploadImageBtn');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        const aiCanvasTitle = document.getElementById('ai-canvas-title');
+        let currentMode = 'image'; // Default mode
+        let imageData = null;
+
+        // Fungsi untuk mengaktifkan mode
+        const setMode = (mode) => {
+            currentMode = mode;
+            aiOutput.innerHTML = '';
+            aiOutput.classList.add('hidden');
+
+            if (mode === 'image') {
+                modeImageBtn.classList.add('bg-sky-500', 'text-white');
+                modeImageBtn.classList.remove('bg-slate-600');
+                modeTextBtn.classList.add('bg-slate-600', 'text-white');
+                modeTextBtn.classList.remove('bg-sky-500');
+                aiPromptInput.placeholder = "Masukkan deskripsi gambar yang ingin Anda buat...";
+                uploadImageBtn.classList.remove('hidden');
+            } else {
+                modeTextBtn.classList.add('bg-sky-500', 'text-white');
+                modeTextBtn.classList.remove('bg-slate-600');
+                modeImageBtn.classList.add('bg-slate-600', 'text-white');
+                modeImageBtn.classList.remove('bg-sky-500');
+                aiPromptInput.placeholder = "Masukkan teks yang ingin Anda buat...";
+                uploadImageBtn.classList.add('hidden');
                 imagePreviewContainer.classList.add('hidden');
-            });
-            
-            // Logika untuk memanggil API dan menampilkan hasil
-            aiGenerateBtn.addEventListener('click', async () => {
-                const userPrompt = aiPromptInput.value.trim();
-                const userToken = document.getElementById('tokenInput').value;
+                imageData = null;
+                imageInput.value = ''; // Reset file input
+            }
+        };
 
-                if (userToken === "") {
-                    // Gunakan peringatan kustom untuk token
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan token untuk mengakses layanan.</p>`;
-                    aiOutput.classList.remove('hidden');
-                    return;
-                }
+        // Event listeners for mode selection
+        modeImageBtn.addEventListener('click', () => setMode('image'));
+        modeTextBtn.addEventListener('click', () => setMode('text'));
 
-                if (userPrompt === "" && !imageData) {
-                     aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi atau unggah foto!</p>`;
-                     aiOutput.classList.remove('hidden');
-                     return;
-                }
+        // Event listener for image upload
+        uploadImageBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
 
-                // Tampilkan loader dan sembunyikan output sebelumnya
-                aiLoader.classList.remove('hidden');
-                aiOutput.classList.add('hidden');
-                aiOutput.innerHTML = '';
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imageData = e.target.result.split(',')[1];
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-                try {
-                    const payload = {
-                        token: userToken,
-                        prompt: userPrompt,
-                        mode: currentMode,
-                        imageData: imageData // Mengirim data gambar jika ada
-                    };
-                    
-                    let response = null;
-                    let retries = 0;
-                    const maxRetries = 5;
-                    const initialBackoff = 1000; // 1 second
+        removeImageBtn.addEventListener('click', () => {
+            imageData = null;
+            imagePreview.src = "#";
+            imagePreviewContainer.classList.add('hidden');
+            imageInput.value = ''; // Reset file input
+        });
 
-                    while (retries < maxRetries) {
-                        try {
-                            response = await fetch(appsScriptUrl, {
-                                method: 'POST',
-                                body: JSON.stringify(payload)
-                            });
-                            if (response.ok) {
-                                break;
-                            } else if (response.status === 429) {
-                                const backoffTime = initialBackoff * Math.pow(2, retries);
-                                retries++;
-                                await new Promise(resolve => setTimeout(resolve, backoffTime));
-                            } else {
-                                throw new Error(`HTTP error! status: ${response.status}`);
-                            }
-                        } catch (e) {
-                            if (retries === maxRetries - 1) throw e;
+        // Logika untuk memanggil API dan menampilkan hasil
+        aiGenerateBtn.addEventListener('click', async () => {
+            const userPrompt = aiPromptInput.value.trim();
+            const userToken = document.getElementById('tokenInput').value;
+
+            if (userToken === "") {
+                aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan token untuk mengakses layanan.</p>`;
+                aiOutput.classList.remove('hidden');
+                return;
+            }
+
+            if (userPrompt === "" && !imageData) {
+                aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi atau unggah foto!</p>`;
+                aiOutput.classList.remove('hidden');
+                return;
+            }
+
+            aiLoader.classList.remove('hidden');
+            aiOutput.classList.add('hidden');
+            aiOutput.innerHTML = '';
+
+            try {
+                const payload = {
+                    token: userToken,
+                    prompt: userPrompt,
+                    mode: currentMode,
+                    imageData: imageData
+                };
+
+                let response = null;
+                let retries = 0;
+                const maxRetries = 5;
+                const initialBackoff = 1000;
+
+                while (retries < maxRetries) {
+                    try {
+                        // =================== PERBAIKAN DI SINI =================== //
+                        // Menambahkan 'headers' untuk memberi tahu server bahwa
+                        // kita mengirim data dalam format JSON.
+                        // ========================================================= //
+                        response = await fetch(appsScriptUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload),
+                            redirect: 'follow' // Menambahkan ini untuk penanganan redirect GAS
+                        });
+
+                        if (response.ok) {
+                            break;
+                        } else if (response.status === 429) {
                             const backoffTime = initialBackoff * Math.pow(2, retries);
                             retries++;
                             await new Promise(resolve => setTimeout(resolve, backoffTime));
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
+                    } catch (e) {
+                        if (retries === maxRetries - 1) throw e;
+                        const backoffTime = initialBackoff * Math.pow(2, retries);
+                        retries++;
+                        await new Promise(resolve => setTimeout(resolve, backoffTime));
                     }
-
-                    if (!response || !response.ok) {
-                        throw new Error("Failed to get a successful response after multiple retries.");
-                    }
-
-                    const result = await response.json();
-                    
-                    if (result.error) {
-                        aiOutput.innerHTML = `<p class="text-center text-red-400">${result.error}</p>`;
-                         if (result.error.includes("hubungi")) {
-                             const whatsappBtn = document.querySelector('.whatsapp-button');
-                             whatsappBtn.textContent = "Dapatkan Token Gratis";
-                         }
-                    } else {
-                        aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
-                        if (result.imageUrl) {
-                             const label = document.createElement('h5');
-                             label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                             label.textContent = 'Hasil Gambar:';
-
-                             const img = document.createElement('img');
-                             img.src = result.imageUrl;
-                             img.alt = userPrompt;
-                             img.className = 'w-full rounded-lg mb-2';
-                             
-                             const text = document.createElement('p');
-                             text.className = 'text-center text-slate-300 text-xs';
-                             text.textContent = `Prompt: "${userPrompt}"`;
-                             
-                             aiOutput.appendChild(label);
-                             aiOutput.appendChild(img);
-                             aiOutput.appendChild(text);
-
-                        } else if (result.generatedText) {
-                            const label = document.createElement('h5');
-                            label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                            label.textContent = 'Hasil Teks:';
-
-                            const text = document.createElement('p');
-                            text.className = 'text-left text-slate-300 text-xs';
-                            text.textContent = result.generatedText;
-
-                            aiOutput.appendChild(label);
-                            aiOutput.appendChild(text);
-                        }
-                    }
-
-                } catch (error) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
-                } finally {
-                    aiLoader.classList.add('hidden');
-                    aiOutput.classList.remove('hidden');
                 }
-            });
-            setMode('image');
+
+                if (!response || !response.ok) {
+                    throw new Error("Gagal mendapatkan respons setelah beberapa kali mencoba.");
+                }
+
+                const result = await response.json();
+
+                if (result.error) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">${result.error}</p>`;
+                    if (result.error.includes("hubungi")) {
+                        const whatsappBtn = document.querySelector('.whatsapp-button');
+                        whatsappBtn.textContent = "Dapatkan Token Gratis";
+                    }
+                } else {
+                    aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
+                    if (result.imageUrl) {
+                        const label = document.createElement('h5');
+                        label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
+                        label.textContent = 'Hasil Gambar:';
+
+                        const img = document.createElement('img');
+                        img.src = result.imageUrl;
+                        img.alt = userPrompt;
+                        img.className = 'w-full rounded-lg mb-2';
+
+                        const text = document.createElement('p');
+                        text.className = 'text-center text-slate-300 text-xs';
+                        text.textContent = `Prompt: "${userPrompt}"`;
+
+                        aiOutput.appendChild(label);
+                        aiOutput.appendChild(img);
+                        aiOutput.appendChild(text);
+
+                    } else if (result.generatedText) {
+                        const label = document.createElement('h5');
+                        label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
+                        label.textContent = 'Hasil Teks:';
+
+                        const text = document.createElement('p');
+                        text.className = 'text-left text-slate-300 text-xs whitespace-pre-wrap';
+                        text.textContent = result.generatedText;
+
+                        aiOutput.appendChild(label);
+                        aiOutput.appendChild(text);
+                    }
+                }
+
+            } catch (error) {
+                aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}. Coba refresh halaman.</p>`;
+            } finally {
+                aiLoader.classList.add('hidden');
+                aiOutput.classList.remove('hidden');
+            }
         });
+        setMode('image');
+    });
     </script>
 </body>
 </html>
