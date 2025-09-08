@@ -45,19 +45,19 @@
         .accordion-item.active .accordion-icon {
             transform: rotate(180deg);
         }
-        /* Custom scrollbar for light background */
+        /* Custom scrollbar for dark background */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(255, 255, 255, 0.1);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
@@ -71,33 +71,33 @@
             <!-- Kolom ini hanya untuk menampilkan gambar -->
         </div>
 
-        <!-- Kolom Konten (Sisi Kanan) -->
-        <div class="w-2/3 flex flex-col bg-white">
+        <!-- Kolom Konten (Sisi Kanan) - Glassmorphism Effect -->
+        <div class="w-2/3 flex flex-col bg-black/40 backdrop-blur-lg border-l border-white/20 text-white">
             
-            <!-- Header -->
-            <header class="text-center p-4 bg-slate-50 border-b border-slate-200 flex-shrink-0">
-                <h1 class="text-lg font-bold tracking-tight text-slate-800">SOLUSI KREATIF ANDA</h1>
-                <p class="text-xs text-slate-500">Cetak, Digital, & Kreatif</p>
+            <!-- Header dengan warna gradien transparan -->
+            <header class="text-center p-4 flex-shrink-0 border-b border-white/20 bg-gradient-to-r from-sky-500/20 to-indigo-500/20">
+                <h1 class="text-lg font-bold tracking-tight">SOLUSI KREATIF ANDA</h1>
+                <p class="text-xs text-slate-300">Cetak, Digital, & Kreatif</p>
             </header>
 
             <!-- Main Content (Bisa di-scroll internal) -->
-            <main class="flex-grow overflow-y-auto p-3 space-y-3 custom-scrollbar bg-slate-100">
-                <h2 class="text-sm font-bold text-center mb-2 text-slate-700">Layanan Profesional Kami</h2>
+            <main class="flex-grow overflow-y-auto p-3 space-y-3 custom-scrollbar">
+                <h2 class="text-sm font-bold text-center mb-2 text-white/90">Layanan Profesional Kami</h2>
                 <div class="space-y-2">
                     <!-- 1. Jasa Cetak/Print (Accordion) -->
-                    <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                    <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                         <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                                 </div>
-                                <h3 class="text-sm font-semibold text-slate-700">Sedia Print / Percetakan</h3>
+                                <h3 class="text-sm font-semibold">Sedia Print / Percetakan</h3>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
                             <div class="px-4 pb-3 pt-1">
-                                <ul class="space-y-1 list-inside list-disc text-slate-600 marker:text-blue-500 text-xs">
+                                <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
                                     <li>Undangan (Pernikahan, Ulang Tahun, dll)</li>
                                     <li>Buku Tulis Anak (Custom Sampul)</li>
                                     <li>Buku Gambar & Mewarnai</li>
@@ -108,19 +108,19 @@
                     </div>
 
                     <!-- 2. Jasa Digital & Kreatif (Accordion) -->
-                    <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                    <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                         <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 6 6 6"/><path d="M12 20.49 16 12"/></svg>
                                 </div>
-                                <h3 class="text-sm font-semibold text-slate-700">Jasa Digital & Kreatif</h3>
+                                <h3 class="text-sm font-semibold">Jasa Digital & Kreatif</h3>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
                             <div class="px-4 pb-3 pt-1">
-                                <ul class="space-y-1 list-inside list-disc text-slate-600 marker:text-blue-500 text-xs">
+                                <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
                                     <li>Bikin Proposal & Laporan</li>
                                     <li>Bikin Aplikasi Kantor Sederhana</li>
                                     <li>Editor Video (Wedding, Konten, Presentasi)</li>
@@ -131,32 +131,32 @@
                     </div>
                     
                     <!-- 3. Olah Limbah (Accordion) -->
-                     <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                     <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                         <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268 3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
                                 </div>
-                                <h3 class="text-sm font-semibold text-slate-700">Olah Limbah Organik</h3>
+                                <h3 class="text-sm font-semibold">Olah Limbah Organik</h3>
                             </div>
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
                              <div class="px-4 pb-3 pt-1">
-                                <p class="text-slate-600 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat. Hubungi kami untuk informasi lebih lanjut.</p>
+                                <p class="text-slate-300 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat. Hubungi kami untuk informasi lebih lanjut.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
 
-            <!-- Footer / Final CTA -->
-            <footer class="p-4 text-center flex-shrink-0 bg-slate-50 border-t border-slate-200">
-                <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-5 py-2 rounded-full shadow-lg text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                    Hubungi Kami Sekarang
+            <!-- Footer / Final CTA (diperkecil) -->
+            <footer class="p-2 text-center flex-shrink-0 border-t border-white/20">
+                <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-4 py-1.5 rounded-full shadow-lg text-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    Hubungi Kami
                 </a>
-                <p class="text-xs text-slate-400 mt-2">&copy; 2025 Usman Moonggalo.</p>
+                <p class="text-[10px] text-slate-400 mt-1.5">&copy; 2025 Usman Moonggalo.</p>
             </footer>
         </div>
     </div>
