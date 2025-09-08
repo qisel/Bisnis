@@ -109,6 +109,31 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Style untuk kontainer output AI yang bisa di-scroll */
+        .ai-output-container {
+            max-height: 200px; 
+            overflow-y: auto; 
+            padding: 10px;
+            background-color: rgba(15, 23, 42, 0.5); 
+            border-radius: 0.5rem; 
+            border: 1px solid rgba(51, 65, 85, 1); 
+            width: 100%;
+        }
+         /* Custom scrollbar untuk kontainer output */
+        .ai-output-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .ai-output-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ai-output-container::-webkit-scrollbar-thumb {
+            background: #0ea5e9; /* sky-500 */
+            border-radius: 3px;
+        }
+        .ai-output-container::-webkit-scrollbar-thumb:hover {
+            background: #0284c7; /* sky-600 */
+        }
     </style>
 </head>
 <!-- NAMA: BODY_UTAMA -->
@@ -183,106 +208,45 @@
                             </div>
                         </div>
                         
-                        <!-- NAMA: ACCORDION_LIMBAH -->
-                         <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
-                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
-                                 <div class="flex items-center gap-3">
-                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268-3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
-                                     </div>
-                                     <h3 class="text-sm font-semibold">Olah Limbah Organik</h3>
-                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
-                             </button>
-                             <div class="accordion-content">
-                                 <div class="px-4 pb-3 pt-1">
-                                     <p class="text-slate-300 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat.</p>
-                                 </div>
-                             </div>
-                         </div>
-                        
-                        <!-- NAMA: ACCORDION_INTERNET -->
-                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
-                            <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi"><path d="M5 12.55a8 8 0 0 1 14 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M9 16.29a4 4 0 0 1 6 0"/><path d="M12 20h.01"/></svg>
-                                    </div>
-                                    <h3 class="text-sm font-semibold">Peralatan & Instalasi Internet</h3>
-                                </div>
-                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
-                            </button>
-                            <div class="accordion-content">
-                                 <div class="px-4 pb-3 pt-1">
-                                     <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
-                                         <li>Jual Beli Peralatan (AP, Repeater, Modem 4G/5G)</li>
-                                         <li>Jasa Pemasangan Internet</li>
-                                         <li>Jasa Instalasi Kabel WiFi, dll.</li>
-                                     </ul>
-                                 </div>
-                             </div>
-                        </div>
-
-                        <!-- NAMA: ACCORDION_JUAL_BELI -->
-                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
-                            <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                    </div>
-                                    <h3 class="text-sm font-semibold">Jual Beli Bekas & Preloved</h3>
-                                </div>
-                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
-                            </button>
-                            <div class="accordion-content">
-                                <div class="px-4 pb-3 pt-1">
-                                    <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
-                                        <li>Printer (Epson, Canon, HP)</li>
-                                        <li>Laptop / PC</li>
-                                        <li>Smartphone</li>
-                                        <li>Router / Modem</li>
-                                        <li>Lain-lain (Tanyakan saja)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- NAMA: ACCORDION_AI -->
-                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
+                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20 active">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.9 4.2-4.3.6 3.1 3-.7 4.2 3.8-2 3.8 2-.7-4.2 3.1-3-4.3-.6L12 3v0z"/><path d="M5 11.5 3.5 13l-1.5-1.5"/><path d="M22 11.5 20.5 10l1.5-1.5"/><path d="M8 3H6c-1 0-2 1-2 2v2"/><path d="M16 3h2c1 0 2 1 2 2v2"/></svg>
                                     </div>
-                                    <h3 class="text-sm font-semibold">Buat gambar dan text otomatis disini</h3>
+                                    <h3 class="text-sm font-semibold">Kanvas AI: Teks & Gambar</h3>
                                 </div>
                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
                             <div class="accordion-content">
                                 <div class="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50 text-xs mt-2">
                                     <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
+                                    
+                                    <div class="flex flex-row gap-2 mb-3">
+                                        <button id="modeTextBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Teks</button>
+                                        <button id="modeImageBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-slate-600 text-white hover:bg-slate-500">Buat Gambar</button>
+                                    </div>
+
                                     <div class="flex flex-col gap-2">
-                                        <div class="flex flex-row gap-2 mb-2">
-                                            <button id="modeImage" class="py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Gambar</button>
-                                            <button id="modeText" class="py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-slate-600 text-white hover:bg-slate-500">Buat Teks</button>
-                                        </div>
-                                        <input type="text" id="tokenInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan token Anda...">
-                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan deskripsi gambar atau teks yang ingin Anda buat..."></textarea>
-                                        <button id="uploadImageBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
-                                            Unggah Foto
+                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
+                                        
+                                        <button id="uploadImageBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
+                                            Unggah Gambar Referensi (Opsional)
                                         </button>
                                         <input type="file" id="imageInput" accept="image/*" class="hidden">
                                         <div id="imagePreviewContainer" class="hidden flex justify-center mb-2 relative">
-                                            <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-48 w-auto rounded-lg object-contain border border-slate-600">
-                                            <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-[10px]"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                            <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
+                                            <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                                         </div>
+
                                         <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
                                             Buat Sekarang
                                         </button>
                                         <div id="aiLoader" class="hidden flex justify-center items-center py-4">
                                             <div class="loader"></div>
                                         </div>
-                                        <div id="aiOutput" class="hidden flex flex-col items-center justify-center space-y-2 mt-2">
+                                        <div id="aiOutput" class="hidden w-full flex-col items-center justify-center space-y-2 mt-2">
                                             <!-- AI generated content will be displayed here -->
                                         </div>
                                     </div>
@@ -305,77 +269,66 @@
     </div>
     
     <script>
-        // Masukkan URL aplikasi web Google Apps Script Anda yang sudah di-deploy di sini.
-        const appsScriptUrl = "https://script.google.com/macros/s/AKfycbw-yxLso-X5cChY60ZGMqqCJFHVB17kOhfLXh3GtroAeUAaK1-x3SaXqb-L5e-_KXV5Dg/exec";
+        // PENTING: Ganti dengan API Key Google AI Anda yang sebenarnya.
+        const apiKey = "AIzaSyBmrf5LRUANwRNn7C8yFBAa6crvboQMND4";
     
         // Initialize Lucide icons
         lucide.createIcons();
-        // Accordion logic
+        
         document.addEventListener("DOMContentLoaded", () => {
+            // Accordion logic
             const accordionHeaders = document.querySelectorAll('.accordion-header');
             accordionHeaders.forEach(header => {
                 header.addEventListener('click', () => {
                     const activeItem = document.querySelector('.accordion-item.active');
                     const clickedItem = header.parentElement;
-
-                    if (activeItem && activeItem !== clickedItem) {
-                        activeItem.classList.remove('active');
-                    }
-
+                    if (activeItem && activeItem !== clickedItem) activeItem.classList.remove('active');
                     clickedItem.classList.toggle('active');
                 });
             });
 
-            // Logika untuk kanvas AI
+            // AI Canvas Logic
             const aiPromptInput = document.getElementById('aiPrompt');
             const aiGenerateBtn = document.getElementById('aiGenerateBtn');
             const aiLoader = document.getElementById('aiLoader');
             const aiOutput = document.getElementById('aiOutput');
-            const modeImageBtn = document.getElementById('modeImage');
-            const modeTextBtn = document.getElementById('modeText');
+            const modeTextBtn = document.getElementById('modeTextBtn');
+            const modeImageBtn = document.getElementById('modeImageBtn');
             const uploadImageBtn = document.getElementById('uploadImageBtn');
             const imageInput = document.getElementById('imageInput');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
             const imagePreview = document.getElementById('imagePreview');
             const removeImageBtn = document.getElementById('removeImageBtn');
-            const aiCanvasTitle = document.getElementById('ai-canvas-title');
-            let currentMode = 'image'; // Default mode
+
+            let currentMode = 'text';
             let imageData = null;
 
-            // Fungsi untuk mengaktifkan mode
             const setMode = (mode) => {
                 currentMode = mode;
                 aiOutput.innerHTML = '';
                 aiOutput.classList.add('hidden');
-
-                if (mode === 'image') {
-                    modeImageBtn.classList.add('bg-sky-500', 'text-white');
-                    modeImageBtn.classList.remove('bg-slate-600');
-                    modeTextBtn.classList.add('bg-slate-600', 'text-white');
-                    modeTextBtn.classList.remove('bg-sky-500');
-                    aiPromptInput.placeholder = "Tulis deskripsi gambar, atau unggah gambar untuk dianalisis...";
-                    uploadImageBtn.classList.remove('hidden');
-                } else {
+                if (mode === 'text') {
                     modeTextBtn.classList.add('bg-sky-500', 'text-white');
-                    modeTextBtn.classList.remove('bg-slate-600');
-                    modeImageBtn.classList.add('bg-slate-600', 'text-white');
-                    modeImageBtn.classList.remove('bg-sky-500');
-                    aiPromptInput.placeholder = "Masukkan teks yang ingin Anda buat...";
+                    modeTextBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500');
+                    modeImageBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
+                    modeImageBtn.classList.remove('bg-sky-500', 'text-white');
+                    aiPromptInput.placeholder = 'Tanyakan apa saja...';
                     uploadImageBtn.classList.add('hidden');
                     imagePreviewContainer.classList.add('hidden');
                     imageData = null;
-                    imageInput.value = ''; // Reset file input
+                } else { // mode === 'image'
+                    modeImageBtn.classList.add('bg-sky-500', 'text-white');
+                    modeImageBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500');
+                    modeTextBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
+                    modeTextBtn.classList.remove('bg-sky-500', 'text-white');
+                    aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
+                    uploadImageBtn.classList.remove('hidden');
                 }
             };
-
-            // Event listeners for mode selection
-            modeImageBtn.addEventListener('click', () => setMode('image'));
+            
             modeTextBtn.addEventListener('click', () => setMode('text'));
-
-            // Event listener for image upload
-            uploadImageBtn.addEventListener('click', () => {
-                imageInput.click();
-            });
+            modeImageBtn.addEventListener('click', () => setMode('image'));
+            uploadImageBtn.addEventListener('click', () => imageInput.click());
 
             imageInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
@@ -393,29 +346,19 @@
             removeImageBtn.addEventListener('click', () => {
                 imageData = null;
                 imagePreview.src = "#";
+                imageInput.value = '';
                 imagePreviewContainer.classList.add('hidden');
-                imageInput.value = ''; // Reset file input
             });
 
-            // Logika untuk memanggil API dan menampilkan hasil
             aiGenerateBtn.addEventListener('click', async () => {
-                if (!appsScriptUrl.startsWith("https://")) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Harap konfigurasi URL Apps Script terlebih dahulu di dalam kode HTML.</p>`;
+                if (apiKey.includes("GANTI_DENGAN")) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Harap konfigurasi API Key.</p>`;
                     aiOutput.classList.remove('hidden');
                     return;
                 }
-
                 const userPrompt = aiPromptInput.value.trim();
-                const userToken = document.getElementById('tokenInput').value;
-
-                if (userToken === "") {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan token untuk mengakses layanan.</p>`;
-                    aiOutput.classList.remove('hidden');
-                    return;
-                }
-
-                if (userPrompt === "" && !imageData) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi atau unggah foto!</p>`;
+                if (userPrompt === "") {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Deskripsi tidak boleh kosong!</p>`;
                     aiOutput.classList.remove('hidden');
                     return;
                 }
@@ -427,69 +370,13 @@
                 aiGenerateBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
                 try {
-                    const payload = {
-                        token: userToken,
-                        prompt: userPrompt,
-                        mode: currentMode,
-                        imageData: imageData
-                    };
-
-                    const response = await fetch(appsScriptUrl, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.error) {
-                        aiOutput.innerHTML = `<p class="text-center text-red-400">${result.error}</p>`;
-                        if (result.error.includes("hubungi")) {
-                            const whatsappBtn = document.querySelector('.whatsapp-button');
-                            whatsappBtn.textContent = "Dapatkan Token Gratis";
-                        }
+                    if (currentMode === 'text') {
+                        await generateText(userPrompt);
                     } else {
-                        aiCanvasTitle.textContent = `Kanvas AI (Sisa Kuota: ${result.remainingUses})`;
-                        if (result.imageUrl) {
-                            const label = document.createElement('h5');
-                            label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                            label.textContent = 'Hasil Gambar:';
-
-                            const img = document.createElement('img');
-                            img.src = result.imageUrl;
-                            img.alt = userPrompt;
-                            img.className = 'w-full rounded-lg mb-2';
-
-                            const text = document.createElement('p');
-                            text.className = 'text-center text-slate-300 text-xs';
-                            text.textContent = `Prompt: "${userPrompt}"`;
-
-                            aiOutput.appendChild(label);
-                            aiOutput.appendChild(img);
-                            aiOutput.appendChild(text);
-
-                        } else if (result.generatedText) {
-                            const label = document.createElement('h5');
-                            label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                            label.textContent = 'Hasil Teks:';
-
-                            const text = document.createElement('p');
-                            text.className = 'text-left text-slate-300 text-xs whitespace-pre-wrap';
-                            text.textContent = result.generatedText;
-
-                            aiOutput.appendChild(label);
-                            aiOutput.appendChild(text);
-                        }
+                        await generateImage(userPrompt);
                     }
-
                 } catch (error) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}. Coba periksa koneksi atau URL skrip Anda.</p>`;
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
                 } finally {
                     aiLoader.classList.add('hidden');
                     aiOutput.classList.remove('hidden');
@@ -497,7 +384,100 @@
                     aiGenerateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
             });
-            setMode('image');
+            
+            async function generateText(prompt) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    tools: [{ "google_search": {} }]
+                };
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (generatedText) {
+                    displayTextResult(generatedText);
+                } else {
+                    throw new Error("Respons API tidak valid.");
+                }
+            }
+
+            async function generateImage(prompt) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
+                const parts = [{ text: prompt }];
+                if (imageData) {
+                    parts.push({ inlineData: { mimeType: "image/png", data: imageData } });
+                }
+                const payload = {
+                    contents: [{ parts: parts }],
+                    generationConfig: { responseModalities: ['IMAGE'] },
+                };
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                if (base64Data) {
+                    displayImageResult(base64Data, prompt);
+                } else {
+                    throw new Error("Respons API tidak berisi data gambar.");
+                }
+            }
+
+            function displayTextResult(generatedText) {
+                const textContainer = document.createElement('div');
+                textContainer.className = 'ai-output-container';
+                const label = document.createElement('h5');
+                label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
+                label.textContent = 'Hasil Teks:';
+                const text = document.createElement('p');
+                text.className = 'text-left text-slate-300 text-xs whitespace-pre-wrap';
+                text.textContent = generatedText;
+                textContainer.appendChild(label);
+                textContainer.appendChild(text);
+
+                const copyButton = document.createElement('button');
+                copyButton.className = 'mt-2 inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-1 px-3 rounded-full text-xs transition-colors';
+                copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Salin Teks</span>`;
+                copyButton.addEventListener('click', () => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = generatedText;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    copyButton.innerHTML = `<span>Tersalin!</span>`;
+                    setTimeout(() => { copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Salin Teks</span>`; }, 2000);
+                });
+                aiOutput.appendChild(textContainer);
+                aiOutput.appendChild(copyButton);
+            }
+
+            function displayImageResult(base64Data, prompt) {
+                const imageUrl = `data:image/png;base64,${base64Data}`;
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = prompt;
+                img.className = 'w-full rounded-lg mb-2 border border-slate-600';
+                
+                const downloadButton = document.createElement('a');
+                downloadButton.href = imageUrl;
+                downloadButton.download = `ai-image-${Date.now()}.png`;
+                downloadButton.className = 'mt-2 inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-1 px-3 rounded-full text-xs transition-colors';
+                downloadButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span>Unduh Gambar</span>`;
+                
+                aiOutput.appendChild(img);
+                aiOutput.appendChild(downloadButton);
+            }
+
+            setMode('text');
+            const aiAccordion = document.querySelector('.accordion-item.active');
+            if(aiAccordion) aiAccordion.querySelector('.accordion-header').click();
         });
     </script>
 </body>
