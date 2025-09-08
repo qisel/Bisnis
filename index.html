@@ -178,7 +178,7 @@
             </div>
 
             <!-- NAMA: GAMBAR_IKLAN -->
-            <div id="floating-image-container" class="absolute bottom-0 left-0 h-auto z-30 pointer-events-none" style="width: 40%;">
+            <div id="floating-image-container" class="absolute bottom-0 left-0 h-auto z-30 cursor-grab active:cursor-grabbing" style="width: 40%;">
                 <img src="https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png" alt="Foto Profil" class="w-full h-auto">
             </div>
         </main>
@@ -229,6 +229,74 @@
                     const newSize = event.target.value;
                     imageContainer.style.width = newSize + '%';
                 });
+            }
+
+            // Drag logic for the image on touch devices
+            const dragElement = document.getElementById('floating-image-container');
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            if (dragElement) {
+                // Mouse events for desktop
+                dragElement.addEventListener("mousedown", dragStart, false);
+                document.addEventListener("mouseup", dragEnd, false);
+                document.addEventListener("mousemove", drag, false);
+
+                // Touch events for mobile
+                dragElement.addEventListener("touchstart", dragStart, false);
+                document.addEventListener("touchend", dragEnd, false);
+                document.addEventListener("touchmove", drag, false);
+            }
+
+            function dragStart(e) {
+                if (e.type === "touchstart") {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
+                
+                if (e.target.tagName === 'IMG') {
+                    isDragging = true;
+                }
+            }
+
+            function dragEnd(e) {
+                isDragging = false;
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+
+                    if (e.type === "touchmove") {
+                        currentX = e.touches[0].clientX - initialX;
+                        currentY = e.touches[0].clientY - initialY;
+                    } else {
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+                    }
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    setTranslate(currentX, currentY, dragElement);
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                let transformValue = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+                // Apply centering transform only on mobile view
+                if (window.innerWidth < 768) { 
+                    transformValue = "translateX(-50%) " + transformValue;
+                }
+                el.style.transform = transformValue;
             }
         });
     </script>
