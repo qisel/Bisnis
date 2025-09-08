@@ -150,12 +150,10 @@
 
         <!-- NAMA: KONTEN_UTAMA -->
         <main class="relative z-10 flex-grow overflow-hidden text-white flex flex-row">
-            <!-- PERUBAHAN: Menambahkan ID dan kelas 'relative' serta 'transition' -->
             <div id="mainImageContainer" class="w-1/3 h-full bg-cover bg-center relative" style="background-image: url('https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png'); transition: background-image 0.5s ease-in-out;">
                 <!-- Tombol aksi gambar akan ditambahkan di sini oleh JS -->
             </div>
             
-            <!-- Kolom Accordion Kanan -->
             <div class="w-2/3 h-full overflow-y-auto custom-scrollbar bg-slate-800/10 backdrop-blur-sm">
                 <div class="p-3 pb-20 space-y-3">
                     <h2 class="text-sm font-bold text-center mb-2 text-white/90">Layanan Profesional Kami</h2>
@@ -208,7 +206,7 @@
                             </div>
                         </div>
                         
-                        <!-- PENAMBAHAN: ACCORDION_LIMBAH -->
+                        <!-- ACCORDION_LIMBAH -->
                         <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
@@ -226,7 +224,7 @@
                             </div>
                         </div>
 
-                        <!-- PENAMBAHAN: ACCORDION_INTERNET -->
+                        <!-- ACCORDION_INTERNET -->
                         <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
@@ -248,7 +246,7 @@
                             </div>
                         </div>
 
-                        <!-- PENAMBAHAN: ACCORDION_JUAL_BELI -->
+                        <!-- ACCORDION_JUAL_BELI -->
                         <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
@@ -273,7 +271,7 @@
                         </div>
                         
                         <!-- NAMA: ACCORDION_AI -->
-                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
+                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20 active">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
@@ -284,34 +282,50 @@
                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
                             <div class="accordion-content">
+                                <!-- PERUBAHAN: Kontainer untuk seluruh area AI -->
                                 <div class="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50 text-xs mt-2">
-                                    <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
                                     
-                                    <div class="flex flex-row gap-2 mb-3">
-                                        <button id="modeTextBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Teks</button>
-                                        <button id="modeImageBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-slate-600 text-white hover:bg-slate-500">Buat Gambar</button>
+                                    <!-- PERUBAHAN: Form verifikasi kode -->
+                                    <div id="aiPasswordPrompt">
+                                        <h4 class="text-sm font-semibold mb-2 text-sky-300">Verifikasi Kode Akses</h4>
+                                        <p class="text-xs text-slate-400 mb-3">Masukkan kode untuk membuka Kanvas AI.</p>
+                                        <div class="flex flex-col gap-2">
+                                            <input type="password" id="aiPasswordInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan kode...">
+                                            <button id="aiVerifyBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">Buka Kanvas</button>
+                                            <p id="aiPasswordError" class="text-red-400 text-xs text-center hidden"></p>
+                                        </div>
                                     </div>
-
-                                    <div class="flex flex-col gap-2">
-                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
+                                    
+                                    <!-- PERUBAHAN: Kontainer untuk Kanvas AI (disembunyikan) -->
+                                    <div id="aiCanvasTools" class="hidden">
+                                        <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
                                         
-                                        <button id="uploadImageBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
-                                            Unggah Gambar Referensi (Opsional)
-                                        </button>
-                                        <input type="file" id="imageInput" accept="image/*" class="hidden">
-                                        <div id="imagePreviewContainer" class="hidden flex justify-center mb-2 relative">
-                                            <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
-                                            <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                        <div class="flex flex-row gap-2 mb-3">
+                                            <button id="modeTextBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Teks</button>
+                                            <button id="modeImageBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-slate-600 text-white hover:bg-slate-500">Buat Gambar</button>
                                         </div>
 
-                                        <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
-                                            Buat Sekarang
-                                        </button>
-                                        <div id="aiLoader" class="hidden flex justify-center items-center py-4">
-                                            <div class="loader"></div>
-                                        </div>
-                                        <div id="aiOutput" class="hidden w-full flex-col items-center justify-center space-y-2 mt-2">
-                                            <!-- AI generated content will be displayed here -->
+                                        <div class="flex flex-col gap-2">
+                                            <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
+                                            
+                                            <button id="uploadImageBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
+                                                Unggah Gambar Referensi (Opsional)
+                                            </button>
+                                            <input type="file" id="imageInput" accept="image/*" class="hidden">
+                                            <div id="imagePreviewContainer" class="hidden flex justify-center mb-2 relative">
+                                                <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
+                                                <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                            </div>
+
+                                            <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
+                                                Buat Sekarang
+                                            </button>
+                                            <div id="aiLoader" class="hidden flex justify-center items-center py-4">
+                                                <div class="loader"></div>
+                                            </div>
+                                            <div id="aiOutput" class="hidden w-full flex-col items-center justify-center space-y-2 mt-2">
+                                                <!-- AI generated content will be displayed here -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -365,6 +379,13 @@
             const removeImageBtn = document.getElementById('removeImageBtn');
             const mainImageContainer = document.getElementById('mainImageContainer');
 
+            // PERUBAHAN: Mendapatkan elemen verifikasi kode
+            const aiPasswordPrompt = document.getElementById('aiPasswordPrompt');
+            const aiPasswordInput = document.getElementById('aiPasswordInput');
+            const aiVerifyBtn = document.getElementById('aiVerifyBtn');
+            const aiPasswordError = document.getElementById('aiPasswordError');
+            const aiCanvasTools = document.getElementById('aiCanvasTools');
+
             let currentMode = 'text';
             let imageData = null;
             let originalImageUrl = null;
@@ -372,6 +393,21 @@
             if (mainImageContainer) {
                 originalImageUrl = mainImageContainer.style.backgroundImage;
             }
+            
+            // PERUBAHAN: Logika untuk verifikasi kode
+            if (aiVerifyBtn) {
+                aiVerifyBtn.addEventListener('click', () => {
+                    if (aiPasswordInput.value.trim().toLowerCase() === 'kaptengembel') {
+                        aiPasswordPrompt.classList.add('hidden');
+                        aiCanvasTools.classList.remove('hidden');
+                        aiPasswordError.classList.add('hidden');
+                    } else {
+                        aiPasswordError.textContent = 'Kode akses salah. Silakan coba lagi.';
+                        aiPasswordError.classList.remove('hidden');
+                    }
+                });
+            }
+
 
             const setMode = (mode) => {
                 currentMode = mode;
@@ -567,7 +603,7 @@
 
             setMode('text');
             // Buka accordion AI secara default
-            const aiAccordion = document.querySelectorAll('.accordion-item')[2]; // asumsi AI adalah item ke-3
+            const aiAccordion = document.querySelectorAll('.accordion-item')[5]; // AI adalah item ke-6 (index 5)
             if(aiAccordion && !aiAccordion.classList.contains('active')) {
                  aiAccordion.querySelector('.accordion-header').click();
             }
