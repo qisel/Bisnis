@@ -84,9 +84,9 @@
                 rgba(255, 255, 255, 0.7) 50%, 
                 transparent 100%
             );
-           transform: skewX(-25deg);
-           animation: flare 4s linear infinite;
-           z-index: -1; /* Place behind the text */
+            transform: skewX(-25deg);
+            animation: flare 4s linear infinite;
+            z-index: -1; /* Place behind the text */
         }
         @keyframes flare {
           from {
@@ -95,6 +95,19 @@
           to {
             left: 125%;
           }
+        }
+        /* Loader styles */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -172,22 +185,22 @@
                         
                         <!-- NAMA: ACCORDION_LIMBAH -->
                          <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
-                            <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268-3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
-                                    </div>
-                                    <h3 class="text-sm font-semibold">Olah Limbah Organik</h3>
-                                </div>
-                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
-                            </button>
-                            <div class="accordion-content">
+                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
+                                 <div class="flex items-center gap-3">
+                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268-3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
+                                     </div>
+                                     <h3 class="text-sm font-semibold">Olah Limbah Organik</h3>
+                                 </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
+                             </button>
+                             <div class="accordion-content">
                                  <div class="px-4 pb-3 pt-1">
-                                    <p class="text-slate-300 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat.</p>
-                                </div>
-                            </div>
-                        </div>
-
+                                     <p class="text-slate-300 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat.</p>
+                                 </div>
+                             </div>
+                         </div>
+                        
                         <!-- NAMA: ACCORDION_INTERNET -->
                         <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
@@ -202,9 +215,33 @@
                             <div class="accordion-content">
                                  <div class="px-4 pb-3 pt-1">
                                      <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
-                                        <li>Jual Beli Peralatan (AP, Repeater, Modem 4G/5G)</li>
-                                        <li>Jasa Pemasangan Internet</li>
-                                        <li>Jasa Instalasi Kabel WiFi, dll.</li>
+                                         <li>Jual Beli Peralatan (AP, Repeater, Modem 4G/5G)</li>
+                                         <li>Jasa Pemasangan Internet</li>
+                                         <li>Jasa Instalasi Kabel WiFi, dll.</li>
+                                     </ul>
+                                 </div>
+                             </div>
+                        </div>
+
+                        <!-- NAMA: ACCORDION_JUAL_BELI -->
+                        <div class="accordion-item bg-white/10 rounded-lg border border-white/20">
+                            <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                    </div>
+                                    <h3 class="text-sm font-semibold">Jual Beli Bekas & Preloved</h3>
+                                </div>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="px-4 pb-3 pt-1">
+                                    <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
+                                        <li>Printer (Epson, Canon, HP)</li>
+                                        <li>Laptop / PC</li>
+                                        <li>Smartphone</li>
+                                        <li>Router / Modem</li>
+                                        <li>Lain-lain (Tanyakan saja)</li>
                                     </ul>
                                 </div>
                             </div>
@@ -215,17 +252,27 @@
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.9 4.2-4.3.6 3.1 3-  .7 4.2 3.8-2 3.8 2-.7-4.2 3.1-3-4.3-.6L12 3v0z"/><path d="M5 11.5 3.5 13l-1.5-1.5"/><path d="M22 11.5 20.5 10l1.5-1.5"/><path d="M8 3H6c-1 0-2 1-2 2v2"/><path d="M16 3h2c1 0 2 1 2 2v2"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.9 4.2-4.3.6 3.1 3-.7 4.2 3.8-2 3.8 2-.7-4.2 3.1-3-4.3-.6L12 3v0z"/><path d="M5 11.5 3.5 13l-1.5-1.5"/><path d="M22 11.5 20.5 10l1.5-1.5"/><path d="M8 3H6c-1 0-2 1-2 2v2"/><path d="M16 3h2c1 0 2 1 2 2v2"/></svg>
                                     </div>
                                     <h3 class="text-sm font-semibold">Buat gambar dan text otomatis disini</h3>
                                 </div>
                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
                             <div class="accordion-content">
-                                 <div class="px-4 pb-3 pt-1">
-                                     <p class="text-slate-300 text-xs">
-                                        Butuh teks atau gambar unik? Biar AI yang buatkan untuk Anda. Coba di sini, murah meriah!
-                                     </p>
+                                <div class="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50 text-xs mt-2">
+                                    <h4 class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
+                                    <div class="flex flex-col gap-2">
+                                        <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Masukkan deskripsi gambar atau teks yang ingin Anda buat..."></textarea>
+                                        <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
+                                            Buat Sekarang
+                                        </button>
+                                        <div id="aiLoader" class="hidden flex justify-center items-center py-4">
+                                            <div class="loader"></div>
+                                        </div>
+                                        <div id="aiOutput" class="hidden flex flex-col items-center justify-center space-y-2 mt-2">
+                                            <!-- AI generated content will be displayed here -->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -262,15 +309,103 @@
                     clickedItem.classList.toggle('active');
                 });
             });
+
+            // Logika untuk kanvas AI
+            const aiPromptInput = document.getElementById('aiPrompt');
+            const aiGenerateBtn = document.getElementById('aiGenerateBtn');
+            const aiLoader = document.getElementById('aiLoader');
+            const aiOutput = document.getElementById('aiOutput');
+            
+            // Logika untuk memanggil API dan menampilkan hasil
+            aiGenerateBtn.addEventListener('click', async () => {
+                const userPrompt = aiPromptInput.value.trim();
+                if (userPrompt === "") {
+                    // Gunakan peringatan kustom sebagai ganti alert()
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Silakan masukkan deskripsi!</p>`;
+                    aiOutput.classList.remove('hidden');
+                    return;
+                }
+
+                // Tampilkan loader dan sembunyikan output sebelumnya
+                aiLoader.classList.remove('hidden');
+                aiOutput.classList.add('hidden');
+                aiOutput.innerHTML = '';
+
+                try {
+                    // API Call to generate image
+                    const payload = {
+                        instances: [{ prompt: userPrompt }],
+                        parameters: { "sampleCount": 1 }
+                    };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    
+                    let response = null;
+                    let retries = 0;
+                    const maxRetries = 5;
+                    const initialBackoff = 1000; // 1 second
+
+                    while (retries < maxRetries) {
+                        try {
+                            response = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                            if (response.ok) {
+                                break;
+                            } else if (response.status === 429) {
+                                const backoffTime = initialBackoff * Math.pow(2, retries);
+                                retries++;
+                                await new Promise(resolve => setTimeout(resolve, backoffTime));
+                            } else {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                        } catch (e) {
+                            if (retries === maxRetries - 1) throw e;
+                            const backoffTime = initialBackoff * Math.pow(2, retries);
+                            retries++;
+                            await new Promise(resolve => setTimeout(resolve, backoffTime));
+                        }
+                    }
+
+                    if (!response || !response.ok) {
+                        throw new Error("Failed to get a successful response after multiple retries.");
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                        const base64Data = result.predictions[0].bytesBase64Encoded;
+                        const imageUrl = `data:image/png;base64,${base64Data}`;
+                        
+                        // Buat elemen gambar dan tambahkan ke output
+                        const img = document.createElement('img');
+                        img.src = imageUrl;
+                        img.alt = userPrompt;
+                        img.className = 'w-full rounded-lg mb-2';
+                        
+                        const text = document.createElement('p');
+                        text.className = 'text-center text-slate-300 text-xs';
+                        text.textContent = `Prompt: "${userPrompt}"`;
+                        
+                        aiOutput.appendChild(img);
+                        aiOutput.appendChild(text);
+                        
+                        aiOutput.classList.remove('hidden');
+
+                    } else {
+                        aiOutput.innerHTML = `<p class="text-center text-red-400">Maaf, gagal membuat gambar. Silakan coba lagi.</p>`;
+                        aiOutput.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
+                    aiOutput.classList.remove('hidden');
+                } finally {
+                    aiLoader.classList.add('hidden');
+                }
+            });
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
