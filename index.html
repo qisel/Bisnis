@@ -76,10 +76,8 @@
 
         <!-- NAMA: KONTEN_UTAMA -->
         <main class="relative z-10 flex-grow overflow-hidden flex flex-row">
-            <!-- Kolom Gambar Kiri -->
-            <div class="w-1/4 h-full bg-cover bg-center" style="background-image: url('https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png');">
-                <!-- Hanya untuk gambar -->
-            </div>
+            <!-- Spacer Kiri (untuk memberi ruang) -->
+            <div class="w-1/4 h-full flex-shrink-0"></div>
             
             <!-- Kolom Accordion Kanan -->
             <div class="w-3/4 h-full overflow-y-auto custom-scrollbar bg-slate-800">
@@ -139,7 +137,7 @@
                             <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268 3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268-3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
                                     </div>
                                     <h3 class="text-sm font-semibold">Olah Limbah Organik</h3>
                                 </div>
@@ -154,23 +152,36 @@
                     </div>
                 </div>
             </div>
+
+            <!-- NAMA: GAMBAR_IKLAN -->
+            <div id="floating-image-container" class="absolute bottom-0 left-0 h-auto z-30 pointer-events-none" style="width: 40%;">
+                <img src="https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png" alt="Foto Profil" class="w-full h-auto">
+            </div>
         </main>
 
         <!-- NAMA: FOOTER -->
         <footer class="relative z-20 p-2 text-center flex-shrink-0 bg-slate-800 text-white">
-            <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-4 py-1.5 rounded-full shadow-lg text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                Hubungi Kami
-            </a>
-            <p class="text-[10px] text-slate-400 mt-1.5">&copy; 2025 Usman Moonggalo.</p>
+             <div class="mb-2">
+                <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-4 py-1.5 rounded-full shadow-lg text-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    Hubungi Kami
+                </a>
+            </div>
+             <!-- Slider control -->
+            <div class="px-4">
+                 <label for="image-size-slider" class="block text-xs text-slate-400 mb-1">Atur Ukuran Gambar</label>
+                <input id="image-size-slider" type="range" min="25" max="50" value="40" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2">&copy; 2025 Usman Moonggalo.</p>
         </footer>
     </div>
     
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
-        // Accordion logic
+
         document.addEventListener("DOMContentLoaded", () => {
+            // Accordion logic
             const accordionHeaders = document.querySelectorAll('.accordion-header');
             accordionHeaders.forEach(header => {
                 header.addEventListener('click', () => {
@@ -184,6 +195,17 @@
                     clickedItem.classList.toggle('active');
                 });
             });
+
+            // Slider logic for image size
+            const slider = document.getElementById('image-size-slider');
+            const imageContainer = document.getElementById('floating-image-container');
+
+            if (slider && imageContainer) {
+                slider.addEventListener('input', (event) => {
+                    const newSize = event.target.value;
+                    imageContainer.style.width = newSize + '%';
+                });
+            }
         });
     </script>
 </body>
