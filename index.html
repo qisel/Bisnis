@@ -150,9 +150,9 @@
 
         <!-- NAMA: KONTEN_UTAMA -->
         <main class="relative z-10 flex-grow overflow-hidden text-white flex flex-row">
-            <!-- Kolom Gambar Kiri -->
-            <div class="w-1/3 h-full bg-cover bg-center" style="background-image: url('https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png');">
-                <!-- Hanya untuk gambar -->
+            <!-- PERUBAHAN: Menambahkan ID dan kelas 'relative' serta 'transition' -->
+            <div id="mainImageContainer" class="w-1/3 h-full bg-cover bg-center relative" style="background-image: url('https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png'); transition: background-image 0.5s ease-in-out;">
+                <!-- Tombol aksi gambar akan ditambahkan di sini oleh JS -->
             </div>
             
             <!-- Kolom Accordion Kanan -->
@@ -299,9 +299,18 @@
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
             const imagePreview = document.getElementById('imagePreview');
             const removeImageBtn = document.getElementById('removeImageBtn');
+            // PERUBAHAN: Mendapatkan elemen kontainer gambar utama
+            const mainImageContainer = document.getElementById('mainImageContainer');
 
             let currentMode = 'text';
             let imageData = null;
+            // PERUBAHAN: Variabel untuk menyimpan URL gambar asli
+            let originalImageUrl = null;
+
+            // PERUBAHAN: Menyimpan URL gambar asli saat halaman dimuat
+            if (mainImageContainer) {
+                originalImageUrl = mainImageContainer.style.backgroundImage;
+            }
 
             const setMode = (mode) => {
                 currentMode = mode;
@@ -458,21 +467,48 @@
                 aiOutput.appendChild(copyButton);
             }
 
+            // PERUBAHAN: Fungsi ini sekarang menampilkan gambar di panel kiri
             function displayImageResult(base64Data, prompt) {
+                aiOutput.innerHTML = '';
                 const imageUrl = `data:image/png;base64,${base64Data}`;
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                img.alt = prompt;
-                img.className = 'w-full rounded-lg mb-2 border border-slate-600';
-                
+
+                // Hapus tombol aksi lama jika ada
+                const oldActions = mainImageContainer.querySelector('.image-actions');
+                if (oldActions) oldActions.remove();
+
+                // Ganti gambar utama
+                mainImageContainer.style.backgroundImage = `url(${imageUrl})`;
+
+                // Buat kontainer untuk tombol
+                const actionsContainer = document.createElement('div');
+                actionsContainer.className = 'image-actions absolute top-2 right-2 flex flex-col gap-2';
+
+                // Buat tombol unduh
                 const downloadButton = document.createElement('a');
                 downloadButton.href = imageUrl;
                 downloadButton.download = `ai-image-${Date.now()}.png`;
-                downloadButton.className = 'mt-2 inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-1 px-3 rounded-full text-xs transition-colors';
-                downloadButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span>Unduh Gambar</span>`;
-                
-                aiOutput.appendChild(img);
-                aiOutput.appendChild(downloadButton);
+                downloadButton.className = 'bg-slate-800/70 hover:bg-slate-700/90 text-white p-2 rounded-full transition-colors backdrop-blur-sm';
+                downloadButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
+
+                // Buat tombol tutup
+                const closeButton = document.createElement('button');
+                closeButton.className = 'bg-red-600/80 hover:bg-red-500/90 text-white p-2 rounded-full transition-colors backdrop-blur-sm';
+                closeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
+
+                closeButton.addEventListener('click', () => {
+                    mainImageContainer.style.backgroundImage = originalImageUrl;
+                    actionsContainer.remove();
+                });
+
+                actionsContainer.appendChild(downloadButton);
+                actionsContainer.appendChild(closeButton);
+                mainImageContainer.appendChild(actionsContainer);
+
+                // Tampilkan pesan status di panel kanan
+                const infoText = document.createElement('p');
+                infoText.className = 'text-center text-sky-300 text-xs';
+                infoText.textContent = 'Gambar ditampilkan di sebelah kiri.';
+                aiOutput.appendChild(infoText);
             }
 
             setMode('text');
