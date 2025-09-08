@@ -20,7 +20,6 @@
         /* Custom styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light gray-blue background */
         }
         .whatsapp-button {
             background-color: #25D366;
@@ -30,52 +29,15 @@
             background-color: #128C7E;
             transform: scale(1.05);
         }
-        .card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden; /* Needed for accordion */
-        }
-        .card:hover {
-             transform: translateY(-5px);
-             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        .icon-circle {
-            background: linear-gradient(135deg, #60a5fa, #3b82f6);
-        }
-
-        /* Styles for scroll animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            will-change: opacity, transform;
-        }
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: none;
-        }
-        .slide-in-from-left {
-            transform: translateX(-30px);
-        }
-        .slide-in-from-right {
-            transform: translateX(30px);
-        }
-        .slide-in-from-bottom {
-            transform: translateY(30px);
-        }
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        
         /* Accordion styles */
         .accordion-content {
             max-height: 0;
-            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
         }
         .accordion-item.active .accordion-content {
-             transition: max-height 1s ease-in-out;
-             max-height: 1000px; /* Large enough to fit content */
+             max-height: 500px; /* Large enough to fit content */
+             transition: max-height 0.5s ease-in;
         }
         .accordion-icon {
             transition: transform 0.3s ease;
@@ -83,47 +45,59 @@
         .accordion-item.active .accordion-icon {
             transform: rotate(180deg);
         }
+        /* Custom scrollbar for light background */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
-<body class="text-slate-800">
+<body class="bg-slate-200">
 
-    <!-- Container Utama -->
-    <div class="max-w-lg mx-auto bg-white min-h-screen shadow-2xl">
+    <!-- Container Utama (Split Screen Layout) -->
+    <div class="max-w-lg mx-auto h-screen shadow-2xl flex flex-row overflow-hidden">
         
-        <!-- Header / Hero Section -->
-        <header class="relative text-center p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white overflow-hidden">
-            <div class="absolute inset-0 bg-black opacity-20"></div>
-            <div class="relative z-10">
-                <h1 class="text-2xl font-bold tracking-tight mb-1">SOLUSI KREATIF ANDA</h1>
-                <p class="text-base text-blue-100 mb-4">Layanan Cetak, Digital, dan Kreatif dalam Genggaman.</p>
-                <a href="https://wa.me/6285299069883?text=Halo,%20saya%20tertarik%20dengan%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-6 py-2 rounded-full shadow-lg text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
-                    Konsultasi Gratis via WhatsApp
-                </a>
-            </div>
-        </header>
+        <!-- Kolom Gambar (Sisi Kiri) -->
+        <div class="w-1/3 bg-cover bg-center" style="background-image: url('https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png');">
+            <!-- Kolom ini hanya untuk menampilkan gambar -->
+        </div>
 
-        <!-- Main Content -->
-        <main class="p-4 md:p-5 space-y-6 bg-slate-50">
+        <!-- Kolom Konten (Sisi Kanan) -->
+        <div class="w-2/3 flex flex-col bg-white">
+            
+            <!-- Header -->
+            <header class="text-center p-4 bg-slate-50 border-b border-slate-200 flex-shrink-0">
+                <h1 class="text-lg font-bold tracking-tight text-slate-800">SOLUSI KREATIF ANDA</h1>
+                <p class="text-xs text-slate-500">Cetak, Digital, & Kreatif</p>
+            </header>
 
-            <!-- Seksi Layanan Kami -->
-            <section id="layanan">
-                <h2 class="text-xl font-bold text-center mb-4 text-slate-700">Layanan Profesional Kami</h2>
-                <div class="space-y-3">
+            <!-- Main Content (Bisa di-scroll internal) -->
+            <main class="flex-grow overflow-y-auto p-3 space-y-3 custom-scrollbar bg-slate-100">
+                <h2 class="text-sm font-bold text-center mb-2 text-slate-700">Layanan Profesional Kami</h2>
+                <div class="space-y-2">
                     <!-- 1. Jasa Cetak/Print (Accordion) -->
-                    <div class="accordion-item card animate-on-scroll slide-in-from-left">
-                        <button class="accordion-header w-full p-4 flex justify-between items-center text-left">
+                    <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                        <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="icon-circle p-2 rounded-full text-white flex-shrink-0">
-                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                                 </div>
-                                <h3 class="text-lg font-semibold text-blue-600">Sedia Print / Percetakan</h3>
+                                <h3 class="text-sm font-semibold text-slate-700">Sedia Print / Percetakan</h3>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-blue-500"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
-                            <div class="px-4 pb-4 pt-2">
-                                <ul class="space-y-2 list-inside list-disc text-slate-600 marker:text-blue-500 text-sm">
+                            <div class="px-4 pb-3 pt-1">
+                                <ul class="space-y-1 list-inside list-disc text-slate-600 marker:text-blue-500 text-xs">
                                     <li>Undangan (Pernikahan, Ulang Tahun, dll)</li>
                                     <li>Buku Tulis Anak (Custom Sampul)</li>
                                     <li>Buku Gambar & Mewarnai</li>
@@ -134,19 +108,19 @@
                     </div>
 
                     <!-- 2. Jasa Digital & Kreatif (Accordion) -->
-                    <div class="accordion-item card animate-on-scroll slide-in-from-right">
-                        <button class="accordion-header w-full p-4 flex justify-between items-center text-left">
+                    <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                        <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="icon-circle p-2 rounded-full text-white flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 6 6 6"/><path d="M12 20.49 16 12"/></svg>
+                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 6 6 6"/><path d="M12 20.49 16 12"/></svg>
                                 </div>
-                                <h3 class="text-lg font-semibold text-blue-600">Jasa Digital & Kreatif</h3>
+                                <h3 class="text-sm font-semibold text-slate-700">Jasa Digital & Kreatif</h3>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-blue-500"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
-                            <div class="px-4 pb-4 pt-2">
-                                <ul class="space-y-2 list-inside list-disc text-slate-600 marker:text-blue-500 text-sm">
+                            <div class="px-4 pb-3 pt-1">
+                                <ul class="space-y-1 list-inside list-disc text-slate-600 marker:text-blue-500 text-xs">
                                     <li>Bikin Proposal & Laporan</li>
                                     <li>Bikin Aplikasi Kantor Sederhana</li>
                                     <li>Editor Video (Wedding, Konten, Presentasi)</li>
@@ -157,93 +131,41 @@
                     </div>
                     
                     <!-- 3. Olah Limbah (Accordion) -->
-                    <div class="accordion-item card animate-on-scroll slide-in-from-left">
-                        <button class="accordion-header w-full p-4 flex justify-between items-center text-left">
+                     <div class="accordion-item bg-white rounded-lg border border-slate-200 shadow-sm">
+                        <button class="accordion-header w-full p-3 flex justify-between items-center text-left">
                             <div class="flex items-center gap-3">
-                                <div class="icon-circle p-2 rounded-full text-white flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268 3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
+                                <div class="bg-blue-500 text-white p-2 rounded-full flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268 3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg>
                                 </div>
-                                <h3 class="text-lg font-semibold text-blue-600">Olah Limbah Organik</h3>
+                                <h3 class="text-sm font-semibold text-slate-700">Olah Limbah Organik</h3>
                             </div>
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-blue-500"><path d="m6 9 6 6 6-6"/></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-500"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="accordion-content">
-                             <div class="px-4 pb-4 pt-2">
-                                <p class="text-slate-600 text-sm">Ubah sampah makanan Anda menjadi lebih bermanfaat. Hubungi kami untuk informasi lebih lanjut mengenai program peduli lingkungan ini.</p>
+                             <div class="px-4 pb-3 pt-1">
+                                <p class="text-slate-600 text-xs">Ubah sampah makanan Anda menjadi lebih bermanfaat. Hubungi kami untuk informasi lebih lanjut.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </main>
 
-            <!-- Seksi Kenapa Memilih Kami -->
-            <section id="mengapa-kami" class="pb-4">
-                <h2 class="text-xl font-bold text-center mb-4 text-slate-700">Kenapa Memilih Kami?</h2>
-                <div class="space-y-3">
-                    <div class="bg-white p-3 rounded-lg flex items-center gap-4 border border-slate-200 animate-on-scroll slide-in-from-bottom">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 text-green-500 flex-shrink-0"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        <div>
-                            <h4 class="font-semibold text-base">Semua Dalam Satu Pintu</h4>
-                            <p class="text-sm text-slate-500">Tidak perlu repot cari banyak vendor.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg flex items-center gap-4 border border-slate-200 animate-on-scroll slide-in-from-bottom delay-100">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 text-green-500 flex-shrink-0"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        <div>
-                            <h4 class="font-semibold text-base">Proses 100% Online</h4>
-                            <p class="text-sm text-slate-500">Pesan dari mana saja, kapan saja.</p>
-                        </div>
-                    </div>
-                     <div class="bg-white p-3 rounded-lg flex items-center gap-4 border border-slate-200 animate-on-scroll slide-in-from-bottom delay-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 text-green-500 flex-shrink-0"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        <div>
-                            <h4 class="font-semibold text-base">Hasil Cepat & Profesional</h4>
-                            <p class="text-sm text-slate-500">Dikerjakan oleh tim berpengalaman.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer / Final CTA -->
-        <footer class="bg-indigo-600 p-6 text-center text-white">
-            <h3 class="text-xl font-bold mb-2">Siap Wujudkan Ide Anda?</h3>
-            <p class="text-indigo-100 mb-4 text-sm">Jangan tunda lagi. Klik tombol di bawah untuk memulai percakapan!</p>
-            <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-6 py-2 rounded-full shadow-lg text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                Hubungi Kami Sekarang
-            </a>
-            <p class="text-xs text-indigo-200 mt-6">&copy; 2025 Usman Moonggalo. All Rights Reserved.</p>
-        </footer>
+            <!-- Footer / Final CTA -->
+            <footer class="p-4 text-center flex-shrink-0 bg-slate-50 border-t border-slate-200">
+                <a href="https://wa.me/6285299069883?text=Halo,%20saya%20mau%20bertanya%20tentang%20jasa%20Anda." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-5 py-2 rounded-full shadow-lg text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    Hubungi Kami Sekarang
+                </a>
+                <p class="text-xs text-slate-400 mt-2">&copy; 2025 Usman Moonggalo.</p>
+            </footer>
+        </div>
     </div>
-
-    <!-- Script for animations and icons -->
+    
     <script>
-        // Initialize Lucide icons after the DOM is loaded
+        // Initialize Lucide icons
         lucide.createIcons();
-
-        // Animation on scroll logic
+        // Accordion logic
         document.addEventListener("DOMContentLoaded", () => {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-
-            if (animatedElements.length > 0) {
-                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, {
-                    threshold: 0.1 // Trigger when 10% of the element is visible
-                });
-
-                animatedElements.forEach(element => {
-                    observer.observe(element);
-                });
-            }
-
-            // Accordion logic
             const accordionHeaders = document.querySelectorAll('.accordion-header');
             accordionHeaders.forEach(header => {
                 header.addEventListener('click', () => {
