@@ -331,6 +331,11 @@
                                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
                                     <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                                 </div>
+                                
+                                <!-- PERUBAHAN: Menambahkan tombol untuk beralih model gambar -->
+                                <div id="imageModelSwitcher" class="hidden flex justify-center text-xs mt-1">
+                                     <button id="switchModelBtn" class="text-sky-400 hover:text-sky-300">Gunakan model Imagen</button>
+                                </div>
 
                                 <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
                                     Buat Sekarang
@@ -360,7 +365,7 @@
     </div>
     
     <script>
-        // PERUBAHAN: API Key diperbarui sesuai permintaan
+        // PENTING: Ganti dengan API Key Google AI Anda yang sebenarnya.
         const apiKey = "AIzaSyBHgSzwaY0aCmToT4ntL7M9jbPAVfSUtJM";
     
         // Initialize Lucide icons
@@ -403,6 +408,10 @@
             
             const imageButtonsContainer = document.getElementById('imageButtonsContainer');
             const popularPromptBtn = document.getElementById('popularPromptBtn');
+
+            // PERUBAHAN: Menambahkan elemen baru untuk beralih model
+            const imageModelSwitcher = document.getElementById('imageModelSwitcher');
+            const switchModelBtn = document.getElementById('switchModelBtn');
             
             const popularPromptText = "Using the model, create a 1/7 scale commercialized figurine of the characters in the picture, in a realistic style, in a real environment. The figurine is placed on a computer desk. The figurine has a round transparent acrylic base, with no text on the base. The content on the computer screen is the Zbrush modeling process of this figurine. Next to the computer screen is a BANDAI-style toy packaging box printed with the original artwork. The packaging features two-dimensional flat illustrations.";
 
@@ -410,6 +419,8 @@
             let imageData = null;
             let originalImageUrl = null;
             let imageGenerationCount = 0;
+            // PERUBAHAN: Variabel untuk melacak model gambar yang aktif
+            let currentImageModel = 'nano-banana'; // 'nano-banana' atau 'imagen'
 
             if (mainImageContainer) {
                 originalImageUrl = mainImageContainer.style.backgroundImage;
@@ -440,6 +451,7 @@
                     aiPromptInput.placeholder = 'Tanyakan apa saja...';
                     imageButtonsContainer.classList.add('hidden');
                     imagePreviewContainer.classList.add('hidden');
+                    imageModelSwitcher.classList.add('hidden'); // Sembunyikan tombol switch
                     imageData = null;
                 } else { // mode === 'image'
                     modeImageBtn.classList.add('bg-sky-500', 'text-white');
@@ -448,8 +460,20 @@
                     modeTextBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
                     imageButtonsContainer.classList.remove('hidden');
+                    imageModelSwitcher.classList.remove('hidden'); // Tampilkan tombol switch
                 }
             };
+            
+            // PERUBAHAN: Logika untuk tombol switch model
+            switchModelBtn.addEventListener('click', () => {
+                if (currentImageModel === 'nano-banana') {
+                    currentImageModel = 'imagen';
+                    switchModelBtn.textContent = 'Gunakan model Nano Banana';
+                } else {
+                    currentImageModel = 'nano-banana';
+                    switchModelBtn.textContent = 'Gunakan model Imagen';
+                }
+            });
             
             modeTextBtn.addEventListener('click', () => setMode('text'));
             modeImageBtn.addEventListener('click', () => setMode('image'));
@@ -480,12 +504,6 @@
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
-                if (currentMode === 'image' && imageGenerationCount >= 1) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Batas pembuatan gambar (1x) telah habis.</p>`;
-                    aiOutput.classList.remove('hidden');
-                    return;
-                }
-
                 if (apiKey.includes("GANTI_DENGAN")) {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Harap konfigurasi API Key.</p>`;
                     aiOutput.classList.remove('hidden');
@@ -497,7 +515,9 @@
                     aiOutput.classList.remove('hidden');
                     return;
                 }
-
+                
+                // Tidak ada lagi pembatasan di sisi klien
+                
                 aiLoader.classList.remove('hidden');
                 aiOutput.classList.add('hidden');
                 aiOutput.innerHTML = '';
@@ -509,7 +529,6 @@
                         await generateText(userPrompt);
                     } else {
                         await generateImage(userPrompt);
-                        imageGenerationCount++;
                     }
                 } catch (error) {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message || 'Gagal mengambil data.'}</p>`;
@@ -522,7 +541,7 @@
             });
             
             async function generateText(prompt) {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
                     tools: [{ "google_search": {} }]
@@ -542,22 +561,38 @@
             }
 
             async function generateImage(prompt) {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
-                const parts = [{ text: prompt }];
-                if (imageData) {
-                    parts.push({ inlineData: { mimeType: "image/png", data: imageData } });
+                let apiUrl, payload;
+                if (currentImageModel === 'nano-banana') {
+                    apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
+                    const parts = [{ text: prompt }];
+                    if (imageData) {
+                        parts.push({ inlineData: { mimeType: "image/png", data: imageData } });
+                    }
+                    payload = {
+                        contents: [{ parts: parts }],
+                        generationConfig: { responseModalities: ['IMAGE'] },
+                    };
+                } else { // imagen
+                    apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    payload = {
+                        instances: [{ prompt: prompt }],
+                        parameters: { "sampleCount": 1 }
+                    };
                 }
-                const payload = {
-                    contents: [{ parts: parts }],
-                    generationConfig: { responseModalities: ['IMAGE'] },
-                };
+
                 const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json();
-                const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                let base64Data;
+                if (currentImageModel === 'nano-banana') {
+                    base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                } else { // imagen
+                    base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+                }
+
                 if (base64Data) {
                     displayImageResult(base64Data, prompt);
                 } else {
@@ -566,7 +601,7 @@
             }
 
             function displayTextResult(generatedText) {
-                aiOutput.innerHTML = '' // Clear previous results
+                aiOutput.innerHTML = ''
                 const textContainer = document.createElement('div');
                 textContainer.className = 'ai-output-container';
                 const label = document.createElement('h5');
