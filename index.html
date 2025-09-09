@@ -332,7 +332,6 @@
                                     <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                                 </div>
                                 
-                                <!-- PERUBAHAN: Menambahkan tombol untuk beralih model gambar -->
                                 <div id="imageModelSwitcher" class="hidden flex justify-center text-xs mt-1">
                                      <button id="switchModelBtn" class="text-sky-400 hover:text-sky-300">Gunakan model Imagen</button>
                                 </div>
@@ -409,7 +408,6 @@
             const imageButtonsContainer = document.getElementById('imageButtonsContainer');
             const popularPromptBtn = document.getElementById('popularPromptBtn');
 
-            // PERUBAHAN: Menambahkan elemen baru untuk beralih model
             const imageModelSwitcher = document.getElementById('imageModelSwitcher');
             const switchModelBtn = document.getElementById('switchModelBtn');
             
@@ -419,7 +417,6 @@
             let imageData = null;
             let originalImageUrl = null;
             let imageGenerationCount = 0;
-            // PERUBAHAN: Variabel untuk melacak model gambar yang aktif
             let currentImageModel = 'nano-banana'; // 'nano-banana' atau 'imagen'
 
             if (mainImageContainer) {
@@ -451,7 +448,7 @@
                     aiPromptInput.placeholder = 'Tanyakan apa saja...';
                     imageButtonsContainer.classList.add('hidden');
                     imagePreviewContainer.classList.add('hidden');
-                    imageModelSwitcher.classList.add('hidden'); // Sembunyikan tombol switch
+                    imageModelSwitcher.classList.add('hidden'); 
                     imageData = null;
                 } else { // mode === 'image'
                     modeImageBtn.classList.add('bg-sky-500', 'text-white');
@@ -460,11 +457,10 @@
                     modeTextBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
                     imageButtonsContainer.classList.remove('hidden');
-                    imageModelSwitcher.classList.remove('hidden'); // Tampilkan tombol switch
+                    imageModelSwitcher.classList.remove('hidden'); 
                 }
             };
             
-            // PERUBAHAN: Logika untuk tombol switch model
             switchModelBtn.addEventListener('click', () => {
                 if (currentImageModel === 'nano-banana') {
                     currentImageModel = 'imagen';
@@ -516,8 +512,6 @@
                     return;
                 }
                 
-                // Tidak ada lagi pembatasan di sisi klien
-                
                 aiLoader.classList.remove('hidden');
                 aiOutput.classList.add('hidden');
                 aiOutput.innerHTML = '';
@@ -540,8 +534,9 @@
                 }
             });
             
+            // PERUBAHAN: Memperbarui nama model teks
             async function generateText(prompt) {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
                     tools: [{ "google_search": {} }]
@@ -559,7 +554,8 @@
                     throw new Error("Respons API tidak valid.");
                 }
             }
-
+            
+            // PERUBAHAN: Memperbarui nama model gambar
             async function generateImage(prompt) {
                 let apiUrl, payload;
                 if (currentImageModel === 'nano-banana') {
