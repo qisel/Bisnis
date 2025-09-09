@@ -203,7 +203,7 @@
                         </div>
                         
                         <div id="aiCanvasTools" class="hidden">
-                            <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300">Kanvas AI</h4>
+                            <h4 id="ai-canvas-title" class="text-sm font-semibold mb-2 text-sky-300 text-center">Kanvas AI</h4>
                             
                             <div class="flex flex-row gap-2 mb-3">
                                 <button id="modeTextBtn" class="flex-1 py-1 px-2 rounded-full font-semibold text-xs transition-colors bg-sky-500 text-white">Buat Teks</button>
@@ -217,24 +217,35 @@
                                         Bersihkan
                                     </button>
                                 </div>
-                                <div id="imageButtonsContainer" class="flex flex-wrap gap-2 hidden">
-                                    <button id="uploadImageBtn" class="flex-grow bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-                                        <span>Unggah</span>
-                                    </button>
-                                    <div id="viralPromptsContainer" class="flex flex-wrap gap-2 flex-grow">
-                                        <!-- Tombol prompt viral akan ditambahkan di sini oleh JS -->
+                                
+                                <!-- Container Fitur Gambar (Struktur Baru) -->
+                                <div id="imageFeaturesContainer" class="hidden flex-col gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <div id="promptSelectorContainer" class="hidden flex-grow bg-slate-900/50 rounded-full border border-slate-700 flex items-center justify-between overflow-hidden">
+                                            <button id="prevPromptBtn" class="p-2 text-slate-300 hover:text-white transition-colors rounded-l-full hover:bg-slate-700 flex-shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                                            </button>
+                                            <button id="applyPromptBtn" class="flex-grow text-center font-semibold text-teal-400 px-1 text-xs truncate h-full hover:bg-slate-700">
+                                                <span id="promptNameDisplay">Pilih Prompt Kustom</span>
+                                            </button>
+                                            <button id="nextPromptBtn" class="p-2 text-slate-300 hover:text-white transition-colors rounded-r-full hover:bg-slate-700 flex-shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                                            </button>
+                                        </div>
+                                        <div id="imageModelSwitcher" class="flex-shrink-0">
+                                            <button id="switchModelBtn" class="text-sky-400 hover:text-sky-300 text-xs px-3 py-2 rounded-full border border-slate-700 hover:bg-slate-700 transition-colors whitespace-nowrap">Gunakan Imagen</button>
+                                        </div>
                                     </div>
+                                    <button id="uploadImageBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                        <span>Unggah Gambar (Opsional)</span>
+                                    </button>
                                 </div>
                                 
                                 <input type="file" id="imageInput" accept="image/*" class="hidden">
                                 <div id="imagePreviewContainer" class="hidden flex justify-center mb-2 relative">
                                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="max-h-32 w-auto rounded-lg object-contain border border-slate-600">
                                     <button id="removeImageBtn" class="absolute top-1 right-1 bg-red-600/80 text-white p-0.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-                                </div>
-                                
-                                <div id="imageModelSwitcher" class="hidden flex justify-center text-xs mt-1">
-                                    <button id="switchModelBtn" class="text-sky-400 hover:text-sky-300">Gunakan model Imagen</button>
                                 </div>
 
                                 <button id="aiGenerateBtn" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors">
@@ -346,31 +357,70 @@
             adminPassword: null,
             prompts: []
         };
+        
+        let currentPromptIndex = -1; // -1 means no prompt selected
 
         lucide.createIcons();
         
         document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            const promptSelectorContainer = document.getElementById('promptSelectorContainer');
+            const prevPromptBtn = document.getElementById('prevPromptBtn');
+            const nextPromptBtn = document.getElementById('nextPromptBtn');
+            const promptNameDisplay = document.getElementById('promptNameDisplay');
+            const applyPromptBtn = document.getElementById('applyPromptBtn');
+            const aiPromptInput = document.getElementById('aiPrompt');
 
-            const viralPromptsContainer = document.getElementById('viralPromptsContainer');
-
-            const renderViralPromptButtons = () => {
-                viralPromptsContainer.innerHTML = '';
-                if (appSettings.prompts && appSettings.prompts.length > 0) {
-                    appSettings.prompts.forEach(prompt => {
-                        const button = document.createElement('button');
-                        button.className = 'flex-grow bg-teal-500 hover:bg-teal-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1';
-                        button.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-magic-wand"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M11.4 7.6 10 9"/><path d="M18.8 12.2 17 14"/><path d="M15 10h-2"/><path d="M21 12h-2"/><path d="M11.4 16.4 10 15"/><path d="M18.8 11.8 17 10"/><path d="M4 15v2"/><path d="M4 8V6"/><path d="M8.6 11.4 7 10"/><path d="M12.2 4.2 14 6"/><path d="M8.6 3.6 7 2"/><path d="M12.2 20.2 14 18"/><path d="M2 12h2"/><path d="M7 18h2"/><path d="M18 7h-2"/></svg>
-                            <span>${prompt.name}</span>`;
-                        button.addEventListener('click', () => {
-                            aiPromptInput.value = prompt.text;
-                            aiPromptInput.dispatchEvent(new Event('input', { bubbles: true }));
-                        });
-                        viralPromptsContainer.appendChild(button);
-                    });
+            const updatePromptDisplay = () => {
+                if (currentPromptIndex === -1 || !appSettings.prompts || appSettings.prompts.length === 0) {
+                    promptNameDisplay.textContent = 'Pilih Prompt Kustom';
+                } else {
+                    const prompt = appSettings.prompts[currentPromptIndex];
+                    promptNameDisplay.textContent = prompt.name;
                 }
             };
+
+            applyPromptBtn.addEventListener('click', () => {
+                if (currentPromptIndex !== -1 && appSettings.prompts && appSettings.prompts.length > 0) {
+                    const prompt = appSettings.prompts[currentPromptIndex];
+                    aiPromptInput.value = prompt.text;
+                    aiPromptInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+            
+            const setupPrompts = () => {
+                if (appSettings.prompts && appSettings.prompts.length > 0) {
+                    promptSelectorContainer.classList.remove('hidden');
+                    promptSelectorContainer.classList.add('flex');
+                    currentPromptIndex = 0;
+                    updatePromptDisplay();
+                } else {
+                    promptSelectorContainer.classList.add('hidden');
+                    promptSelectorContainer.classList.remove('flex');
+                }
+            };
+
+            prevPromptBtn.addEventListener('click', () => {
+                if (appSettings.prompts.length > 0) {
+                    currentPromptIndex--;
+                    if (currentPromptIndex < 0) {
+                        currentPromptIndex = appSettings.prompts.length - 1; // loop to last
+                    }
+                    updatePromptDisplay();
+                }
+            });
+
+            nextPromptBtn.addEventListener('click', () => {
+                if (appSettings.prompts.length > 0) {
+                    currentPromptIndex++;
+                    if (currentPromptIndex >= appSettings.prompts.length) {
+                        currentPromptIndex = 0; // loop to first
+                    }
+                    updatePromptDisplay();
+                }
+            });
+
 
             const fetchPublicSettings = async () => {
                 try {
@@ -392,20 +442,17 @@
                     const data = await response.json();
 
                     if (data && data.canvasPassword && data.adminPassword) {
-                        // Cek prompt secara opsional, jangan gagalkan aplikasi jika tidak ada
                         const prompts = data.prompts || [];
-                        
                         appSettings = {
                            canvasPassword: data.canvasPassword,
                            adminPassword: data.adminPassword,
                            prompts: prompts
                         };
-                        
                         console.log("Pengaturan publik berhasil dimuat dari server.");
                         if (prompts.length === 0) {
-                            console.warn("Tidak ada prompt viral yang dimuat dari server. Pastikan sheet 'Prompts' sudah terisi dan di-deploy ulang.");
+                            console.warn("Tidak ada prompt viral yang dimuat. Pastikan sheet 'Prompts' sudah terisi.");
                         }
-                        renderViralPromptButtons();
+                        setupPrompts();
                     } else {
                         console.error("Data yang diterima dari server:", data);
                         throw new Error("Data pengaturan (password) yang diterima dari server tidak lengkap. Pastikan Anda sudah mengisi sel A2 dan A3 di sheet 'PengaturanAktif' dan men-deploy ulang script.");
@@ -437,7 +484,6 @@
             const aiVerifyBtn = document.getElementById('aiVerifyBtn');
             const aiPasswordError = document.getElementById('aiPasswordError');
             const aiCanvasTools = document.getElementById('aiCanvasTools');
-            const aiPromptInput = document.getElementById('aiPrompt');
             const clearPromptBtn = document.getElementById('clearPromptBtn');
             const aiGenerateBtn = document.getElementById('aiGenerateBtn');
             const aiLoader = document.getElementById('aiLoader');
@@ -450,8 +496,7 @@
             const imagePreview = document.getElementById('imagePreview');
             const removeImageBtn = document.getElementById('removeImageBtn');
             const mainImageContainer = document.getElementById('mainImageContainer');
-            const imageButtonsContainer = document.getElementById('imageButtonsContainer');
-            const imageModelSwitcher = document.getElementById('imageModelSwitcher');
+            const imageFeaturesContainer = document.getElementById('imageFeaturesContainer');
             const switchModelBtn = document.getElementById('switchModelBtn');
             
             let currentMode = 'text';
@@ -491,9 +536,9 @@
                     modeImageBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
                     modeImageBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Tanyakan apa saja...';
-                    imageButtonsContainer.classList.add('hidden');
+                    imageFeaturesContainer.classList.add('hidden');
+                    imageFeaturesContainer.classList.remove('flex');
                     imagePreviewContainer.classList.add('hidden');
-                    imageModelSwitcher.classList.add('hidden');
                     imageData = null;
                 } else { // mode === 'image'
                     modeImageBtn.classList.add('bg-sky-500', 'text-white');
@@ -501,8 +546,8 @@
                     modeTextBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
                     modeTextBtn.classList.remove('bg-sky-500', 'text-white');
                     aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
-                    imageButtonsContainer.classList.remove('hidden');
-                    imageModelSwitcher.classList.remove('hidden');
+                    imageFeaturesContainer.classList.remove('hidden');
+                    imageFeaturesContainer.classList.add('flex');
                 }
             };
 
@@ -512,7 +557,7 @@
 
             switchModelBtn.addEventListener('click', () => {
                 currentImageModel = (currentImageModel === 'nano-banana') ? 'imagen' : 'nano-banana';
-                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan model Imagen' : 'Gunakan model Nano Banana';
+                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan Nano Banana' : 'Gunakan Imagen';
             });
             
             imageInput.addEventListener('change', (event) => {
@@ -542,6 +587,8 @@
                 aiPromptInput.value = '';
                 clearPromptBtn.classList.add('hidden');
                 aiPromptInput.focus();
+                currentPromptIndex = -1; // Deselect prompt
+                updatePromptDisplay();
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
