@@ -2,7 +2,7 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solusi Lengkap - Cetak, Digital, & Teknologi</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -304,45 +304,45 @@
                     </button>
                     Panel Pengaturan
                 </h3>
-                <div class="space-y-3 text-xs overflow-y-auto custom-scrollbar pr-2 flex-grow">
-                    <!-- Tambah Prompt Viral Baru -->
-                    <div class="p-2 border border-slate-700 rounded-lg">
-                        <label class="block text-slate-300 mb-1 font-semibold">Tambah Prompt Viral Baru</label>
-                        <div class="flex flex-col gap-2">
-                            <input type="text" id="newPromptNameInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Nama Tombol (e.g., Foto Produk)">
-                            <textarea id="newPromptTextInput" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400 text-xs" placeholder="Teks prompt lengkap..."></textarea>
-                            <button id="addPromptBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Tambah Prompt</button>
+                <div class="overflow-y-auto custom-scrollbar pr-2 flex-grow">
+                     <div class="flex flex-col md:flex-row gap-4 text-xs">
+                        <!-- Kolom Kiri -->
+                        <div class="md:w-1/2 flex flex-col">
+                            <div class="p-2 border border-slate-700 rounded-lg h-full flex flex-col">
+                                <label class="block text-slate-300 mb-1 font-semibold">Tambah Prompt Viral Baru</label>
+                                <div class="flex flex-col gap-2 flex-grow">
+                                    <input type="text" id="newPromptNameInput" class="w-full p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Nama Tombol (e.g., Foto Produk)">
+                                    <textarea id="newPromptTextInput" rows="4" class="w-full p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400 text-xs flex-grow" placeholder="Teks prompt lengkap..."></textarea>
+                                    <button id="addPromptBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px] mt-auto">Tambah Prompt</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    <hr class="border-slate-600 my-4">
-
-                    <!-- Update Kunci API -->
-                    <div class="p-2 border border-slate-700 rounded-lg">
-                        <label class="block text-slate-300 mb-1 font-semibold">Ubah Kunci API</label>
-                        <div class="flex items-center gap-2">
-                            <input type="text" id="newApiKeyInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kunci API baru">
-                            <button data-type="apiKey" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
+                        <!-- Kolom Kanan -->
+                        <div class="md:w-1/2 flex flex-col space-y-3">
+                            <div class="p-2 border border-slate-700 rounded-lg">
+                                <label class="block text-slate-300 mb-1 font-semibold">Ubah Kunci API</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="newApiKeyInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kunci API baru">
+                                    <button data-type="apiKey" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
+                                </div>
+                            </div>
+                            <div class="p-2 border border-slate-700 rounded-lg">
+                                <label class="block text-slate-300 mb-1 font-semibold">Ubah Kode Kanvas AI</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="newCanvasPasswordInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kode Kanvas AI baru">
+                                    <button data-type="canvasPassword" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
+                                </div>
+                            </div>
+                            <div class="p-2 border border-slate-700 rounded-lg">
+                                <label class="block text-slate-300 mb-1 font-semibold">Ubah Kode Admin</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="newAdminPasswordInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kode Admin baru">
+                                    <button data-type="adminPassword" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Update Kode Kanvas -->
-                     <div class="p-2 border border-slate-700 rounded-lg">
-                        <label class="block text-slate-300 mb-1 font-semibold">Ubah Kode Kanvas AI</label>
-                        <div class="flex items-center gap-2">
-                            <input type="text" id="newCanvasPasswordInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kode Kanvas AI baru">
-                            <button data-type="canvasPassword" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
-                        </div>
-                    </div>
-                    <!-- Update Kode Admin -->
-                     <div class="p-2 border border-slate-700 rounded-lg">
-                        <label class="block text-slate-300 mb-1 font-semibold">Ubah Kode Admin</label>
-                         <div class="flex items-center gap-2">
-                            <input type="text" id="newAdminPasswordInput" class="flex-grow p-2 rounded-lg bg-slate-900/50 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-400" placeholder="Kode Admin baru">
-                            <button data-type="adminPassword" class="save-setting-btn bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-full transition-colors text-[11px]">Ubah</button>
-                        </div>
-                    </div>
-                    
-                    <div id="adminPanelStatus" class="text-center text-sm p-2 rounded-lg hidden"></div>
+                     </div>
+                     <div id="adminPanelStatus" class="text-center text-sm p-2 rounded-lg hidden mt-4"></div>
                 </div>
             </div>
         </div>
