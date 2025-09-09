@@ -370,8 +370,8 @@
     </div>
     
     <script>
-        // API Key untuk generate Teks (bisa dikosongkan jika dijalankan di dalam Canvas)
-        const apiKey = "";
+        // Ganti dengan API Key Google AI Anda.
+        const apiKey = "AIzaSyDC_BwKOOIIztQiA53SXzEt_VOa-o28wqs";
     
         // Initialize Lucide icons
         lucide.createIcons();
@@ -422,7 +422,6 @@
             let currentMode = 'text';
             let imageData = null;
             let originalImageUrl = null;
-            let imageGenerationCount = 0;
             let currentImageModel = 'nano-banana'; // 'nano-banana' atau 'imagen'
 
             if (mainImageContainer) {
@@ -514,7 +513,6 @@
 
             popularPromptBtn.addEventListener('click', () => {
                 aiPromptInput.value = popularPromptText;
-                // Mensimulasikan input untuk menampilkan tombol "Bersihkan"
                 aiPromptInput.dispatchEvent(new Event('input'));
             });
 
@@ -539,6 +537,12 @@
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
+                if (!apiKey) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">API Key belum dikonfigurasi. Harap masukkan API Key Anda.</p>`;
+                    aiOutput.classList.remove('hidden');
+                    return;
+                }
+
                 const userPrompt = aiPromptInput.value.trim();
                 if (userPrompt === "") {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Deskripsi tidak boleh kosong!</p>`;
@@ -554,9 +558,6 @@
 
                 try {
                     if (currentMode === 'text') {
-                        if (!apiKey) {
-                             throw new Error("API Key untuk Teks tidak dikonfigurasi. Hubungi admin.");
-                        }
                         await generateText(userPrompt);
                     } else {
                         await generateImage(userPrompt);
@@ -592,38 +593,43 @@
             }
             
             async function generateImage(prompt) {
-                const proxyUrl = "https://jembatan-rahasia-ai.qiselgembel.workers.dev";
+                 let apiUrl, payload;
+                 if (currentImageModel === 'nano-banana') {
+                     apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
+                     const parts = [{ text: prompt }];
+                     if (imageData) {
+                         parts.push({ inlineData: { mimeType: "image/png", data: imageData } });
+                     }
+                     payload = {
+                         contents: [{ parts: parts }],
+                         generationConfig: { responseModalities: ['IMAGE'] },
+                     };
+                 } else { // imagen
+                     apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                     payload = {
+                         instances: [{ prompt: prompt }],
+                         parameters: { "sampleCount": 1 }
+                     };
+                 }
 
-                const payload = {
-                    prompt: prompt,
-                    model: currentImageModel,
-                    imageData: imageData 
-                };
+                 const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                 if (!response.ok) {
+                     const errorData = await response.json();
+                     throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                 }
+                 const result = await response.json();
+                 let base64Data;
+                 if (currentImageModel === 'nano-banana') {
+                     base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                 } else { // imagen
+                     base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+                 }
 
-                const response = await fetch(proxyUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                const result = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(result.error || `Terjadi kesalahan pada jembatan.`);
-                }
-                
-                let base64Data;
-                if (currentImageModel === 'nano-banana') {
-                    base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-                } else { // imagen
-                    base64Data = result.predictions?.[0]?.bytesBase64Encoded;
-                }
-
-                if (base64Data) {
-                    displayImageResult(base64Data, prompt);
-                } else {
-                   throw new Error("Gagal membuat gambar dari jembatan. Coba prompt yang berbeda.");
-                }
+                 if (base64Data) {
+                     displayImageResult(base64Data, prompt);
+                 } else {
+                      throw new Error("Gagal membuat gambar. Coba prompt yang berbeda atau API key mungkin telah mencapai batas.");
+                 }
             }
 
             function displayTextResult(generatedText) {
