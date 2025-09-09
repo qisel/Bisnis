@@ -168,7 +168,7 @@
                                     </div>
                                     <h3 class="text-sm font-semibold">Tersedia Print / Percetakan</h3>
                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down text-slate-300"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
                             <div class="accordion-content">
                                 <div class="px-4 pb-3 pt-1">
@@ -277,7 +277,6 @@
         
         <div id="aiFloatingPanelContainer" class="absolute bottom-14 left-0 right-0 z-30 px-2 pointer-events-none">
             <div class="accordion-item bg-slate-900/80 backdrop-blur-sm rounded-t-lg border-x border-t border-white/20 max-w-lg mx-auto pointer-events-auto">
-                <!-- PERUBAHAN: Menyesuaikan kelas untuk layout center -->
                 <button class="accordion-header w-full p-3 flex justify-center items-center relative">
                     <div class="flex items-center gap-3">
                         <div class="bg-white/20 text-white p-2 rounded-full flex-shrink-0">
@@ -285,14 +284,12 @@
                         </div>
                         <h3 class="text-sm font-semibold text-white">Buat gambar dan text otomatis</h3>
                     </div>
-                   <!-- PERUBAHAN: Memposisikan ikon panah secara absolut -->
                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-up text-slate-300 absolute right-3 top-1/2 -translate-y-1/2"><path d="m18 15-6-6-6 6"/></svg>
                 </button>
                 <div class="accordion-content">
                     <div class="p-4 bg-slate-800/50 text-xs">
                         
                         <div id="aiPasswordPrompt">
-                            <!-- PERUBAHAN: Menambahkan text-center -->
                             <h4 class="text-sm font-semibold mb-2 text-sky-300 text-center">Verifikasi Kode Akses</h4>
                             <div class="text-center mb-3">
                                 <a href="https://wa.me/6285299069883?text=Halo,%20saya%20ingin%20meminta%20kode%20akses%20untuk%20Kanvas%20AI." target="_blank" class="whatsapp-button inline-flex items-center justify-center gap-2 font-bold text-white px-3 py-1 rounded-full shadow-md text-[11px]">
@@ -363,8 +360,8 @@
     </div>
     
     <script>
-        // PENTING: Ganti dengan API Key Google AI Anda yang sebenarnya.
-        const apiKey = "AIzaSyBmrf5LRUANwRNn7C8yFBAa6crvboQMND4";
+        // PERUBAHAN: API Key diperbarui sesuai permintaan
+        const apiKey = "AIzaSyBHgSzwaY0aCmToT4ntL7M9jbPAVfSUtJM";
     
         // Initialize Lucide icons
         lucide.createIcons();
@@ -483,6 +480,12 @@
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
+                if (currentMode === 'image' && imageGenerationCount >= 1) {
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Batas pembuatan gambar (1x) telah habis.</p>`;
+                    aiOutput.classList.remove('hidden');
+                    return;
+                }
+
                 if (apiKey.includes("GANTI_DENGAN")) {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Harap konfigurasi API Key.</p>`;
                     aiOutput.classList.remove('hidden');
@@ -491,12 +494,6 @@
                 const userPrompt = aiPromptInput.value.trim();
                 if (userPrompt === "") {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Deskripsi tidak boleh kosong!</p>`;
-                    aiOutput.classList.remove('hidden');
-                    return;
-                }
-
-                if (currentMode === 'image' && imageGenerationCount >= 1) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Batas pembuatan gambar (1x) telah habis.</p>`;
                     aiOutput.classList.remove('hidden');
                     return;
                 }
@@ -515,7 +512,7 @@
                         imageGenerationCount++;
                     }
                 } catch (error) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
+                    aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message || 'Gagal mengambil data.'}</p>`;
                 } finally {
                     aiLoader.classList.add('hidden');
                     aiOutput.classList.remove('hidden');
@@ -564,7 +561,7 @@
                 if (base64Data) {
                     displayImageResult(base64Data, prompt);
                 } else {
-                    throw new Error("Respons API tidak berisi data gambar.");
+                     throw new Error("Gagal membuat gambar. Coba prompt yang berbeda atau API key mungkin telah mencapai batas.");
                 }
             }
 
