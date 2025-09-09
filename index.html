@@ -237,11 +237,11 @@
                             </button>
                             <div class="accordion-content">
                                  <div class="px-4 pb-3 pt-1">
-                                     <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
-                                         <li>Jual Beli Peralatan (AP, Repeater, Modem 4G/5G)</li>
-                                         <li>Jasa Pemasangan Internet</li>
-                                         <li>Jasa Instalasi Kabel WiFi, dll.</li>
-                                     </ul>
+                                      <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
+                                          <li>Jual Beli Peralatan (AP, Repeater, Modem 4G/5G)</li>
+                                          <li>Jasa Pemasangan Internet</li>
+                                          <li>Jasa Instalasi Kabel WiFi, dll.</li>
+                                      </ul>
                                 </div>
                             </div>
                         </div>
@@ -259,13 +259,13 @@
                             </button>
                             <div class="accordion-content">
                                  <div class="px-4 pb-3 pt-1">
-                                     <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
-                                         <li>Printer (Epson, Canon, HP)</li>
-                                         <li>Laptop / PC</li>
-                                         <li>Smartphone</li>
-                                         <li>Router / Modem</li>
-                                         <li>Lain-lain (Tanyakan saja)</li>
-                                     </ul>
+                                      <ul class="space-y-1 list-inside list-disc text-slate-300 marker:text-sky-400 text-xs">
+                                          <li>Printer (Epson, Canon, HP)</li>
+                                          <li>Laptop / PC</li>
+                                          <li>Smartphone</li>
+                                          <li>Router / Modem</li>
+                                          <li>Lain-lain (Tanyakan saja)</li>
+                                      </ul>
                                 </div>
                             </div>
                         </div>
@@ -313,7 +313,13 @@
                             </div>
 
                             <div class="flex flex-col gap-2">
-                                <textarea id="aiPrompt" rows="3" class="w-full p-2 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
+                                <!-- NAMA: WRAPPER_PROMPT -->
+                                <div class="relative w-full">
+                                    <textarea id="aiPrompt" rows="3" class="w-full p-2 pr-16 rounded-lg bg-slate-900/50 text-white text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-400 placeholder:text-slate-500" placeholder="Tanyakan apa saja..."></textarea>
+                                    <button id="clearPromptBtn" class="hidden absolute top-1/2 -translate-y-1/2 right-2 text-slate-300 hover:text-white bg-slate-700/60 hover:bg-slate-600/80 px-2 py-0.5 rounded-full text-[10px] font-semibold transition-colors">
+                                        Bersihkan
+                                    </button>
+                                </div>
                                 
                                 <div id="imageButtonsContainer" class="flex gap-2 hidden">
                                     <button id="uploadImageBtn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1">
@@ -364,8 +370,8 @@
     </div>
     
     <script>
-        // PENTING: Ganti dengan API Key Google AI Anda yang sebenarnya.
-        const apiKey = "AIzaSyBHgSzwaY0aCmToT4ntL7M9jbPAVfSUtJM";
+        // API Key untuk generate Teks (bisa dikosongkan jika dijalankan di dalam Canvas)
+        const apiKey = "";
     
         // Initialize Lucide icons
         lucide.createIcons();
@@ -434,7 +440,38 @@
                         aiPasswordError.classList.remove('hidden');
                     }
                 });
+
+                aiPasswordInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        aiVerifyBtn.click();
+                    }
+                });
             }
+
+            // Logika untuk tombol clear pada prompt input
+            const clearPromptBtn = document.getElementById('clearPromptBtn');
+
+            aiPromptInput.addEventListener('input', () => {
+                if (aiPromptInput.value.trim() !== '') {
+                    clearPromptBtn.classList.remove('hidden');
+                } else {
+                    clearPromptBtn.classList.add('hidden');
+                }
+            });
+
+            aiPromptInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    aiGenerateBtn.click();
+                }
+            });
+
+            clearPromptBtn.addEventListener('click', () => {
+                aiPromptInput.value = '';
+                clearPromptBtn.classList.add('hidden');
+                aiPromptInput.focus();
+            });
 
             const setMode = (mode) => {
                 currentMode = mode;
@@ -477,6 +514,8 @@
 
             popularPromptBtn.addEventListener('click', () => {
                 aiPromptInput.value = popularPromptText;
+                // Mensimulasikan input untuk menampilkan tombol "Bersihkan"
+                aiPromptInput.dispatchEvent(new Event('input'));
             });
 
             imageInput.addEventListener('change', (event) => {
@@ -500,11 +539,6 @@
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
-                if (apiKey.includes("GANTI_DENGAN")) {
-                    aiOutput.innerHTML = `<p class="text-center text-red-400">Harap konfigurasi API Key.</p>`;
-                    aiOutput.classList.remove('hidden');
-                    return;
-                }
                 const userPrompt = aiPromptInput.value.trim();
                 if (userPrompt === "") {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Deskripsi tidak boleh kosong!</p>`;
@@ -520,6 +554,9 @@
 
                 try {
                     if (currentMode === 'text') {
+                        if (!apiKey) {
+                             throw new Error("API Key untuk Teks tidak dikonfigurasi. Hubungi admin.");
+                        }
                         await generateText(userPrompt);
                     } else {
                         await generateImage(userPrompt);
@@ -534,7 +571,6 @@
                 }
             });
             
-            // PERUBAHAN: Memperbarui nama model teks
             async function generateText(prompt) {
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 const payload = {
@@ -555,33 +591,27 @@
                 }
             }
             
-            // PERUBAHAN: Memperbarui nama model gambar
             async function generateImage(prompt) {
-                let apiUrl, payload;
-                if (currentImageModel === 'nano-banana') {
-                    apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
-                    const parts = [{ text: prompt }];
-                    if (imageData) {
-                        parts.push({ inlineData: { mimeType: "image/png", data: imageData } });
-                    }
-                    payload = {
-                        contents: [{ parts: parts }],
-                        generationConfig: { responseModalities: ['IMAGE'] },
-                    };
-                } else { // imagen
-                    apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-                    payload = {
-                        instances: [{ prompt: prompt }],
-                        parameters: { "sampleCount": 1 }
-                    };
-                }
+                const proxyUrl = "https://jembatan-rahasia-ai.qiselgembel.workers.dev";
 
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
-                }
+                const payload = {
+                    prompt: prompt,
+                    model: currentImageModel,
+                    imageData: imageData 
+                };
+
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
                 const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || `Terjadi kesalahan pada jembatan.`);
+                }
+                
                 let base64Data;
                 if (currentImageModel === 'nano-banana') {
                     base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
@@ -592,7 +622,7 @@
                 if (base64Data) {
                     displayImageResult(base64Data, prompt);
                 } else {
-                     throw new Error("Gagal membuat gambar. Coba prompt yang berbeda atau API key mungkin telah mencapai batas.");
+                   throw new Error("Gagal membuat gambar dari jembatan. Coba prompt yang berbeda.");
                 }
             }
 
