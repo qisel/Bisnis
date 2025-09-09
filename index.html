@@ -304,7 +304,7 @@
                     </button>
                     Panel Pengaturan
                 </h3>
-                <div class="space-y-3 text-xs max-h-[70vh] overflow-y-auto pr-2">
+                <div class="space-y-3 text-xs pr-2">
                     <!-- Tambah Prompt Viral Baru -->
                     <div class="p-2 border border-slate-700 rounded-lg">
                         <label class="block text-slate-300 mb-1 font-semibold">Tambah Prompt Viral Baru</label>
@@ -557,7 +557,7 @@
 
             switchModelBtn.addEventListener('click', () => {
                 currentImageModel = (currentImageModel === 'nano-banana') ? 'imagen' : 'nano-banana';
-                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan Nano Banana' : 'Gunakan Imagen';
+                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan Imagen' : 'Gunakan Nano Banana';
             });
             
             imageInput.addEventListener('change', (event) => {
