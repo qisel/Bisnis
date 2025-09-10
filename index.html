@@ -193,7 +193,7 @@
                                 <div class="bg-white/20 text-white p-1.5 rounded-full flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.9 4.2-4.3.6 3.1 3-.7 4.2 3.8-2 3.8 2-.7-4.2 3.1-3-4.3-.6L12 3v0z"/><path d="M5 11.5 3.5 13l-1.5-1.5"/><path d="M22 11.5 20.5 10l1.5-1.5"/><path d="M8 3H6c-1 0-2 1-2 2v2"/><path d="M16 3h2c1 0 2 1 2 2v2"/></svg>
                                 </div>
-                                <h3 class="text-xs font-semibold text-white">Buat gambar dan text otomatis</h3>
+                                <h3 class="text-xs font-semibold text-white">Asisten A.I. Kreatif</h3>
                             </div>
                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-icon lucide lucide-chevron-up text-slate-300 absolute right-3 top-1/2 -translate-y-1/2"><path d="m18 15-6-6-6 6"/></svg>
                         </button>
@@ -477,19 +477,26 @@
             const accordionHeaders = document.querySelectorAll('.accordion-header');
             accordionHeaders.forEach(header => {
                 header.addEventListener('click', () => {
-                    const activeItem = document.querySelector('.accordion-item.active');
                     const clickedItem = header.parentElement;
-
-                    // This logic ensures only one accordion item within the same conceptual group is open at a time.
-                    // It checks if the clicked item's parent container is the same as the active item's.
-                    // This allows side panels and bottom panels to operate independently.
-                    if (activeItem && activeItem !== clickedItem && activeItem.parentElement === clickedItem.parentElement) {
-                        activeItem.classList.remove('active');
-                    }
+                    const isSidePanel = clickedItem.parentElement.id === 'leftSidePanelsWrapper' || clickedItem.parentElement.id === 'rightSidePanelsWrapper';
                     
-                    clickedItem.classList.toggle('active');
+                    if (isSidePanel) {
+                        const wasActive = clickedItem.classList.contains('active');
+                        // Close all side panels first
+                        document.querySelectorAll('#leftSidePanelsWrapper .accordion-item, #rightSidePanelsWrapper .accordion-item').forEach(panel => {
+                            panel.classList.remove('active');
+                        });
+                        // If it wasn't active, open it. This creates the toggle effect.
+                        if (!wasActive) {
+                            clickedItem.classList.add('active');
+                        }
+                    } else {
+                        // For non-side panels (like the AI panel), just toggle
+                        clickedItem.classList.toggle('active');
+                    }
                 });
             });
+
 
             // --- VARIABEL & LOGIKA PANEL AI ---
             const aiPasswordPrompt = document.getElementById('aiPasswordPrompt');
