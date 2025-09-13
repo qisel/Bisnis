@@ -36,8 +36,6 @@
         .ai-output-container::-webkit-scrollbar-thumb:hover { background: #0284c7; }
         #adminModal { transition: opacity 0.3s ease; }
         .admin-view { transition: opacity 0.3s ease, transform 0.3s ease; }
-
-        /* STYLES FOR SIDE PANELS ANIMATION */
         #leftSidePanelsWrapper .accordion-item,
         #rightSidePanelsWrapper .accordion-item {
             transition: width 0.4s ease-in-out;
@@ -48,13 +46,13 @@
             width: 144px; 
         }
         #rightSidePanelsWrapper .accordion-item.active {
-            width: 188px; /* Increased by 30% from 144px */
+            width: 188px;
         }
         #leftSidePanelsWrapper .accordion-item .accordion-content > div {
              width: 144px;
         }
         #rightSidePanelsWrapper .accordion-item .accordion-content > div {
-             width: 188px; /* Increased by 30% from 144px */
+             width: 188px;
         }
         #rightSidePanelsWrapper {
             align-items: flex-end; 
@@ -62,7 +60,6 @@
         #rightSidePanelsWrapper .accordion-header > div {
             flex-direction: row-reverse;
         }
-
     </style>
 </head>
 <body class="bg-slate-900">
@@ -139,7 +136,6 @@
                 </button>
                 <div class="accordion-content">
                     <div class="p-3.5 bg-slate-800/50 rounded-b-lg">
-                        <!-- PERUBAHAN DI SINI: Menambahkan kelas `text-slate-300` agar teks terlihat -->
                         <p class="text-xs leading-relaxed text-slate-300">Ubah sampah makanan Anda.</p>
                     </div>
                 </div>
@@ -276,7 +272,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -336,6 +331,26 @@
                           </div>
                           <!-- Kolom Kanan -->
                           <div class="md:w-1/2 flex flex-col space-y-3">
+                                <!-- ===== BLOK BARU UNTUK UPLOAD GAMBAR ===== -->
+                                <div class="p-2 border border-slate-700 rounded-lg">
+                                    <label class="block text-slate-300 mb-2 font-semibold">Ubah Gambar Latar</label>
+                                    <div class="flex flex-col gap-2">
+                                        <input type="file" id="imageUploaderInput" accept="image/*" class="hidden">
+                                        <button id="selectImageBtn" class="w-full bg-slate-600 hover:bg-slate-500 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image-plus"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" x2="22" y1="5" y2="5"/><line x1="19" x2="19" y1="2" y2="8"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                            Pilih Gambar
+                                        </button>
+                                        <div id="uploadPreviewContainer" class="hidden text-center">
+                                            <img id="uploadPreview" src="#" class="max-h-24 mx-auto rounded-md border border-slate-600 mb-2">
+                                            <p id="fileNameDisplay" class="text-slate-400 text-[10px] truncate"></p>
+                                        </div>
+                                        <button id="applyImageBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-1.5 px-3 rounded-full text-xs transition-colors hidden">
+                                            Terapkan ke Latar
+                                        </button>
+                                        <div id="imageUploadStatus" class="text-center text-xs p-1.5 rounded-lg hidden"></div>
+                                    </div>
+                                </div>
+                                <!-- ============================================ -->
                               <div class="p-2 border border-slate-700 rounded-lg">
                                   <label class="block text-slate-300 mb-1 font-semibold">Ubah Kunci API</label>
                                   <div class="flex items-center gap-2">
@@ -375,7 +390,7 @@
             prompts: []
         };
         
-        let currentPromptIndex = -1; // -1 means no prompt selected
+        let currentPromptIndex = -1;
 
         lucide.createIcons();
         
@@ -424,7 +439,7 @@
                 if (appSettings.prompts.length > 0) {
                     currentPromptIndex--;
                     if (currentPromptIndex < 0) {
-                        currentPromptIndex = appSettings.prompts.length - 1; // loop to last
+                        currentPromptIndex = appSettings.prompts.length - 1;
                     }
                     updatePromptDisplay();
                 }
@@ -434,90 +449,61 @@
                 if (appSettings.prompts.length > 0) {
                     currentPromptIndex++;
                     if (currentPromptIndex >= appSettings.prompts.length) {
-                        currentPromptIndex = 0; // loop to first
+                        currentPromptIndex = 0;
                     }
                     updatePromptDisplay();
                 }
             });
 
-
             const fetchPublicSettings = async () => {
                 aiLoadingSettings.classList.remove('hidden');
                 aiLoadingSettings.classList.add('flex');
                 aiPasswordPrompt.classList.add('hidden');
-
                 try {
-                    if (SCRIPT_URL.includes("GANTI_DENGAN")) {
-                        throw new Error("URL Google Apps Script belum diatur.");
-                    }
                     const response = await fetch(SCRIPT_URL);
-                    if (!response.ok) {
-                        throw new Error(`Server merespons dengan status: ${response.status}. Pastikan script sudah di-deploy dengan benar.`);
-                    }
-
-                    const contentType = response.headers.get("content-type");
-                    if (!contentType || !contentType.includes("application/json")) {
-                        const errorText = await response.text();
-                        console.error("Respons Server (bukan JSON):", errorText);
-                        throw new Error("Server tidak mengembalikan format data yang benar (diharapkan JSON). Periksa log di Google Apps Script untuk detail error.");
-                    }
-                    
+                    if (!response.ok) throw new Error(`Server merespons dengan status: ${response.status}.`);
                     const data = await response.json();
-
                     if (data && data.canvasPassword && data.adminPassword) {
-                        const prompts = data.prompts || [];
                         appSettings = {
                            canvasPassword: data.canvasPassword,
                            adminPassword: data.adminPassword,
-                           prompts: prompts
+                           prompts: data.prompts || []
                         };
-                        console.log("Pengaturan publik berhasil dimuat dari server.");
-                        if (prompts.length === 0) {
-                           console.warn("Tidak ada prompt viral yang dimuat. Pastikan sheet 'Prompts' sudah terisi.");
-                        }
                         setupPrompts();
                     } else {
-                        console.error("Data yang diterima dari server:", data);
-                        throw new Error("Data pengaturan (password) yang diterima dari server tidak lengkap. Pastikan Anda sudah mengisi sel A2 dan A3 di sheet 'PengaturanAktif' dan men-deploy ulang script.");
+                        throw new Error("Data pengaturan dari server tidak lengkap.");
                     }
                 } catch (error) {
                     console.error("Tidak dapat memuat pengaturan publik:", error);
-                    alert(`Peringatan: Tidak dapat memuat pengaturan dari server. Aplikasi mungkin tidak berfungsi.\n\nDetail: ${error.message}`);
+                    alert(`Peringatan: Tidak dapat memuat pengaturan dari server.\n\nDetail: ${error.message}`);
                 } finally {
                     aiLoadingSettings.classList.add('hidden');
                     aiLoadingSettings.classList.remove('flex');
                     aiPasswordPrompt.classList.remove('hidden');
                 }
             };
-
             await fetchPublicSettings();
             
-            // --- VARIABEL & LOGIKA ACCORDION ---
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
+            // --- LOGIKA ACCORDION ---
+            document.querySelectorAll('.accordion-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const clickedItem = header.parentElement;
                     const isSidePanel = clickedItem.parentElement.id === 'leftSidePanelsWrapper' || clickedItem.parentElement.id === 'rightSidePanelsWrapper';
-                    
                     if (isSidePanel) {
                         const wasActive = clickedItem.classList.contains('active');
-                        // Close all side panels first
                         document.querySelectorAll('#leftSidePanelsWrapper .accordion-item, #rightSidePanelsWrapper .accordion-item').forEach(panel => {
                             panel.classList.remove('active');
                         });
-                        // If it wasn't active, open it. This creates the toggle effect.
                         if (!wasActive) {
                             clickedItem.classList.add('active');
                         }
                     } else {
-                        // For non-side panels (like the AI panel), just toggle
                         clickedItem.classList.toggle('active');
                     }
                 });
             });
 
-
-            // --- VARIABEL & LOGIKA PANEL AI ---
+            // --- LOGIKA PANEL AI ---
             const aiPasswordInput = document.getElementById('aiPasswordInput');
             const aiVerifyBtn = document.getElementById('aiVerifyBtn');
             const aiPasswordError = document.getElementById('aiPasswordError');
@@ -543,63 +529,48 @@
             let currentImageModel = 'nano-banana';
 
             aiVerifyBtn.addEventListener('click', () => {
-                if (!appSettings.canvasPassword) {
-                     aiPasswordError.textContent = 'Pengaturan belum dimuat. Coba lagi.';
-                     aiPasswordError.classList.remove('hidden');
-                     return;
-                }
                 if (aiPasswordInput.value.trim().toLowerCase() === appSettings.canvasPassword) {
                     aiPasswordPrompt.classList.add('hidden');
                     aiCanvasTools.classList.remove('hidden');
                     aiPasswordError.classList.add('hidden');
                 } else {
-                    aiPasswordError.textContent = 'Kode akses salah. Silakan coba lagi.';
+                    aiPasswordError.textContent = 'Kode akses salah.';
                     aiPasswordError.classList.remove('hidden');
                 }
             });
-            aiPasswordInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    aiVerifyBtn.click();
-                }
-            });
+            aiPasswordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') aiVerifyBtn.click(); });
 
             const setMode = (mode) => {
                 currentMode = mode;
                 aiOutput.innerHTML = '';
                 aiOutput.classList.add('hidden');
-                if (mode === 'text') {
-                    modeTextBtn.classList.add('bg-sky-500', 'text-white');
-                    modeTextBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500');
-                    modeImageBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
-                    modeImageBtn.classList.remove('bg-sky-500', 'text-white');
-                    aiPromptInput.placeholder = 'Tanyakan apa saja...';
-                    imageFeaturesContainer.classList.add('hidden');
-                    imageFeaturesContainer.classList.remove('flex');
+                modeTextBtn.classList.toggle('bg-sky-500', mode === 'text');
+                modeTextBtn.classList.toggle('text-white', mode === 'text');
+                modeTextBtn.classList.toggle('bg-slate-600', mode !== 'text');
+                modeTextBtn.classList.toggle('hover:bg-slate-500', mode !== 'text');
+                modeImageBtn.classList.toggle('bg-sky-500', mode === 'image');
+                modeImageBtn.classList.toggle('text-white', mode === 'image');
+                modeImageBtn.classList.toggle('bg-slate-600', mode !== 'image');
+                modeImageBtn.classList.toggle('hover:bg-slate-500', mode !== 'image');
+                aiPromptInput.placeholder = mode === 'text' ? 'Tanyakan apa saja...' : 'Deskripsikan gambar...';
+                imageFeaturesContainer.classList.toggle('hidden', mode !== 'image');
+                imageFeaturesContainer.classList.toggle('flex', mode === 'image');
+                if(mode === 'text') {
                     imagePreviewContainer.classList.add('hidden');
                     imageData = null;
-                } else { // mode === 'image'
-                    modeImageBtn.classList.add('bg-sky-500', 'text-white');
-                    modeImageBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500');
-                    modeTextBtn.classList.add('bg-slate-600', 'hover:bg-slate-500');
-                    modeTextBtn.classList.remove('bg-sky-500', 'text-white');
-                    aiPromptInput.placeholder = 'Deskripsikan gambar yang ingin dibuat...';
-                    imageFeaturesContainer.classList.remove('hidden');
-                    imageFeaturesContainer.classList.add('flex');
                 }
             };
 
             modeTextBtn.addEventListener('click', () => setMode('text'));
             modeImageBtn.addEventListener('click', () => setMode('image'));
             uploadImageBtn.addEventListener('click', () => imageInput.click());
-
             switchModelBtn.addEventListener('click', () => {
                 currentImageModel = (currentImageModel === 'nano-banana') ? 'imagen' : 'nano-banana';
-                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan Imagen' : 'Gunakan Nano Banana';
+                switchModelBtn.textContent = (currentImageModel === 'nano-banana') ? 'Gunakan Imagen' : 'Gunakan Flash';
             });
             
-            imageInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
@@ -613,27 +584,20 @@
 
             removeImageBtn.addEventListener('click', () => {
                 imageData = null;
-                imagePreview.src = "#";
                 imageInput.value = '';
                 imagePreviewContainer.classList.add('hidden');
             });
-
-            aiPromptInput.addEventListener('input', () => {
-                clearPromptBtn.classList.toggle('hidden', aiPromptInput.value.trim() === '');
-            });
+            
+            aiPromptInput.addEventListener('input', () => clearPromptBtn.classList.toggle('hidden', aiPromptInput.value.trim() === ''));
             clearPromptBtn.addEventListener('click', () => {
                 aiPromptInput.value = '';
                 clearPromptBtn.classList.add('hidden');
                 aiPromptInput.focus();
-                currentPromptIndex = -1; // Deselect prompt
+                currentPromptIndex = -1;
                 updatePromptDisplay();
             });
 
             aiGenerateBtn.addEventListener('click', async () => {
-                if (SCRIPT_URL.includes("GANTI_DENGAN")) {
-                    alert("Kesalahan Konfigurasi: URL Google Apps Script belum diatur di file index.html.");
-                    return;
-                }
                 const userPrompt = aiPromptInput.value.trim();
                 if (userPrompt === "") {
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Deskripsi tidak boleh kosong!</p>`;
@@ -643,7 +607,6 @@
                 
                 aiLoader.classList.remove('hidden');
                 aiOutput.classList.add('hidden');
-                aiOutput.innerHTML = '';
                 aiGenerateBtn.disabled = true;
                 aiGenerateBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
@@ -654,33 +617,23 @@
                         imageData: imageData,
                         imageModel: currentImageModel
                     };
-
                     const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify(payload),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
                     });
-
-                    if (!response.ok) {
-                         const errorText = await response.text();
-                         throw new Error(`Server error: ${response.status} - ${errorText}`);
-                    }
-                    
+                    if (!response.ok) throw new Error(`Server error: ${response.status}`);
                     const result = await response.json();
-
-                    if(result.error) {
-                        throw new Error(result.error);
-                    }
+                    if(result.error) throw new Error(result.error);
 
                     if (currentMode === 'text' && result.text) {
                         displayTextResult(result.text);
                     } else if (currentMode === 'image' && result.base64Data) {
-                        displayImageResult(result.base64Data, userPrompt);
+                        displayImageResult(result.base64Data);
                     } else {
                         throw new Error("Respons dari server tidak valid.");
                     }
                 } catch (error) {
-                    console.error("Error during generation:", error);
                     aiOutput.innerHTML = `<p class="text-center text-red-400">Terjadi kesalahan: ${error.message}</p>`;
                 } finally {
                     aiLoader.classList.add('hidden');
@@ -689,79 +642,43 @@
                     aiGenerateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
             });
+            aiPromptInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiGenerateBtn.click(); }});
 
-             aiPromptInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    aiGenerateBtn.click();
-                }
-            });
-
-            function displayTextResult(generatedText) {
-                aiOutput.innerHTML = ''
+            function displayTextResult(text) {
+                aiOutput.innerHTML = '';
                 const textContainer = document.createElement('div');
                 textContainer.className = 'ai-output-container';
-                const label = document.createElement('h5');
-                label.className = 'text-sm font-semibold text-center text-sky-300 mb-2';
-                label.textContent = 'Hasil Teks:';
-                const text = document.createElement('p');
-                text.className = 'text-left text-slate-300 text-xs whitespace-pre-wrap';
-                text.textContent = generatedText;
-                textContainer.appendChild(label);
-                textContainer.appendChild(text);
-
+                textContainer.innerHTML = `<h5 class="text-sm font-semibold text-center text-sky-300 mb-2">Hasil Teks:</h5><p class="text-left text-slate-300 text-xs whitespace-pre-wrap">${text}</p>`;
+                
                 const copyButton = document.createElement('button');
                 copyButton.className = 'mt-2 inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-1 px-3 rounded-full text-xs transition-colors';
                 copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Salin Teks</span>`;
                 copyButton.addEventListener('click', () => {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = generatedText;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    copyButton.innerHTML = `<span>Tersalin!</span>`;
-                    setTimeout(() => { copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Salin Teks</span>`; }, 2000);
+                    navigator.clipboard.writeText(text).then(() => {
+                        copyButton.innerHTML = `<span>Tersalin!</span>`;
+                        setTimeout(() => { copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Salin Teks</span>`; }, 2000);
+                    });
                 });
-                aiOutput.appendChild(textContainer);
-                aiOutput.appendChild(copyButton);
+                aiOutput.append(textContainer, copyButton);
             }
 
-            function displayImageResult(base64Data, prompt) {
-                aiOutput.innerHTML = '';
-                const imageUrl = `data:image/png;base64,${base64Data}`;
-
-                const oldActions = mainImageContainer.querySelector('.image-actions');
-                if (oldActions) oldActions.remove();
-
+            function displayImageResult(base64) {
+                const imageUrl = `data:image/png;base64,${base64}`;
+                mainImageContainer.querySelector('.image-actions')?.remove();
                 mainImageContainer.style.backgroundImage = `url(${imageUrl})`;
 
-                const actionsContainer = document.createElement('div');
-                actionsContainer.className = 'image-actions absolute top-2 right-2 flex flex-col gap-2';
-
-                const downloadButton = document.createElement('a');
-                downloadButton.href = imageUrl;
-                downloadButton.download = `ai-image-${Date.now()}.png`;
-                downloadButton.className = 'bg-slate-800/70 hover:bg-slate-700/90 text-white p-2 rounded-full transition-colors backdrop-blur-sm';
-                downloadButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
-
-                const closeButton = document.createElement('button');
-                closeButton.className = 'bg-red-600/80 hover:bg-red-500/90 text-white p-2 rounded-full transition-colors backdrop-blur-sm';
-                closeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
-
-                closeButton.addEventListener('click', () => {
+                const actions = document.createElement('div');
+                actions.className = 'image-actions absolute top-2 right-2 flex flex-col gap-2';
+                actions.innerHTML = `
+                    <a href="${imageUrl}" download="ai-image.png" class="bg-slate-800/70 hover:bg-slate-700/90 text-white p-2 rounded-full backdrop-blur-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></a>
+                    <button id="closePreviewBtn" class="bg-red-600/80 hover:bg-red-500/90 text-white p-2 rounded-full backdrop-blur-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                `;
+                actions.querySelector('#closePreviewBtn').addEventListener('click', () => {
                     mainImageContainer.style.backgroundImage = originalImageUrl;
-                    actionsContainer.remove();
+                    actions.remove();
                 });
-
-                actionsContainer.appendChild(downloadButton);
-                actionsContainer.appendChild(closeButton);
-                mainImageContainer.appendChild(actionsContainer);
-
-                const infoText = document.createElement('p');
-                infoText.className = 'text-center text-sky-300 text-xs';
-                infoText.textContent = 'Gambar ditampilkan di sebelah kiri.';
-                aiOutput.appendChild(infoText);
+                mainImageContainer.appendChild(actions);
+                aiOutput.innerHTML = `<p class="text-center text-sky-300 text-xs">Gambar baru ditampilkan sebagai latar.</p>`;
             }
             
             setMode('text');
@@ -773,43 +690,35 @@
             const verifyAdminBtn = document.getElementById('verifyAdminBtn');
             const adminPasswordVerifyInput = document.getElementById('adminPasswordVerify');
             const adminLoginStatus = document.getElementById('adminLoginStatus');
-            
             const adminLoginView = document.getElementById('adminLoginView');
             const adminPanelView = document.getElementById('adminPanelView');
             const backToLoginBtn = document.getElementById('backToLoginBtn');
             const adminPanelStatus = document.getElementById('adminPanelStatus');
-            const saveSettingBtns = document.querySelectorAll('.save-setting-btn');
             const addPromptBtn = document.getElementById('addPromptBtn');
-            
+
             const showAdminLogin = () => {
                 adminPanelView.style.transform = 'translateX(100%)';
                 adminPanelView.style.opacity = '0';
                 adminLoginView.style.transform = 'translateX(0)';
                 adminLoginView.style.opacity = '1';
-                adminLoginStatus.classList.add('hidden');
                 adminPasswordVerifyInput.value = '';
             };
-
             const showAdminPanel = () => {
                 adminLoginView.style.transform = 'translateX(-100%)';
                 adminLoginView.style.opacity = '0';
                 adminPanelView.style.transform = 'translateX(0)';
                 adminPanelView.style.opacity = '1';
-                adminPanelStatus.classList.add('hidden');
             };
-
             const showModal = () => {
                 adminModal.classList.remove('hidden');
-                setTimeout(() => {
-                    adminModal.classList.remove('opacity-0', 'pointer-events-none');
-                }, 10);
+                setTimeout(() => adminModal.classList.remove('opacity-0', 'pointer-events-none'), 10);
             };
             const hideModal = () => {
-                 adminModal.classList.add('opacity-0', 'pointer-events-none');
-                 setTimeout(() => {
-                      adminModal.classList.add('hidden');
-                      showAdminLogin(); 
-                 }, 300);
+                adminModal.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    adminModal.classList.add('hidden');
+                    showAdminLogin(); 
+                }, 300);
             };
 
             openAdminBtn.addEventListener('click', showModal);
@@ -825,42 +734,20 @@
                     adminLoginStatus.classList.remove('hidden');
                 }
             });
-            
-             adminPasswordVerifyInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    verifyAdminBtn.click();
-                }
-            });
-            
-            addPromptBtn.addEventListener('click', async () => {
-                const newPromptNameInput = document.getElementById('newPromptNameInput');
-                const newPromptTextInput = document.getElementById('newPromptTextInput');
-                const name = newPromptNameInput.value.trim();
-                const text = newPromptTextInput.value.trim();
+            adminPasswordVerifyInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') verifyAdminBtn.click(); });
 
-                if (!name || !text) {
-                    alert('Nama dan Teks prompt tidak boleh kosong.');
+            async function performAdminAction(payload, statusElement) {
+                const currentAdminPassword = adminPasswordVerifyInput.value;
+                if (currentAdminPassword !== appSettings.adminPassword) {
+                    alert('Sesi admin tidak valid. Silakan login kembali.');
+                    showAdminLogin();
                     return;
                 }
-                
-                const currentAdminPassword = adminPasswordVerifyInput.value;
-                 if (currentAdminPassword !== appSettings.adminPassword) {
-                      alert('Sesi admin tidak valid. Silakan login kembali.');
-                      showAdminLogin();
-                      return;
-                 }
+                payload.adminPassword = currentAdminPassword;
 
-                adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-yellow-200 text-yellow-800';
-                adminPanelStatus.textContent = 'Menambahkan prompt baru...';
-                adminPanelStatus.classList.remove('hidden');
-
-                const payload = {
-                    action: 'addViralPrompt',
-                    adminPassword: currentAdminPassword,
-                    name: name,
-                    text: text
-                };
+                statusElement.className = 'text-center text-sm p-2 rounded-lg bg-yellow-200 text-yellow-800';
+                statusElement.textContent = 'Memproses...';
+                statusElement.classList.remove('hidden');
 
                 try {
                     const response = await fetch(SCRIPT_URL, {
@@ -868,96 +755,139 @@
                         body: JSON.stringify(payload),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                     });
-                    
                     const result = await response.json();
-
-                    if (!response.ok || result.status !== 'success') {
-                        throw new Error(result.message || 'Gagal menambahkan prompt.');
-                    }
-
-                    adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-green-200 text-green-800';
-                    adminPanelStatus.textContent = 'Prompt berhasil ditambahkan!';
+                    if (!response.ok || result.status !== 'success') throw new Error(result.message || 'Gagal memproses permintaan.');
                     
-                    newPromptNameInput.value = '';
-                    newPromptTextInput.value = '';
-                    await fetchPublicSettings(); // Reload settings & prompts
-
-                    setTimeout(() => {
-                       adminPanelStatus.classList.add('hidden');
-                    }, 2000);
-
+                    statusElement.className = 'text-center text-sm p-2 rounded-lg bg-green-200 text-green-800';
+                    statusElement.textContent = 'Berhasil! Memuat ulang...';
+                    await fetchPublicSettings();
+                    
+                    return true;
                 } catch (error) {
-                    adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-red-200 text-red-800';
-                    adminPanelStatus.textContent = `Gagal: ${error.message}`;
+                    statusElement.className = 'text-center text-sm p-2 rounded-lg bg-red-200 text-red-800';
+                    statusElement.textContent = `Gagal: ${error.message}`;
+                    return false;
+                }
+            }
+
+            addPromptBtn.addEventListener('click', async () => {
+                const name = document.getElementById('newPromptNameInput').value.trim();
+                const text = document.getElementById('newPromptTextInput').value.trim();
+                if (!name || !text) {
+                    alert('Nama dan Teks prompt tidak boleh kosong.');
+                    return;
+                }
+                
+                const payload = { action: 'addViralPrompt', name, text };
+                const success = await performAdminAction(payload, adminPanelStatus);
+                if (success) {
+                    document.getElementById('newPromptNameInput').value = '';
+                    document.getElementById('newPromptTextInput').value = '';
+                    setTimeout(() => adminPanelStatus.classList.add('hidden'), 2000);
                 }
             });
 
-
-            saveSettingBtns.forEach(button => {
+            document.querySelectorAll('.save-setting-btn').forEach(button => {
                 button.addEventListener('click', async () => {
                     const updateType = button.dataset.type;
-                    const inputElement = document.getElementById(`new${updateType.charAt(0).toUpperCase() + updateType.slice(1)}Input`);
-                    const newValue = inputElement.value.trim();
-
+                    const input = document.getElementById(`new${updateType.charAt(0).toUpperCase() + updateType.slice(1)}Input`);
+                    const newValue = input.value.trim();
                     if (!newValue) {
                         alert('Kolom input tidak boleh kosong.');
                         return;
                     }
-                    
-                    const currentAdminPassword = adminPasswordVerifyInput.value;
-                       if (currentAdminPassword !== appSettings.adminPassword) {
-                           alert('Sesi admin tidak valid. Silakan login kembali.');
-                           showAdminLogin();
-                           return;
-                       }
-                    
-                    adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-yellow-200 text-yellow-800';
-                    adminPanelStatus.textContent = `Menyimpan ${updateType}...`;
-                    adminPanelStatus.classList.remove('hidden');
 
-                    const payload = { 
-                        action: 'updateSetting',
-                        adminPassword: currentAdminPassword, 
-                        updateType, 
-                        newValue 
-                    };
-
-                    try {
-                        const response = await fetch(SCRIPT_URL, {
-                            method: 'POST',
-                            body: JSON.stringify(payload),
-                            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                        });
-                        
-                        const result = await response.json();
-
-                        if (!response.ok || result.status !== 'success') {
-                            throw new Error(result.message || 'Gagal menyimpan pengaturan.');
-                        }
-                        
-                        adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-green-200 text-green-800';
-                        adminPanelStatus.textContent = 'Berhasil! Memuat ulang pengaturan...';
-                        
-                        inputElement.value = ''; 
-                        await fetchPublicSettings(); // Reload settings from server
-
-                        // If admin password was changed, force re-login
+                    const payload = { action: 'updateSetting', updateType, newValue };
+                    const success = await performAdminAction(payload, adminPanelStatus);
+                    if (success) {
+                        input.value = '';
                         if(updateType === 'adminPassword') {
                             setTimeout(() => {
                                 alert("Password Admin berhasil diubah. Silakan login kembali.");
                                 showAdminLogin();
                             }, 1000);
                         } else {
-                            setTimeout(() => {
-                               adminPanelStatus.classList.add('hidden');
-                            }, 2000);
+                            setTimeout(() => adminPanelStatus.classList.add('hidden'), 2000);
                         }
-
-                    } catch (error) {
-                         adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-red-200 text-red-800';
-                         adminPanelStatus.textContent = `Gagal menyimpan: ${error.message}`;
                     }
                 });
+            });
+
+            // --- ===== LOGIKA BARU UNTUK UPLOAD GAMBAR LATAR ===== ---
+            const imageUploaderInput = document.getElementById('imageUploaderInput');
+            const selectImageBtn = document.getElementById('selectImageBtn');
+            const applyImageBtn = document.getElementById('applyImageBtn');
+            const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
+            const uploadPreview = document.getElementById('uploadPreview');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const imageUploadStatus = document.getElementById('imageUploadStatus');
+
+            let selectedFile = null;
+            let selectedBase64 = null;
+
+            selectImageBtn.addEventListener('click', () => imageUploaderInput.click());
+
+            imageUploaderInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    selectedFile = file;
+                    fileNameDisplay.textContent = file.name;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadPreview.src = e.target.result;
+                        selectedBase64 = e.target.result.split(',')[1];
+                        uploadPreviewContainer.classList.remove('hidden');
+                        applyImageBtn.classList.remove('hidden');
+                        imageUploadStatus.classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            applyImageBtn.addEventListener('click', async () => {
+                if (!selectedFile || !selectedBase64) return;
+
+                imageUploadStatus.className = 'text-center text-xs p-1.5 rounded-lg bg-yellow-200 text-yellow-800';
+                imageUploadStatus.textContent = 'Mengunggah gambar...';
+                imageUploadStatus.classList.remove('hidden');
+                applyImageBtn.disabled = true;
+                applyImageBtn.classList.add('opacity-50');
+
+                const payload = { action: 'uploadImage', imageData: selectedBase64, fileName: selectedFile.name };
+
+                try {
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+                    if (result.error) throw new Error(result.error);
+                    if (result.status === 'success' && result.download_url) {
+                        imageUploadStatus.className = 'text-center text-xs p-1.5 rounded-lg bg-green-200 text-green-800';
+                        imageUploadStatus.textContent = 'Berhasil!';
+                        mainImageContainer.style.backgroundImage = `url('${result.download_url}')`;
+                        originalImageUrl = `url('${result.download_url}')`;
+
+                        setTimeout(() => {
+                            imageUploadStatus.classList.add('hidden');
+                            uploadPreviewContainer.classList.add('hidden');
+                            applyImageBtn.classList.add('hidden');
+                            imageUploaderInput.value = '';
+                            selectedFile = null;
+                            selectedBase64 = null;
+                        }, 2000);
+                    } else {
+                        throw new Error('Respons server tidak valid.');
+                    }
+                } catch (error) {
+                    imageUploadStatus.className = 'text-center text-xs p-1.5 rounded-lg bg-red-200 text-red-800';
+                    imageUploadStatus.textContent = `Error: ${error.message}`;
+                } finally {
+                    applyImageBtn.disabled = false;
+                    applyImageBtn.classList.remove('opacity-50');
+                }
             });
         });
     </script>
