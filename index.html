@@ -158,10 +158,6 @@
                                 </div>
                               </div>
                             <div class="p-2 border border-slate-700 rounded-lg">
-                                <label class="block text-slate-300 mb-1 font-semibold">Ubah Kunci API</label>
-                                <div class="flex items-center gap-2"><input type="text" id="newApiKeyInput" class="flex-grow p-1.5 text-xs rounded-lg bg-slate-900/50 text-white border" placeholder="Kunci API baru"><button data-type="apiKey" class="save-setting-btn bg-sky-600 hover:bg-sky-700 rounded-full px-2 py-1.5">Ubah</button></div>
-                            </div>
-                            <div class="p-2 border border-slate-700 rounded-lg">
                                 <label class="block text-slate-300 mb-1 font-semibold">Ubah Kode Kanvas AI</label>
                                 <div class="flex items-center gap-2"><input type="text" id="newCanvasPasswordInput" class="flex-grow p-1.5 text-xs rounded-lg bg-slate-900/50 text-white border" placeholder="Kode Kanvas AI baru"><button data-type="canvasPassword" class="save-setting-btn bg-sky-600 hover:bg-sky-700 rounded-full px-2 py-1.5">Ubah</button></div>
                             </div>
@@ -236,7 +232,6 @@
             const promptNameDisplay = document.getElementById('promptNameDisplay');
             const applyPromptBtn = document.getElementById('applyPromptBtn');
             
-            // <!-- PERUBAHAN: Menambahkan variabel untuk elemen panel admin -->
             const newPromptNameInput = document.getElementById('newPromptNameInput');
             const newPromptTextInput = document.getElementById('newPromptTextInput');
             const addPromptBtn = document.getElementById('addPromptBtn');
@@ -555,7 +550,6 @@
                 reader.readAsDataURL(file);
             });
             
-            // <!-- PERUBAHAN: Menambahkan event listener untuk tombol Tambah Prompt -->
             addPromptBtn.addEventListener('click', async () => {
                 const name = newPromptNameInput.value.trim();
                 const text = newPromptTextInput.value.trim();
@@ -590,7 +584,7 @@
                     adminPanelStatus.textContent = result.message;
                     newPromptNameInput.value = '';
                     newPromptTextInput.value = '';
-                    await fetchPublicSettings(); // Muat ulang pengaturan untuk menampilkan prompt baru
+                    await fetchPublicSettings(); 
                 } catch (error) {
                     adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-red-200 text-red-800';
                     adminPanelStatus.textContent = `Error: ${error.message}`;
@@ -599,7 +593,6 @@
                 }
             });
 
-            // <!-- PERUBAHAN: Menambahkan event listener untuk semua tombol "Ubah" -->
             saveSettingBtns.forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const updateType = btn.dataset.type;
@@ -607,9 +600,6 @@
                     let inputElement;
 
                     switch(updateType) {
-                        case 'apiKey':
-                            inputElement = document.getElementById('newApiKeyInput');
-                            break;
                         case 'canvasPassword':
                             inputElement = document.getElementById('newCanvasPasswordInput');
                             break;
