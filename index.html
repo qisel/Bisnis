@@ -44,7 +44,6 @@
             </div>
         </main>
         
-        <!-- NAMA: PANEL SAMPING KIRI -->
         <div id="leftSidePanelsWrapper" class="absolute top-1/2 -translate-y-1/2 left-0 z-30 flex flex-col gap-2.5">
             <div class="accordion-item bg-slate-900/80 backdrop-blur-sm rounded-r-lg border-t border-r border-b border-white/20">
                 <button class="accordion-header w-full p-2.5 flex justify-between items-center text-left"><div class="flex items-center gap-2.5"><div class="bg-white/20 text-white p-2 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg></div><h3 class="text-sm font-semibold text-white">Percetakan</h3></div></button>
@@ -56,7 +55,6 @@
             </div>
         </div>
 
-        <!-- NAMA: PANEL SAMPING KANAN -->
         <div id="rightSidePanelsWrapper" class="absolute top-1/2 -translate-y-1/2 right-0 z-30 flex flex-col gap-2.5">
              <div class="accordion-item bg-slate-900/80 backdrop-blur-sm rounded-l-lg border-t border-l border-b border-white/20">
                 <button class="accordion-header w-full p-2.5 flex justify-between items-center text-left"><div class="flex items-center gap-2.5"><h3 class="text-sm font-semibold text-white">Olah Limbah</h3><div class="bg-white/20 text-white p-2 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-2.923L4.5 13.5"/><path d="M10.732 10.732 7 19l8.268-3.268a1.83 1.83 0 0 0 1.57-2.923L15.5 11.5"/><path d="M13.5 4.5 17 13l-8.268-3.268a1.83 1.83 0 0 1-2.923-1.57L4.5 13.5"/><path d="m13.5 4.5 4.586 4.586a2 2 0 0 1 0 2.828l-2.757 2.757a2 2 0 0 1-2.828 0L8.414 10.586a2 2 0 0 1 0-2.828L12.001 4.17a2 2 0 0 1 2.827.001Z"/></svg></div></div></button>
@@ -72,7 +70,6 @@
             </div>
         </div>
 
-        <!-- NAMA: PANEL ASISTEN AI -->
         <div id="floatingPanelsWrapper" class="absolute bottom-14 left-0 right-0 z-30 px-2 pointer-events-none">
             <div class="max-w-lg mx-auto">
                 <div id="aiFloatingPanelContainer" class="mt-2">
@@ -112,7 +109,6 @@
         </footer>
     </div>
 
-    <!-- Modal Admin -->
     <div id="adminModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div class="bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-md border border-slate-700 grid max-h-[90vh]">
             <div id="adminLoginView" class="admin-view col-start-1 row-start-1">
@@ -174,7 +170,10 @@
     </div>
     
     <script>
+        // === PASTE URL WEB APP ANDA DI SINI ===
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYc47ZfOb4nT-mbpuztKRkJjTLxV8QCIRazaD0qL4nWAWSy6MwRnwHOYakUSK_9aXObg/exec";
+        // =======================================
+
         const DEFAULT_BG_IMAGE_URL = "https://raw.githubusercontent.com/qisel/Bisnis/1c43fd4383d422670ae9ffd155961695ad4972ec/kep.png";
 
         let appSettings = { backgroundImages: [], prompts: [] };
@@ -408,15 +407,15 @@
 
                 let model, geminiData;
                 if (currentMode === 'text') {
-                    model = 'gemini-2.5-flash-preview-05-20';
-                    geminiData = { contents: [{ parts: [{ text: aiPrompt.value }] }], tools: [{ "google_search": {} }] };
+                    model = 'gemini-1.5-flash'; // Model terbaru
+                    geminiData = { contents: [{ parts: [{ text: aiPrompt.value }] }] };
                 } else {
-                    model = 'gemini-2.5-flash-image-preview'; 
+                    model = 'gemini-1.5-flash'; // Model ini juga bisa handle gambar
                     const parts = [{ text: aiPrompt.value }];
                     if (imageData && imageMimeType) { 
                         parts.push({ inlineData: { mimeType: imageMimeType, data: imageData } }); 
                     }
-                    geminiData = {  contents: [{ parts: parts }], generationConfig: { responseModalities: ['IMAGE'] } };
+                    geminiData = {  contents: [{ parts: parts }] };
                 }
 
                 const payload = { action: 'generateAiContent', model: model, data: geminiData };
@@ -426,14 +425,11 @@
                     const candidate = result.data.candidates?.[0];
                     if (!candidate) throw new Error("Tidak ada respons dari AI.");
                     aiOutput.innerHTML = '';
-                    if (currentMode === 'text') {
+                    if (candidate.content.parts[0].text) {
                         const generatedText = candidate.content.parts[0].text;
                         aiOutput.innerHTML = `<div class="ai-output-container"><p>${generatedText.replace(/\n/g, '<br>')}</p></div>`;
                     } else {
-                        const imagePart = candidate.content.parts.find(p => p.inlineData);
-                        if (!imagePart) throw new Error("Respons AI tidak mengandung data gambar.");
-                        const base64Data = imagePart.inlineData.data;
-                        aiOutput.innerHTML = `<img src="data:image/png;base64,${base64Data}" class="max-w-full h-auto rounded-lg">`;
+                        throw new Error("Respons AI tidak mengandung teks.");
                     }
                 } catch(error) {
                     console.error("Kesalahan saat generate AI:", error);
@@ -525,7 +521,7 @@
                     const base64 = e.target.result.split(',')[1];
                     imageUploadStatus.className = 'text-center text-xs p-1.5 rounded-lg bg-yellow-200 text-yellow-800';
                     imageUploadStatus.textContent = 'Mengunggah...'; imageUploadStatus.classList.remove('hidden');
-                    const payload = { action: 'uploadImage', imageData: base64, fileName: file.name };
+                    const payload = { action: 'uploadImage', imageData: base64, fileName: file.name, adminPassword: adminPassword };
                     try {
                         const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                         const result = await response.json();
@@ -640,12 +636,8 @@
                         adminPanelStatus.textContent = result.message;
                         inputElement.value = '';
                         
-                        if(updateType === 'adminPassword') {
-                           appSettings.adminPassword = newValue;
-                        }
-                        if(updateType === 'canvasPassword') {
-                           appSettings.canvasPassword = newValue;
-                        }
+                        // Perbarui pengaturan di sisi klien agar tidak perlu refresh
+                        appSettings[updateType] = newValue;
 
                     } catch (error) {
                         adminPanelStatus.className = 'text-center text-sm p-2 rounded-lg bg-red-200 text-red-800';
@@ -660,4 +652,3 @@
     </script>
 </body>
 </html>
-
